@@ -1,0 +1,28 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'idea'
+    id 'com.github.spotbugs' version "$spotbugsVersion" apply false
+    id 'org.owasp.dependencycheck' version "$dependencyCheckVersion" apply false
+}
+
+repositories {
+    maven { url "https://maven.aliyun.com/repository/central" }
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+apply from: "$projectDir/gradle/checkstyle/checkstyle.gradle"
+apply from: "$projectDir/gradle/spotbugs/spotbugs.gradle"
+apply from: "$projectDir/gradle/git-hooks/git-hooks.gradle"
+apply from: "$projectDir/gradle/dependency-check/dependency-check.gradle"
+apply from: "$projectDir/gradle/version-info.gradle"
+apply from: "$projectDir/gradle/jacoco.gradle"
