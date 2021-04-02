@@ -3,7 +3,7 @@
     <!-- https://spotbugs.readthedocs.io/en/stable/filter.html -->
 
     <Match>
-        <Package name="com.github.qbosen.dddboot.shared"/>
+        <Package name="top.abosen.dddboot.shared"/>
     </Match>
 
     <Match>
