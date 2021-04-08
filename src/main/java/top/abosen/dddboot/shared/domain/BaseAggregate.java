@@ -12,7 +12,7 @@ import java.util.List;
  * @author qiubaisen
  * @date 2021/3/31
  */
-public abstract class BaseEntityAggregate<ID extends Serializable> extends BaseEntity<ID> implements Validatable {
+public abstract class BaseAggregate<ID extends Serializable> extends BaseEntity<ID> implements Validatable {
     private List<DomainEvent> _events;
 
     protected final void raiseEvent(DomainEvent event) {

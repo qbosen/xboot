@@ -6,6 +6,4 @@ package top.abosen.dddboot.shared.domain;
  */
 public interface Entity<ID> {
     ID getId();
-
-    void setId(ID id);
 }
