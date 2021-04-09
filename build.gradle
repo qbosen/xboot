@@ -90,12 +90,12 @@ publishing {
 
     repositories {
         maven {
+            name '120'
             credentials { username "deployment"; password "123456" }
             url = version.endsWith('SNAPSHOT') ?
                     "http://192.168.6.120:8181/repository/maven-snapshots/" :
                     "http://192.168.6.120:8181/repository/maven-releases/"
         }
-
     }
 }
 

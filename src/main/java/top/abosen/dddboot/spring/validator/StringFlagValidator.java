@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
-@Constraint(validatedBy = FlagValidatorClass.class)
+@Constraint(validatedBy = StringFlagValidatorClass.class)
 public @interface StringFlagValidator {
     String[] value() default {};
 
