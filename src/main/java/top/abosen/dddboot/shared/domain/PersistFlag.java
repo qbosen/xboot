@@ -26,25 +26,41 @@ public interface PersistFlag {
     }
 
     default boolean isCreated() {
-        return getPersistType() == PersistType.CREATED;
+        return getPersistType().isCreated();
     }
 
     default boolean isModified() {
-        return getPersistType() == PersistType.MODIFIED;
+        return getPersistType().isModified();
     }
 
     default boolean isDeleted() {
-        return getPersistType() == PersistType.DELETED;
+        return getPersistType().isDeleted();
     }
 
     default boolean isOriginal() {
-        return getPersistType() == PersistType.ORIGINAL;
+        return getPersistType().isOriginal();
     }
 
     enum PersistType {
         ORIGINAL,
         DELETED,
         CREATED,
-        MODIFIED
+        MODIFIED;
+
+        public boolean isCreated() {
+            return this == PersistType.CREATED;
+        }
+
+        public boolean isModified() {
+            return this == PersistType.MODIFIED;
+        }
+
+        public boolean isDeleted() {
+            return this == PersistType.DELETED;
+        }
+
+        public boolean isOriginal() {
+            return this == PersistType.ORIGINAL;
+        }
     }
 }

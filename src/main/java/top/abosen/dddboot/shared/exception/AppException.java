@@ -31,8 +31,8 @@ public abstract class AppException extends RuntimeException {
     }
 
     private static String format(String code, String message, Map<String, Object> data) {
-        return data.isEmpty() ? String.format("[%s]%s.", code, message) :
-                String.format("[%s]%s:%s.", code, message, data.toString());
+        return data.isEmpty() ? String.format("%s.", message) :
+                String.format("%s:%s.", message, data.toString());
     }
 
     public ErrorCode getError() {
