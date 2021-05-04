@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    schema: schema.sql
+    data: data.sql
+  output:
+    ansi:
+      enabled: always
+
+logging:
+  level:
+    root: info
+    top.abosen.toys.sortabledemo: debug
+    top.abosen.toys.sortableapi: debug
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml

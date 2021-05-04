@@ -1,2 +1,5 @@
-rootProject.name = 'sortable-demo'
+rootProject.name = 'sortable'
+
+include 'sortable-api'
+include 'sortable-demo'
 

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.abosen.toys.sortableapi.infrastructure.database.SortableElementMapper">
+    <update id="sortElements" parameterType="top.abosen.toys.sortableapi.infrastructure.database.SortableElementDto">
+        <foreach collection="elements" item="item" separator=";">
+            update ${item.tableName} set ${item.sortField} = #{item.sortValue} where ${item.idField} = #{item.idValue}
+        </foreach>
+    </update>
+
+    <resultMap id="SortedElement" type="top.abosen.toys.sortableapi.infrastructure.database.SortedElementDto">
+        <id column="id" property="id"/>
+        <result column="weight" property="weight"/>
+    </resultMap>
+
+    <select id="querySortElement" resultMap="SortedElement">
+        select ${idField} as id, ${weightField} as weight
+        from ${tableName}
+        <where>
+            <if test="condition!=null and condition.length>0">
+                <![CDATA[${condition}]]>
+            </if>
+            <if test='weightBegin != null'>
+                and ${weightField} &gt;= #{weightBegin}
+            </if>
+            <if test='weightEnd != null'>
+                and ${weightField} &lt;= #{weightEnd}
+            </if>
+        </where>
+        <choose>
+            <when test="weightAsc">
+                order by ${weightField} asc, ${idField} asc
+            </when>
+            <otherwise>
+                order by ${weightField} desc, ${idField} desc
+            </otherwise>
+        </choose>
+
+        <if test="offset != null and offset >=0 and limit != null and limit > 0">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="findSortElement" resultMap="SortedElement">
+        select ${idField} as id, ${weightField} as weight
+        from ${tableName}
+        <where>
+            <if test="condition!=null and condition.length>0">
+                <![CDATA[${condition}]]>
+            </if>
+            and ${idField} = #{idValue}
+        </where>
+    </select>
+</mapper>
