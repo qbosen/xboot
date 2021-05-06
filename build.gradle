@@ -39,13 +39,12 @@ dependencies {
     api 'jakarta.validation:jakarta.validation-api'
     api 'org.springframework.boot:spring-boot-starter'
     api 'org.springframework.data:spring-data-commons'
-
+    api 'org.springframework.boot:spring-boot-starter-validation'
     api "org.springdoc:springdoc-openapi-ui:$springDocVersion"
     api('org.springframework.boot:spring-boot-starter-web')
 
     implementation "com.baomidou:mybatis-plus:$mybatisPlusVersion"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
-
 
     // lombok dependencies
     compileOnly "org.projectlombok:lombok:$lombokVersion"
