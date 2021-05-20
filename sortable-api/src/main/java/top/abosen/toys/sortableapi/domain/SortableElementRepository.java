@@ -1,8 +1,6 @@
 package top.abosen.toys.sortableapi.domain;
 
 
-import org.springframework.lang.Nullable;
-
 import java.util.List;
 
 /**
@@ -10,11 +8,15 @@ import java.util.List;
  * @date 2021/5/4
  */
 public interface SortableElementRepository {
-    void saveSortElements(BaseMeta baseMeta, List<SortableElement> elements);
+    void saveSortElements(ExecuteMeta executeMeta, List<SortableElement> elements);
 
-    List<SortableElement> query(ExecuteMeta executeMeta, boolean weightAsc,
-                                @Nullable Long weightBegin, @Nullable Long weightEnd,
-                                @Nullable Long offset, @Nullable Long limit);
+    List<SortableElement> query(ExecuteMeta executeMeta,
+                                boolean weightAsc, Long weightMin, Long weightMax,
+                                Long rowMin, Long rowMax,
+                                Boolean stick,
+                                Long offset, Long limit);
 
     SortableElement find(ExecuteMeta executeMeta, long idValue);
+
+    long totalCount(ExecuteMeta executeMeta);
 }

@@ -1,37 +1,66 @@
 package top.abosen.toys.sortableapi.domain;
 
-import lombok.Value;
+import lombok.Getter;
+
+import javax.annotation.Nullable;
 
 /**
  * @author qiubaisen
  * @date 2021/4/30
  */
 
-@Value
+@Getter
 public class ExecuteMeta {
-    BaseMeta baseMeta;
-    String condition;
+    private final String tableName;
+    private final String idField;
+    private final String weightField;
+    @Nullable private final String stickField;
+    @Nullable private final String rowField;
+    @Nullable private final String condition;
 
-    public static ExecuteMetaBuilder builder(BaseMeta baseMeta) {
-        return new ExecuteMetaBuilder(baseMeta);
+    public boolean hasStickAbility() {
+        return stickField != null && stickField.length() > 0;
     }
 
-    public static final class ExecuteMetaBuilder {
-        private final BaseMeta baseMeta;
-        private String condition;
+    public boolean hasRowFixAbility() {
+        return rowField != null && rowField.length() > 0;
+    }
 
-        private ExecuteMetaBuilder(BaseMeta baseMeta) {
-            this.baseMeta = baseMeta;
-        }
+    private ExecuteMeta(String tableName,
+                        String idField,
+                        String weightField,
+                        @Nullable String stickField,
+                        @Nullable String rowField,
+                        @Nullable String condition) {
+        this.tableName = tableName;
+        this.idField = idField;
+        this.weightField = weightField;
+        this.stickField = stickField;
+        this.rowField = rowField;
+        this.condition = condition;
+    }
 
+    public static ExecuteMeta base(String tableName, String idField, String weightField) {
+        return new ExecuteMeta(tableName, idField, weightField, null, null, null);
+    }
 
-        public ExecuteMetaBuilder condition(String condition) {
-            this.condition = condition;
-            return this;
-        }
+    public static ExecuteMeta stickMeta(String tableName, String idField, String weightField, String stickField) {
+        return new ExecuteMeta(tableName, idField, weightField, stickField, null, null);
+    }
 
-        public ExecuteMeta build() {
-            return new ExecuteMeta(this.baseMeta, this.condition);
-        }
+    public static ExecuteMeta rowMeta(String tableName, String idField, String weightField, String rowField) {
+        return new ExecuteMeta(tableName, idField, weightField, null, rowField, null);
+    }
+
+    public static ExecuteMeta stickRowMeta(String tableName, String idField, String weightField, String stickField, String rowField) {
+        return new ExecuteMeta(tableName, idField, weightField, stickField, rowField, null);
+    }
+
+    public ExecuteMeta condition(String condition) {
+        return new ExecuteMeta(tableName, idField, weightField, stickField, rowField, condition);
+    }
+
+    @Override public String toString() {
+        return "Table[ " + tableName + " ]";
     }
 }

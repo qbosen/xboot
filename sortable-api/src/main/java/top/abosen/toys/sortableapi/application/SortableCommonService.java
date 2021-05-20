@@ -1,6 +1,7 @@
 package top.abosen.toys.sortableapi.application;
 
 import top.abosen.toys.sortableapi.domain.ExecuteMeta;
+import top.abosen.toys.sortableapi.domain.PagedList;
 import top.abosen.toys.sortableapi.domain.SortableElement;
 
 import java.util.List;
@@ -10,10 +11,13 @@ import java.util.List;
  * @date 2021/5/4
  */
 public interface SortableCommonService {
-    List<SortableElement> query(ExecuteMeta executeMeta, long page, long size);
+    PagedList<SortableElement> query(ExecuteMeta executeMeta, long page, long size);
+
 
     /**
      * 移动排序，可能影响中间数据
+     * 置顶数据 只可在置顶数据间移动
+     * 固定行数据 不可移动
      *
      * @param executeMeta 可执行的数据元信息
      * @param id          目标数据id
@@ -24,10 +28,17 @@ public interface SortableCommonService {
 
     /**
      * 移动到最顶上，不影响中间数据
+     * 置顶数据 只可在置顶数据间移动
+     * 固定行数据 不可移动
      *
      * @param executeMeta 可执行的数据元信息
      * @param id          目标数据id
      * @return 是否发生了移动
      */
     boolean moveToTop(ExecuteMeta executeMeta, long id);
+
+
+    boolean stick(ExecuteMeta executeMeta, long id, boolean undo);
+
+    boolean frozenRow(ExecuteMeta executeMeta, long id, long row, boolean undo);
 }

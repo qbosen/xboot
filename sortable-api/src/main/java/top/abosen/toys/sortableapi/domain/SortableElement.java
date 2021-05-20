@@ -16,6 +16,8 @@ public class SortableElement {
 
     private long id;
     private long weight;
+    private long row;
+    private boolean stick;
 
     public void update(long weight) {
         if (this.weight == weight) {
@@ -26,8 +28,16 @@ public class SortableElement {
         }
     }
 
-    @Override
-    public String toString() {
-        return String.format("{%d: %d}", id, weight);
+    @Override public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{").append("id:").append(id)
+                .append(", w:").append(weight);
+        if (row != 0) {
+            builder.append(", r:").append(row);
+        }
+        if (stick) {
+            builder.append(", sticky");
+        }
+        return builder.append('}').toString();
     }
 }

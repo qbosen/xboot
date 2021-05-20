@@ -32,12 +32,12 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
         MybatisAutoConfiguration.class,
         SortableAutoConfiguration.class})
 @Slf4j
-class ContentMetaTest {
+class ContentBaseMetaTest {
     @Autowired
     SortableCommonService sortableCommonService;
 
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER + ParameterizedTest.DEFAULT_DISPLAY_NAME)
     @DisplayName("常规移动")
     @MethodSource("column100provider")
     public void normalTest(ExecuteMeta meta, int fromIdx, int count) {
@@ -45,7 +45,7 @@ class ContentMetaTest {
     }
 
     static Stream<Arguments> column100provider() {
-        final ExecuteMeta meta100 = new ContentMeta().executeMeta(100);
+        final ExecuteMeta meta100 = ContentBaseMeta.executeMeta(100);
         return Stream.of(
                 arguments(meta100, 0, 1),
                 arguments(meta100, 1, 1),
@@ -58,7 +58,7 @@ class ContentMetaTest {
     }
 
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER + ParameterizedTest.DEFAULT_DISPLAY_NAME)
     @DisplayName("超界限的移动")
     @MethodSource("column100_over_bound_provider")
     public void overBoundTest(ExecuteMeta meta, int fromIdx, int count) {
@@ -66,7 +66,7 @@ class ContentMetaTest {
     }
 
     static Stream<Arguments> column100_over_bound_provider() {
-        final ExecuteMeta meta100 = new ContentMeta().executeMeta(100);
+        final ExecuteMeta meta100 = ContentBaseMeta.executeMeta(100);
         return Stream.of(
                 arguments(meta100, 0, 100),
                 arguments(meta100, 1, 100),
@@ -79,7 +79,7 @@ class ContentMetaTest {
         );
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER + ParameterizedTest.DEFAULT_DISPLAY_NAME)
     @DisplayName("有重复权重的移动")
     @MethodSource("column200_duplicate_weight_over_bound_provider")
     public void duplicateOverBoundWeight(ExecuteMeta meta, int fromIdx, int count) {
@@ -87,7 +87,7 @@ class ContentMetaTest {
     }
 
     static Stream<Arguments> column200_duplicate_weight_over_bound_provider() {
-        final ExecuteMeta meta200 = new ContentMeta().executeMeta(200);
+        final ExecuteMeta meta200 = ContentBaseMeta.executeMeta(200);
         return Stream.of(
                 arguments(meta200, 0, 100),
                 arguments(meta200, 1, 100),
@@ -101,7 +101,7 @@ class ContentMetaTest {
     }
 
 
-    @ParameterizedTest
+    @ParameterizedTest(name = ParameterizedTest.DISPLAY_NAME_PLACEHOLDER + ParameterizedTest.DEFAULT_DISPLAY_NAME)
     @DisplayName("有重复权重的移动")
     @MethodSource("column200_duplicate_weight_provider")
     public void duplicateWeight(ExecuteMeta meta, int fromIdx, int count) {
@@ -109,7 +109,7 @@ class ContentMetaTest {
     }
 
     static Stream<Arguments> column200_duplicate_weight_provider() {
-        final ExecuteMeta meta200 = new ContentMeta().executeMeta(200);
+        final ExecuteMeta meta200 = ContentBaseMeta.executeMeta(200);
         return Stream.of(
                 arguments(meta200, 0, 1),
                 arguments(meta200, 1, 1),
@@ -130,7 +130,7 @@ class ContentMetaTest {
         SortableElement target;
 
         {   // 查询数据
-            data = sortableCommonService.query(meta, 1, 100);
+            data = sortableCommonService.query(meta, 1, 100).getData();
             if (fromIdx >= data.size()) {
                 throw new IllegalArgumentException();
             }
@@ -151,7 +151,7 @@ class ContentMetaTest {
             expectCurrentIds = filterIds.toArray(new Long[0]);
         }
         {   // 移动后的查询
-            data = sortableCommonService.query(meta, 1, 100);
+            data = sortableCommonService.query(meta, 1, 100).getData();
             log.debug("current sort: {}", data);
             currentIds = data.stream().map(SortableElement::getId).toArray(Long[]::new);
         }

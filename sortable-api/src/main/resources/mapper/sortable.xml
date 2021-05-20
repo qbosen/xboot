@@ -1,37 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.abosen.toys.sortableapi.infrastructure.database.SortableElementMapper">
-    <update id="sortElements" parameterType="top.abosen.toys.sortableapi.infrastructure.database.SortableElementDto">
+    <resultMap id="SortedElement" type="top.abosen.toys.sortableapi.infrastructure.database.SortedElementDto">
+        <id column="__id_" property="id"/>
+        <result column="__weight_" property="weight"/>
+        <result column="__row_" property="row" jdbcType="BIGINT"/>
+        <result column="__stick_" property="stick" jdbcType="BIT"/>
+    </resultMap>
+
+    <update id="saveElements">
         <foreach collection="elements" item="item" separator=";">
-            update ${item.tableName} set ${item.sortField} = #{item.sortValue} where ${item.idField} = #{item.idValue}
+            update ${tableName}
+            set ${weightField} = #{item.weight}
+            <if test="stickField!=null and stickField.length>0">
+                , ${stickField} = #{item.stick}
+            </if>
+            <if test="rowField!=null and rowField.length>0">
+                , ${rowField} = #{item.row}
+            </if>
+            where ${idField} = #{item.id}
         </foreach>
     </update>
 
-    <resultMap id="SortedElement" type="top.abosen.toys.sortableapi.infrastructure.database.SortedElementDto">
-        <id column="id" property="id"/>
-        <result column="weight" property="weight"/>
-    </resultMap>
-
     <select id="querySortElement" resultMap="SortedElement">
-        select ${idField} as id, ${weightField} as weight
+        select ${idField} as __id_, ${weightField} as __weight_
+        <if test="stickField!=null and stickField.length>0">
+            , ${stickField} as __stick_
+        </if>
+        <if test="rowField!=null and rowField.length>0">
+            , ${rowField} as __row_
+        </if>
         from ${tableName}
         <where>
             <if test="condition!=null and condition.length>0">
                 <![CDATA[${condition}]]>
             </if>
-            <if test='weightBegin != null'>
-                and ${weightField} &gt;= #{weightBegin}
+            <if test='weightMin != null'>
+                and ${weightField} &gt;= #{weightMin}
             </if>
-            <if test='weightEnd != null'>
-                and ${weightField} &lt;= #{weightEnd}
+            <if test='weightMax != null'>
+                and ${weightField} &lt;= #{weightMax}
+            </if>
+            <if test="stick!=null and stickField!=null and stickField.length>0">
+                and ${stickField} = #{stick}
+            </if>
+            <if test="rowField!=null and rowField.length>0">
+                <if test='rowMin != null'>
+                    and ${rowField} &gt;= #{rowMin}
+                </if>
+                <if test='rowMax != null'>
+                    and ${rowField} &lt;= #{rowMax}
+                </if>
             </if>
         </where>
         <choose>
             <when test="weightAsc">
-                order by ${weightField} asc, ${idField} asc
+                order by
+                <if test="stickField!=null and stickField.length>0">
+                    ${stickField} desc,
+                </if>
+                ${weightField} asc, ${idField} asc
             </when>
             <otherwise>
-                order by ${weightField} desc, ${idField} desc
+                order by
+                <if test="stickField!=null and stickField.length>0">
+                    ${stickField} desc,
+                </if>
+                ${weightField} desc, ${idField} desc
             </otherwise>
         </choose>
 
@@ -41,13 +76,28 @@
     </select>
 
     <select id="findSortElement" resultMap="SortedElement">
-        select ${idField} as id, ${weightField} as weight
+        select ${idField} as __id_, ${weightField} as __weight_
+        <if test="stickField!=null and stickField.length>0">
+            , ${stickField} as __stick_
+        </if>
+        <if test="rowField!=null and rowField.length>0">
+            , ${rowField} as __row_
+        </if>
         from ${tableName}
         <where>
             <if test="condition!=null and condition.length>0">
                 <![CDATA[${condition}]]>
             </if>
             and ${idField} = #{idValue}
+        </where>
+    </select>
+
+    <select id="totalCount" resultType="long">
+        select count(*) from ${tableName}
+        <where>
+            <if test="condition!=null and condition.length>0">
+                <![CDATA[${condition}]]>
+            </if>
         </where>
     </select>
 </mapper>
