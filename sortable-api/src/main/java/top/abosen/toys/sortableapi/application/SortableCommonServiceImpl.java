@@ -109,7 +109,12 @@ public class SortableCommonServiceImpl implements SortableCommonService {
         if (sortableElements.isEmpty()) {
             return false;
         }
-        target.update(sortableElements.get(0).getWeight() + 1);
+        SortableElement top = sortableElements.get(0);
+        if (top.getId() == target.getId()) {
+            // 已经是最上面的元素
+            return false;
+        }
+        target.update(top.getWeight() + 1);
 
         sortableRepository.saveSortElements(executeMeta, Collections.singletonList(target));
         return true;
@@ -175,11 +180,25 @@ public class SortableCommonServiceImpl implements SortableCommonService {
         return true;
     }
 
-    @Override public boolean stick(ExecuteMeta executeMeta, long id, boolean undo) {
-        return false;
+    @Override public boolean stick(ExecuteMeta executeMeta, long id, boolean stick) {
+        SortableElement target = sortableRepository.find(executeMeta, id);
+        if (target == null) {
+            return false;
+        }
+        if (target.getRow() > 0) {
+            // 固定行元素无法置顶
+            return false;
+        }
+        if (target.isStick() == stick) {
+            // 无需操作
+            return false;
+        }
+        target.stick(stick);
+        sortableRepository.saveSortElements(executeMeta, Collections.singletonList(target));
+        return true;
     }
 
-    @Override public boolean frozenRow(ExecuteMeta executeMeta, long id, long row, boolean undo) {
+    @Override public boolean frozenRow(ExecuteMeta executeMeta, long id, long row, boolean frozen) {
         return false;
     }
 }

@@ -28,6 +28,15 @@ public class SortableElement {
         }
     }
 
+    public void stick(boolean stick){
+        if (this.stick == stick) {
+            flag.notModify();
+        }else{
+            this.stick = stick;
+            flag.modify();
+        }
+    }
+
     @Override public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("{").append("id:").append(id)

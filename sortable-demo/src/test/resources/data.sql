@@ -1,5 +1,6 @@
+# base moving data
 BEGIN;
-INSERT INTO `content`(`column_id`, `weight`)
+INSERT INTO `content_base`(`column_id`, `weight`)
 VALUES (100, 1),
        (100, 2),
        (100, 3),
@@ -21,6 +22,29 @@ VALUES (100, 1),
        (200, 4),
        (200, 4),
        (200, 10);
+COMMIT;
+# stick data
+BEGIN;
+INSERT INTO `content_stick`(`column_id`, `weight`)
+VALUES (100, 1),
+       (100, 2),
+       (100, 3),
+       (100, 4),
+       (100, 5),
+       (100, 6),
+       (100, 7),
+       (100, 8),
+       (100, 9),
+       (100, 10),
 
-
+       (200, 1),
+       (200, 2),
+       (200, 2),
+       (200, 2),
+       (200, 3),
+       (200, 3),
+       (200, 3),
+       (200, 4),
+       (200, 4),
+       (200, 10);
 COMMIT;

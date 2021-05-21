@@ -4,8 +4,6 @@ import top.abosen.toys.sortableapi.domain.ExecuteMeta;
 import top.abosen.toys.sortableapi.domain.PagedList;
 import top.abosen.toys.sortableapi.domain.SortableElement;
 
-import java.util.List;
-
 /**
  * @author qiubaisen
  * @date 2021/5/4
@@ -38,7 +36,7 @@ public interface SortableCommonService {
     boolean moveToTop(ExecuteMeta executeMeta, long id);
 
 
-    boolean stick(ExecuteMeta executeMeta, long id, boolean undo);
+    boolean stick(ExecuteMeta executeMeta, long id, boolean stick);
 
-    boolean frozenRow(ExecuteMeta executeMeta, long id, long row, boolean undo);
+    boolean frozenRow(ExecuteMeta executeMeta, long id, long row, boolean frozen);
 }
