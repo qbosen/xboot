@@ -18,7 +18,6 @@ public abstract class PageableSupport implements Pageable {
 
     public void setPage(Integer page) {
         if (Objects.nonNull(page)) {
-
             this.page = Math.max(DEFAULT_PAGE, page);
         }
     }
