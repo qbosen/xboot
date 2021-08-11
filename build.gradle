@@ -33,11 +33,12 @@ targetCompatibility = 1.8
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 dependencies {
-    api("top.abosen.dddboot:dddboot-shared-model:0.0.1-SNAPSHOT") { changing = true }
+    api("top.abosen.dddboot:dddboot-shared-model:0.0.3-SNAPSHOT") { changing = true }
     api 'jakarta.servlet:jakarta.servlet-api'
     api 'jakarta.persistence:jakarta.persistence-api'
     api 'jakarta.validation:jakarta.validation-api'
     api 'org.springframework.boot:spring-boot-starter'
+    api 'org.springframework:spring-tx'
     api 'org.springframework.data:spring-data-commons'
     api 'org.springframework.boot:spring-boot-starter-validation'
     api "org.springdoc:springdoc-openapi-ui:$springDocVersion"
