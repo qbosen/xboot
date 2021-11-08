@@ -1,11 +1,13 @@
 buildscript {
     repositories {
+        maven { url "https://maven.aliyun.com/repository/gradle-plugin" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:$spotbugsVersion"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$springbootVersion"
         classpath "io.spring.gradle:dependency-management-plugin:$springDependencyMgrVersion"
+        classpath "org.owasp:dependency-check-gradle:$dependencyCheckVersion"
     }
 }
 allprojects {
@@ -19,7 +21,6 @@ subprojects {
         def localMavenRepositoryUrl = project.findProperty("localMavenRepositoryUrl") as String
 
         if (localMavenRepositoryUrl != null && localMavenRepositoryUrl.trim().length() > 0) {
-            logger.quiet("configure custom maven repo: $localMavenRepositoryUrl")
             maven {
                 url localMavenRepositoryUrl
                 allowInsecureProtocol true
@@ -47,8 +48,11 @@ subprojects {
         useJUnitPlatform()
     }
 
-    apply from: "${rootProject.rootDir}/gradle/spotbugs/spotbugs.gradle"
-    apply from: "${rootProject.rootDir}/gradle/checkstyle/checkstyle.gradle"
-    apply from: "${rootProject.rootDir}/gradle/git-hooks/git-hooks.gradle"
+    apply from: "$rootDir/gradle/spotbugs/spotbugs.gradle"
+    apply from: "$rootDir/gradle/checkstyle/checkstyle.gradle"
+    apply from: "$rootDir/gradle/git-hooks/git-hooks.gradle"
+    apply from: "$rootDir/gradle/dependency-check/dependency-check.gradle"
+    apply from: "$rootDir/gradle/version-info.gradle"
+    apply from: "$rootDir/gradle/jacoco.gradle"
 }
 

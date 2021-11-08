@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd"
-              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:schemaLocation="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd ">
-
-    <!--如何设置忽略：在build/reports/dependency-check-report.html报告中，找到对应项中的"suppress"按钮，可以查看忽略设置-->
-
-</suppressions>

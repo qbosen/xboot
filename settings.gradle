@@ -1,0 +1,7 @@
+rootProject.name = 'xboot'
+
+include 'dddboot-share-model'
+include 'dddboot-spring-common'
+include 'dddboot-sortable-util'
+
+include 'dddboot-sortable-util:sortable-demo'

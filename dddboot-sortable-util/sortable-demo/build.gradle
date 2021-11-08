@@ -1,11 +1,11 @@
 plugins {
     id 'java-library'
-    id "org.springframework.boot" version "2.4.2"
-    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+    id "org.springframework.boot"
+    id "io.spring.dependency-management"
 }
 
 dependencies {
-    implementation project(":sortable-api")
+    implementation project(":dddboot-sortable-util")
 
     implementation 'mysql:mysql-connector-java:8.0.23'
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.4'
@@ -16,7 +16,7 @@ dependencies {
     testAnnotationProcessor "org.projectlombok:lombok"
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntime 'com.h2database:h2:1.4.200'
+    testRuntimeOnly 'com.h2database:h2:1.4.200'
     testImplementation 'org.junit.jupiter:junit-jupiter-api'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
 }

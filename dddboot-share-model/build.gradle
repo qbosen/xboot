@@ -1,22 +1,7 @@
-buildscript {
-    repositories {
-        maven { url "https://plugins.gradle.org/m2/" }
-    }
-    dependencies {
-        classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:$spotbugsVersion"
-        classpath "org.owasp:dependency-check-gradle:$dependencyCheckVersion"
-    }
-}
 plugins {
     id 'java-library'
     id 'maven-publish'
     id 'idea'
-}
-
-repositories {
-    maven { url "http://192.168.6.120:8181/repository/maven-public/" }
-    maven { url "https://maven.aliyun.com/repository/central" }
-    mavenCentral()
 }
 
 sourceCompatibility = 1.8
@@ -91,10 +76,3 @@ publishing {
         }
     }
 }
-
-apply from: "$projectDir/gradle/checkstyle/checkstyle.gradle"
-apply from: "$projectDir/gradle/spotbugs/spotbugs.gradle"
-apply from: "$projectDir/gradle/git-hooks/git-hooks.gradle"
-apply from: "$projectDir/gradle/dependency-check/dependency-check.gradle"
-apply from: "$projectDir/gradle/version-info.gradle"
-apply from: "$projectDir/gradle/jacoco.gradle"
