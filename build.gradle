@@ -1,0 +1,100 @@
+buildscript {
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:$spotbugsVersion"
+        classpath "org.owasp:dependency-check-gradle:$dependencyCheckVersion"
+    }
+}
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'idea'
+}
+
+repositories {
+    maven { url "http://192.168.6.120:8181/repository/maven-public/" }
+    maven { url "https://maven.aliyun.com/repository/central" }
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+dependencies {
+    api "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+
+    //utils
+    api("com.google.guava:guava:$guavaVersion")
+    api("org.apache.commons:commons-lang3:$commonsLangVersion")
+    api("org.apache.commons:commons-collections4:$commonsCollectionVersion")
+
+
+    //jackson dependencies
+    implementation("com.fasterxml.jackson.module:jackson-module-parameter-names:$jacksonVersion")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
+    api("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+    api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+    api("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
+
+    // lombok dependencies
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+
+    //test dependencies
+    testImplementation platform("org.junit:junit-bom:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+configurations.all {
+    exclude group: "junit", module: "junit"
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+test {
+    useJUnitPlatform()
+}
+
+java {
+    withSourcesJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = rootProject.group
+            artifactId = rootProject.artifact
+            version = rootProject.version
+            from components.java
+        }
+    }
+
+    repositories {
+        maven {
+            name '120'
+            credentials { username "deployment"; password "123456" }
+            url = version.endsWith('SNAPSHOT') ?
+                    "http://192.168.6.120:8181/repository/maven-snapshots/" :
+                    "http://192.168.6.120:8181/repository/maven-releases/"
+        }
+    }
+}
+
+apply from: "$projectDir/gradle/checkstyle/checkstyle.gradle"
+apply from: "$projectDir/gradle/spotbugs/spotbugs.gradle"
+apply from: "$projectDir/gradle/git-hooks/git-hooks.gradle"
+apply from: "$projectDir/gradle/dependency-check/dependency-check.gradle"
+apply from: "$projectDir/gradle/version-info.gradle"
+apply from: "$projectDir/gradle/jacoco.gradle"
