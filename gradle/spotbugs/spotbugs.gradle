@@ -5,7 +5,7 @@ spotbugs {
     ignoreFailures = false
     showStackTraces = true
     showProgress = true
-    excludeFilter = file("$projectDir/gradle/spotbugs/exclude.xml")
+    excludeFilter = file("$rootDir/gradle/spotbugs/exclude.xml")
     reportLevel = "high"
 }
 

@@ -7,7 +7,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.sql.init.SqlInitializationAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import top.abosen.dddboot.sortableutil.SortableAutoConfiguration;
 import top.abosen.dddboot.sortableutil.application.SortableCommonService;
@@ -29,6 +31,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @SpringBootTest(classes = {
         DataSourceAutoConfiguration.class,
+        SqlInitializationAutoConfiguration.class,
         MybatisAutoConfiguration.class,
         SortableAutoConfiguration.class})
 @Slf4j

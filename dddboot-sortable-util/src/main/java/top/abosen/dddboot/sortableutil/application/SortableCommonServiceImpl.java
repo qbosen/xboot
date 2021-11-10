@@ -138,7 +138,10 @@ public class SortableCommonServiceImpl implements SortableCommonService {
 
 
     private boolean doSort(ExecuteMeta executeMeta, SortableElement target, boolean duringStick, int count) {
-        if (count == 0) return false;
+        if (count == 0) {
+            return false;
+        }
+
         boolean moveDown = count > 0;
 
         // 构建一种排序方式，这种方式使排序后的 目标一定是第一个元素。
@@ -148,10 +151,10 @@ public class SortableCommonServiceImpl implements SortableCommonService {
 
         // 再一次获取影响元素，这一次能够确保影响不扩散
         LinkedList<SortableElement> mayChange = sortableRepository.query(executeMeta, !moveDown,
-                !moveDown ? target.getWeight() : null,
-                moveDown ? target.getWeight() : null,
-                0L, 0L, duringStick,
-                0L, Math.abs(count) + 1L)
+                        !moveDown ? target.getWeight() : null,
+                        moveDown ? target.getWeight() : null,
+                        0L, 0L, duringStick,
+                        0L, Math.abs(count) + 1L)
                 .stream()
                 .filter(it -> it.getId() != target.getId())     // 过滤掉目标，因为目标不可能是第一个元素
                 .sorted(comparator)

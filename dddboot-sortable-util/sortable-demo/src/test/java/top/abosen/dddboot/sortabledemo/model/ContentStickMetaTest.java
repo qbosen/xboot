@@ -22,19 +22,4 @@ import top.abosen.dddboot.sortableutil.application.SortableCommonService;
 @Slf4j
 class ContentStickMetaTest {
 
-
-    @SpringBootTest(classes = {DataSourceAutoConfiguration.class, MybatisAutoConfiguration.class, SortableAutoConfiguration.class})
-    @Nested
-    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class Basic_stick_feature_test {
-        @Autowired
-        SortableCommonService sortableCommonService;
-
-        @DisplayName("常规内容置顶")
-        @ParameterizedTest(name = "For example, year {0} is not supported.")
-        @MethodSource("")
-        public void normal_stick_content() {
-//            sortableCommonService.query();
-        }
-    }
 }

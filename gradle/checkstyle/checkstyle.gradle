@@ -6,7 +6,7 @@ checkstyle {
     ignoreFailures = false
 
     toolVersion = '8.41'
-    configFile = file("$projectDir/gradle/checkstyle/checks.xml")
+    configFile = file("$rootDir/gradle/checkstyle/checks.xml")
 
 }
 

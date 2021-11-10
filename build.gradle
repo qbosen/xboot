@@ -14,15 +14,21 @@ allprojects {
     apply plugin: 'idea'
 }
 
+
+static String loadMavenUrl(Project pj, String prop) {
+    def url = pj.findProperty(prop) as String
+    return url == null || url.trim().length() == 0 ? null : url.trim()
+}
+
 subprojects {
     apply plugin: 'java-library'
 
     repositories {
-        def localMavenRepositoryUrl = project.findProperty("localMavenRepositoryUrl") as String
+        def localMavenPublicRU = loadMavenUrl(project, "localMavenPublicRU")
 
-        if (localMavenRepositoryUrl != null && localMavenRepositoryUrl.trim().length() > 0) {
+        if (localMavenPublicRU != null) {
             maven {
-                url localMavenRepositoryUrl
+                url localMavenPublicRU
                 allowInsecureProtocol true
             }
         }
@@ -43,7 +49,36 @@ subprojects {
         exclude group: "junit", module: "junit"
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
     }
+    afterEvaluate {
+        def localMavenReleaseRU = loadMavenUrl(project, "localMavenReleaseRU")
+        def localMavenSnapshotRU = loadMavenUrl(project, "localMavenSnapshotRU")
 
+        if (plugins.hasPlugin("maven-publish") && localMavenReleaseRU != null && localMavenSnapshotRU != null) {
+            logger.quiet("配置[$project.name]发布仓库")
+            group = rootProject.group
+            version = rootProject.version
+            publishing {
+                publications {
+                    mavenJava(MavenPublication) {
+                        groupId = rootProject.group
+                        version = rootProject.version
+                        artifactId = project.name
+                        from components.java
+                    }
+                }
+
+                repositories {
+                    maven {
+                        name 'cust'
+                        credentials { username "$mavenUsername"; password "$mavenPassword" }
+                        url = version.endsWith('SNAPSHOT') ? localMavenSnapshotRU : localMavenReleaseRU
+                        allowInsecureProtocol true
+                    }
+                }
+            }
+        }
+
+    }
     test {
         useJUnitPlatform()
     }

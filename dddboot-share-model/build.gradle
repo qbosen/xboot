@@ -4,11 +4,6 @@ plugins {
     id 'idea'
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
-
 dependencies {
     api "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
 
@@ -39,40 +34,8 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
 }
 
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-configurations.all {
-    exclude group: "junit", module: "junit"
-    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-}
-test {
-    useJUnitPlatform()
-}
+jar { enabled = true; archiveClassifier.set('') }
 
 java {
     withSourcesJar()
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = rootProject.group
-            artifactId = rootProject.artifact
-            version = rootProject.version
-            from components.java
-        }
-    }
-
-    repositories {
-        maven {
-            name '120'
-            credentials { username "deployment"; password "123456" }
-            url = version.endsWith('SNAPSHOT') ?
-                    "http://192.168.6.120:8181/repository/maven-snapshots/" :
-                    "http://192.168.6.120:8181/repository/maven-releases/"
-        }
-    }
 }

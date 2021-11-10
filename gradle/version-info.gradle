@@ -8,8 +8,6 @@ def buildDate = (ZonedDateTime.now((ZoneId.of("Asia/Shanghai")))).toString()
 
 
 jar {
-    baseName = rootProject.artifact
-    version = rootProject.version
     manifest {
         attributes(
                 "Git-Revision": gitRevision,
