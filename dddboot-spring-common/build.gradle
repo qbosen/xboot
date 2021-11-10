@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":dddboot-share-model"))
+    api(project(":dddboot-shared-model"))
     api 'jakarta.servlet:jakarta.servlet-api'
     api 'jakarta.persistence:jakarta.persistence-api'
     api 'jakarta.validation:jakarta.validation-api'
