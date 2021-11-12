@@ -1,0 +1,30 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id "org.springframework.boot"
+    id "io.spring.dependency-management"
+}
+
+dependencies {
+    implementation("org.springframework.cloud:spring-cloud-starter-consul-config:3.0.3")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    // lombok dependencies
+    compileOnly("org.projectlombok:lombok:$lombokVersion")
+    annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+    testCompileOnly("org.projectlombok:lombok:$lombokVersion")
+    testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
+
+    //test dependencies
+    testImplementation platform("org.junit:junit-bom:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
+}
+
+
+jar { enabled = true; archiveClassifier.set('') }
+bootJar { enabled = false }
+java {
+    withSourcesJar()
+}

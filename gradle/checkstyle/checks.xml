@@ -29,7 +29,7 @@
         <module name="DefaultComesLast"/>
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="ExplicitInitialization"/>
+<!--        <module name="ExplicitInitialization"/>-->
         <module name="MultipleVariableDeclarations"/>
         <module name="NoClone"/>
         <module name="NoFinalizer"/>

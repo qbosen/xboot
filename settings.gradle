@@ -4,4 +4,7 @@ include 'dddboot-shared-model'
 include 'dddboot-spring-common'
 include 'dddboot-sortable-util'
 
+include 'dddboot-consul-config-util'
+
 include 'dddboot-sortable-util:sortable-demo'
+

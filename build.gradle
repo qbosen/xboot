@@ -22,7 +22,6 @@ static String loadMavenUrl(Project pj, String prop) {
 
 subprojects {
     apply plugin: 'java-library'
-
     repositories {
         def localMavenPublicRU = loadMavenUrl(project, "localMavenPublicRU")
 
@@ -55,8 +54,6 @@ subprojects {
 
         if (plugins.hasPlugin("maven-publish") && localMavenReleaseRU != null && localMavenSnapshotRU != null) {
             logger.quiet("配置[$project.name]发布仓库")
-            group = rootProject.group
-            version = rootProject.version
             publishing {
                 publications {
                     mavenJava(MavenPublication) {
