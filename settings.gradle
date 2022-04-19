@@ -7,4 +7,5 @@ include 'dddboot-sortable-util'
 include 'dddboot-consul-config-util'
 
 include 'dddboot-sortable-util:sortable-demo'
+include 'diff-match-patch-util'
 
