@@ -3,6 +3,10 @@ package top.abosen.dddboot.dmputil;
 
 import name.fraser.neil.plaintext.diff_match_patch;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 public class DiffMatchPatch {
 
     public final diff_match_patch dmp = new diff_match_patch();
@@ -151,12 +155,23 @@ public class DiffMatchPatch {
     //endregion
 
     public String diffHtml(String oldText, String newText) {
+        Map<String, String> map = new HashMap<>();
+        map.put("&", "&amp;");
+        map.put("<", "&lt;");
+        map.put(">", "&gt;");
+        map.put("\n", "&para;<br>");
+        return diffHtml(oldText, newText, map);
+    }
+
+    public String diffHtml(String oldText, String newText, Map<String, String> escapeMap) {
         StringBuilder html = new StringBuilder();
         for (diff_match_patch.Diff aDiff : dmp.diff_main(oldText, newText, true)) {
-            String text = aDiff.text.replace("&", "&amp;")
-                    .replace("<", "&lt;")
-                    .replace(">", "&gt;")
-                    .replace("\n", "&para;<br>");
+            String text = aDiff.text;
+            if (escapeMap != null) {
+                for (Map.Entry<String, String> stringStringEntry : escapeMap.entrySet()) {
+                    text = text.replace(stringStringEntry.getKey(), stringStringEntry.getValue());
+                }
+            }
             switch (aDiff.operation) {
                 case INSERT:
                     html.append("<span class=\"diffinsert\">").append(text)
