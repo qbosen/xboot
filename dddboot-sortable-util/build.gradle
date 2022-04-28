@@ -3,6 +3,7 @@ plugins {
     id 'maven-publish'
     id "org.springframework.boot"
     id "io.spring.dependency-management"
+    id "groovy"
 }
 
 
@@ -21,12 +22,31 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation('org.junit.jupiter:junit-jupiter-engine')
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // spock test
+    testImplementation platform("org.spockframework:spock-bom:2.0-groovy-3.0")
+    testImplementation "org.codehaus.groovy:groovy:3.0.8"
+    testImplementation "org.spockframework:spock-core"
+    testImplementation "org.spockframework:spock-spring"
+    // optional dependencies for using Spock
+    testImplementation "org.hamcrest:hamcrest-core:2.2"   // only necessary if Hamcrest matchers are used
+    testRuntimeOnly "net.bytebuddy:byte-buddy:1.11.0" // allows mocking of classes (in addition to interfaces)
+    testRuntimeOnly "org.objenesis:objenesis:3.2"      // allows mocking of classes without default constructor (together with ByteBuddy or CGLIB)
+    testRuntimeOnly "com.h2database:h2:1.4.200"        // allows H2 database to be used for testing
+    testImplementation "org.codehaus.groovy:groovy-sql:3.0.8"
 
 }
 
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
+    }
+}
+sourceSets{
+    test{
+        groovy{
+            srcDirs = ["src/test/java", "src/test/groovy"]
+        }
     }
 }
 

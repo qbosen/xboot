@@ -14,9 +14,8 @@ import lombok.NoArgsConstructor;
 public class SortedElementDto {
     long id;
     long weight;
-
+    // 是否置顶，默认为0
+    long stick;
     // 是否设置固定行，默认为0
     long row;
-    // 是否置顶，默认为false
-    boolean stick;
 }
