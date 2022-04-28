@@ -10,11 +10,8 @@ import java.util.List;
 public interface SortableElementRepository {
     void saveSortElements(ExecuteMeta executeMeta, List<SortableElement> elements);
 
-    List<SortableElement> query(ExecuteMeta executeMeta,
-                                boolean weightAsc, Long weightMin, Long weightMax,
-                                Long rowMin, Long rowMax,
-                                Boolean stick,
-                                Long offset, Long limit);
+    List<SortableElement> query(SortableQuery query);
+    long count(SortableQuery query);
 
     SortableElement find(ExecuteMeta executeMeta, long idValue);
 

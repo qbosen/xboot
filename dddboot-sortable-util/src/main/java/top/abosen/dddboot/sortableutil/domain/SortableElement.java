@@ -28,16 +28,38 @@ public class SortableElement {
         }
     }
 
-    public void stick(boolean stick){
+    public boolean stick(boolean stick) {
         if (this.stick == stick) {
             flag.notModify();
-        }else{
+            return false;
+        } else {
             this.stick = stick;
             flag.modify();
+            return true;
         }
     }
 
-    @Override public String toString() {
+    /**
+     * 固定行
+     *
+     * @param row 0表示不固定行
+     */
+    public boolean frozen(long row) {
+        if (row < 0) {
+            row = 0;
+        }
+        if (this.row == row) {
+            flag.notModify();
+            return false;
+        } else {
+            this.row = row;
+            flag.modify();
+            return true;
+        }
+    }
+
+    @Override
+    public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("{").append("id:").append(id)
                 .append(", w:").append(weight);
@@ -45,7 +67,7 @@ public class SortableElement {
             builder.append(", r:").append(row);
         }
         if (stick) {
-            builder.append(", sticky");
+            builder.append(", s");
         }
         return builder.append('}').toString();
     }

@@ -22,15 +22,7 @@
         </foreach>
     </update>
 
-    <select id="querySortElement" resultMap="SortedElement">
-        select ${idField} as __id_, ${weightField} as __weight_
-        <if test="stickField!=null and stickField.length>0">
-            , ${stickField} as __stick_
-        </if>
-        <if test="rowField!=null and rowField.length>0">
-            , ${rowField} as __row_
-        </if>
-        from ${tableName}
+    <sql id="conditionSQL">
         <where>
             <if test="condition!=null and condition.length>0">
                 <![CDATA[${condition}]]>
@@ -53,6 +45,25 @@
                 </if>
             </if>
         </where>
+
+    </sql>
+
+    <select id="countSortElement" resultType="java.lang.Long">
+        select count(*)
+        from ${tableName}
+        <include refid="conditionSQL"/>
+    </select>
+
+    <select id="querySortElement" resultMap="SortedElement">
+        select ${idField} as __id_, ${weightField} as __weight_
+        <if test="stickField!=null and stickField.length>0">
+            , ${stickField} as __stick_
+        </if>
+        <if test="rowField!=null and rowField.length>0">
+            , ${rowField} as __row_
+        </if>
+        from ${tableName}
+        <include refid="conditionSQL"/>
         <choose>
             <when test="weightAsc">
                 order by

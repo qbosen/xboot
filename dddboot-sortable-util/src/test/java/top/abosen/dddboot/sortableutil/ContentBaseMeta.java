@@ -1,4 +1,4 @@
-package top.abosen.dddboot.sortabledemo.model;
+package top.abosen.dddboot.sortableutil;
 
 import top.abosen.dddboot.sortableutil.domain.ExecuteMeta;
 

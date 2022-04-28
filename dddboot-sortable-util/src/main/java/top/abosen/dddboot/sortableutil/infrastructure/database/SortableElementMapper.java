@@ -65,6 +65,25 @@ public interface SortableElementMapper {
             @Nullable @Param("limit") Long limit
     );
 
+    long countSortElement(
+            @Param("tableName") String tableName,
+            @Param("idField") String idField,
+            @Param("weightField") String weightField,
+
+            @Nullable @Param("stickField") String stickField,
+            @Nullable @Param("rowField") String rowField,
+
+            @Nullable @Param("condition") String condition,
+
+            @Nullable @Param("weightMin") Long weightMin,
+            @Nullable @Param("weightMax") Long weightMax,
+            @Param("weightAsc") boolean weightAsc,
+
+            @Nullable @Param("rowMin") Long rowMin,
+            @Nullable @Param("rowMax") Long rowMax,
+            @Nullable @Param("stick") Boolean stick
+    );
+
     SortedElementDto findSortElement(
             @Param("tableName") String tableName,
             @Param("idField") String idField,

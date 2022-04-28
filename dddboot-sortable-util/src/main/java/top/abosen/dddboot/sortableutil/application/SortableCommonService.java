@@ -38,5 +38,15 @@ public interface SortableCommonService {
 
     boolean stick(ExecuteMeta executeMeta, long id, boolean stick);
 
-    boolean frozenRow(ExecuteMeta executeMeta, long id, long row, boolean frozen);
+    /**
+     * 固定行操作
+     * 处于置顶状态的数据不会被操作
+     *
+     * @param executeMeta 可执行的数据元信息
+     * @param id          目标数据id
+     * @param row         行数;0或负数表示取消固定;
+     * @param override    覆盖操作;false:目标位置有数据时跳过;true:旧数据被取消固定行
+     * @return 是否发生了修改
+     */
+    boolean frozenRow(ExecuteMeta executeMeta, long id, long row, boolean override);
 }

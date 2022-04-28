@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL
+    url: jdbc:h2:mem:testdb?allowMultiQueries=true;DB_CLOSE_DELAY=-1;MODE=MySQL;
     driver-class-name: org.h2.Driver
   output:
     ansi:
@@ -13,8 +13,7 @@ spring:
 logging:
   level:
     root: info
-    top.abosen.toys.sortabledemo: debug
-    top.abosen.toys.sortableapi: debug
+    top.abosen.dddboot.sortableutil: debug
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml

@@ -1,4 +1,4 @@
-package top.abosen.dddboot.sortabledemo.model;
+package top.abosen.dddboot.sortableutil;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
@@ -7,7 +7,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.h2.H2ConsoleAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.sql.init.SqlInitializationAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -50,13 +49,13 @@ class ContentBaseMetaTest {
     static Stream<Arguments> column100provider() {
         final ExecuteMeta meta100 = ContentBaseMeta.executeMeta(100);
         return Stream.of(
-                arguments(meta100, 0, 1),
-                arguments(meta100, 1, 1),
-                arguments(meta100, 1, 5),
-                arguments(meta100, 1, 10),
-                arguments(meta100, 1, -10),
-                arguments(meta100, 9, -10),
-                arguments(meta100, 9, -5)
+                Arguments.arguments(meta100, 0, 1),
+                Arguments.arguments(meta100, 1, 1),
+                Arguments.arguments(meta100, 1, 5),
+                Arguments.arguments(meta100, 1, 10),
+                Arguments.arguments(meta100, 1, -10),
+                Arguments.arguments(meta100, 9, -10),
+                Arguments.arguments(meta100, 9, -5)
         );
     }
 
@@ -71,14 +70,14 @@ class ContentBaseMetaTest {
     static Stream<Arguments> column100_over_bound_provider() {
         final ExecuteMeta meta100 = ContentBaseMeta.executeMeta(100);
         return Stream.of(
-                arguments(meta100, 0, 100),
-                arguments(meta100, 1, 100),
-                arguments(meta100, 5, 100),
-                arguments(meta100, 9, 100),
-                arguments(meta100, 0, -100),
-                arguments(meta100, 1, -100),
-                arguments(meta100, 5, -100),
-                arguments(meta100, 9, -100)
+                Arguments.arguments(meta100, 0, 100),
+                Arguments.arguments(meta100, 1, 100),
+                Arguments.arguments(meta100, 5, 100),
+                Arguments.arguments(meta100, 9, 100),
+                Arguments.arguments(meta100, 0, -100),
+                Arguments.arguments(meta100, 1, -100),
+                Arguments.arguments(meta100, 5, -100),
+                Arguments.arguments(meta100, 9, -100)
         );
     }
 
@@ -92,14 +91,14 @@ class ContentBaseMetaTest {
     static Stream<Arguments> column200_duplicate_weight_over_bound_provider() {
         final ExecuteMeta meta200 = ContentBaseMeta.executeMeta(200);
         return Stream.of(
-                arguments(meta200, 0, 100),
-                arguments(meta200, 1, 100),
-                arguments(meta200, 5, 100),
-                arguments(meta200, 9, 100),
-                arguments(meta200, 0, -100),
-                arguments(meta200, 1, -100),
-                arguments(meta200, 5, -100),
-                arguments(meta200, 9, -100)
+                Arguments.arguments(meta200, 0, 100),
+                Arguments.arguments(meta200, 1, 100),
+                Arguments.arguments(meta200, 5, 100),
+                Arguments.arguments(meta200, 9, 100),
+                Arguments.arguments(meta200, 0, -100),
+                Arguments.arguments(meta200, 1, -100),
+                Arguments.arguments(meta200, 5, -100),
+                Arguments.arguments(meta200, 9, -100)
         );
     }
 
@@ -114,13 +113,13 @@ class ContentBaseMetaTest {
     static Stream<Arguments> column200_duplicate_weight_provider() {
         final ExecuteMeta meta200 = ContentBaseMeta.executeMeta(200);
         return Stream.of(
-                arguments(meta200, 0, 1),
-                arguments(meta200, 1, 1),
-                arguments(meta200, 1, 5),
-                arguments(meta200, 1, 10),
-                arguments(meta200, 1, -10),
-                arguments(meta200, 9, -10),
-                arguments(meta200, 9, -5)
+                Arguments.arguments(meta200, 0, 1),
+                Arguments.arguments(meta200, 1, 1),
+                Arguments.arguments(meta200, 1, 5),
+                Arguments.arguments(meta200, 1, 10),
+                Arguments.arguments(meta200, 1, -10),
+                Arguments.arguments(meta200, 9, -10),
+                Arguments.arguments(meta200, 9, -5)
         );
     }
 

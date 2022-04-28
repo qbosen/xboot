@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import top.abosen.dddboot.sortableutil.domain.ExecuteMeta;
 import top.abosen.dddboot.sortableutil.domain.SortableElement;
 import top.abosen.dddboot.sortableutil.domain.SortableElementRepository;
+import top.abosen.dddboot.sortableutil.domain.SortableQuery;
 import top.abosen.dddboot.sortableutil.infrastructure.database.SortableElementMapper;
 import top.abosen.dddboot.sortableutil.infrastructure.database.SortedElementDto;
 
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
  * @author qiubaisen
  * @date 2021/4/30
  */
+@SuppressWarnings("DuplicatedCode")
 @RequiredArgsConstructor
 public class SortableRepositoryImpl implements SortableElementRepository {
     private final SortableElementMapper mapper;
@@ -46,7 +48,8 @@ public class SortableRepositoryImpl implements SortableElementRepository {
                 modified);
     }
 
-    @Override public long totalCount(ExecuteMeta executeMeta) {
+    @Override
+    public long totalCount(ExecuteMeta executeMeta) {
         return mapper.totalCount(
                 executeMeta.getTableName(),
                 executeMeta.getCondition()
@@ -54,19 +57,54 @@ public class SortableRepositoryImpl implements SortableElementRepository {
     }
 
     @Override
-    public List<SortableElement> query(ExecuteMeta executeMeta,
-                                       boolean weightAsc, Long weightMin, Long weightMax,
-                                       Long rowMin, Long rowMax,
-                                       Boolean stick,
-                                       Long offset, Long limit) {
+    public List<SortableElement> query(SortableQuery query) {
+        ExecuteMeta executeMeta = query.getExecuteMeta();
+        boolean weightAsc = query.isWeightAsc();
+        Long weightMin = query.getWeightMin();
+        Long weightMax = query.getWeightMax();
+        Long rowMin = query.getRowMin();
+        Long rowMax = query.getRowMax();
+        Boolean stick = query.getStick();
+        Long offset = query.getOffset();
+        Long limit = query.getLimit();
+
         if ((offset != null && offset < 0) ||
-            (limit != null && limit <= 0) ||
-            (weightMin != null && weightMax != null && weightMin > weightMax) ||
-            (rowMin != null && rowMax != null && rowMin > rowMax)
+                (limit != null && limit <= 0) ||
+                (weightMin != null && weightMax != null && weightMin > weightMax) ||
+                (rowMin != null && rowMax != null && rowMin > rowMax)
         ) {
             return Collections.emptyList();
         }
         return mapper.querySortElement(
+                        executeMeta.getTableName(),
+                        executeMeta.getIdField(),
+                        executeMeta.getWeightField(),
+                        executeMeta.getStickField(),
+                        executeMeta.getRowField(),
+                        executeMeta.getCondition(),
+                        weightMin, weightMax, weightAsc,
+                        rowMin, rowMax, stick,
+                        offset, limit
+                ).stream().map(it -> new SortableElement(it.getId(), it.getWeight(), it.getRow(), it.isStick()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public long count(SortableQuery query) {
+        ExecuteMeta executeMeta = query.getExecuteMeta();
+        boolean weightAsc = query.isWeightAsc();
+        Long weightMin = query.getWeightMin();
+        Long weightMax = query.getWeightMax();
+        Long rowMin = query.getRowMin();
+        Long rowMax = query.getRowMax();
+        Boolean stick = query.getStick();
+
+        if ((weightMin != null && weightMax != null && weightMin > weightMax) ||
+                (rowMin != null && rowMax != null && rowMin > rowMax)
+        ) {
+            return 0L;
+        }
+        return mapper.countSortElement(
                 executeMeta.getTableName(),
                 executeMeta.getIdField(),
                 executeMeta.getWeightField(),
@@ -74,10 +112,8 @@ public class SortableRepositoryImpl implements SortableElementRepository {
                 executeMeta.getRowField(),
                 executeMeta.getCondition(),
                 weightMin, weightMax, weightAsc,
-                rowMin, rowMax, stick,
-                offset, limit
-        ).stream().map(it -> new SortableElement(it.getId(), it.getWeight(), it.getRow(), it.isStick()))
-                .collect(Collectors.toList());
+                rowMin, rowMax, stick
+        );
     }
 
     @Override
