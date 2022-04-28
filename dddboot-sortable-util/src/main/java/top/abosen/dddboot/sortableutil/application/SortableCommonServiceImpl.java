@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import top.abosen.dddboot.sortableutil.domain.*;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.ToLongFunction;
 import java.util.stream.Collectors;
 
 /**
@@ -15,13 +18,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SortableCommonServiceImpl implements SortableCommonService {
     private final SortableElementRepository sortableRepository;
+    private final SortableStickWeightGenerator sortableStickWeightGenerator;
 
-    // 权重降序 >> id降序
-    private final Comparator<SortableElement> weightDescThenIdDescSort = Comparator.comparing(SortableElement::getWeight).reversed()
-            .thenComparing(Comparator.comparing(SortableElement::getId).reversed());
-    // 权重升序 >> id升序
-    private final Comparator<SortableElement> weightAscThenIdAscSort = Comparator.comparing(SortableElement::getWeight)
-            .thenComparing(SortableElement::getId);
+    // 置顶权重降序 >> 权重降序 >> id降序
+    private final Comparator<SortableElement> weightDescThenIdDescSort = Comparator.comparing(SortableElement::getStick).reversed()
+            .thenComparing(Comparator.comparing(SortableElement::getWeight).reversed()
+                    .thenComparing(Comparator.comparing(SortableElement::getId).reversed())
+            );
+    // 置顶权重降序 >> 权重升序 >> id升序
+    private final Comparator<SortableElement> weightAscThenIdAscSort = Comparator.comparing(SortableElement::getStick).reversed()
+            .thenComparing(Comparator.comparing(SortableElement::getWeight)
+                    .thenComparing(SortableElement::getId));
 
     @Override
     public PagedList<SortableElement> query(ExecuteMeta executeMeta, long page, long size) {
@@ -44,9 +51,9 @@ public class SortableCommonServiceImpl implements SortableCommonService {
         long frozenBefore = offset == 0 ? 0 : sortableRepository.count(
                 SortableQuery.builder(executeMeta).rowMin(1L).rowMax(offset).stick(false).build()
         );
-        // 3. 需要填充的非固定内容
+        // 3. 需要填充的非固定内容(置顶的也在此类)
         List<SortableElement> unfrozenData = frozenData.size() == size ? Collections.emptyList() : sortableRepository.query(
-                SortableQuery.builder(executeMeta).rowMin(0L).rowMax(0L).offset(offset - frozenBefore).limit(size - frozenData.size()).build()
+                SortableQuery.builder(executeMeta).row(false).offset(offset - frozenBefore).limit(size - frozenData.size()).build()
         );
         // 4. 合并
         frozenData.sort(Comparator.comparingLong(SortableElement::getRow));
@@ -81,56 +88,56 @@ public class SortableCommonServiceImpl implements SortableCommonService {
         if (target == null) {
             return false;
         }
-        if (target.getRow() > 0) {
+        if (target.isFrozen()) {
             // 固定行元素无法移动
             return false;
         }
         boolean moveDown = count > 0;
-        // 置顶元素的移动在 置顶元素内发生
-        boolean duringStick = target.isStick();
+        boolean moveInStick = target.isStick();
+
+        // 置顶元素的权重为 stick 字段, 非置顶元素为 weight 字段
 
         // 原始排序一定是 置顶>权重降序>id降序
-        List<SortableElement> mayChange = sortableRepository.query(
-                SortableQuery.builder(executeMeta)
-                        .weightAsc(!moveDown)
-                        /*权重降序排列，目标向上移动，目标权重为查询的最小值*/
-                        .weightMin(!moveDown ? target.getWeight() : null)
-                        /*权重降序排列，目标向下移动，目标权重为查询的最大值*/
-                        .weightMax(moveDown ? target.getWeight() : null)
-                        .rowMin(0L).rowMax(0L)
-                        /*数据移动发生在非固定行数据中，发生在同种置顶状态的数据中*/
-                        .stick(duringStick)
-                        .offset(0L)
-                        /*移动count个元素，则影响了count+1条数据*/
-                        .limit(Math.abs(count) + 1L)
-                        .build()
-        );
+        SortableQuery query = SortableQuery.builder(executeMeta)
+                .orderAsc(!moveDown)
+                /*置顶内容,向下移动,查找比当前行权重小的值; 设置查询权重最大值为当前值*/
+                .condition(moveInStick && moveDown, it -> it.stickMax(target.getStick()))
+                .condition(moveInStick && !moveDown, it -> it.stickMin(target.getStick()))
+                .condition(!moveInStick && moveDown, it -> it.weightMax(target.getWeight()))
+                .condition(!moveInStick && !moveDown, it -> it.weightMin(target.getWeight()))
+                .row(false)
+                .stick(moveInStick)
+                .offset(0L)
+                /*移动count个元素，则影响了count+1条数据*/
+                .limit(Math.abs(count) + 1L)
+                .build();
+        List<SortableElement> mayChange = sortableRepository.query(query);
 
         // 计算权重槽是否充足
-        long min = mayChange.stream().mapToLong(SortableElement::getWeight).min().orElse(target.getWeight());
-        long max = mayChange.stream().mapToLong(SortableElement::getWeight).max().orElse(target.getWeight());
+        long min = mayChange.stream().mapToLong(SortableElement::getSort).min().orElse(target.getSort());
+        long max = mayChange.stream().mapToLong(SortableElement::getSort).max().orElse(target.getSort());
 
         // 受影响的数据：满足权重槽位数量、按权重降序&id降序
-        List<SortableElement> elements = querySortableRecursive(executeMeta, mayChange, duringStick, min, max)
+        List<SortableElement> elements = querySortableRecursive(executeMeta, mayChange, moveInStick, min, max)
                 .stream().sorted(weightDescThenIdDescSort).collect(Collectors.toList());
 
         // 规整化受影响的数据
         if (elements.size() > 1) {
-            long baseWeight = elements.get(0).getWeight();
+            long baseSort = elements.get(0).getSort();
 
             sortableRepository.saveSortElements(executeMeta,
                     Streams.mapWithIndex(elements.stream(), (element, idx) -> {
-                        element.update(baseWeight - idx);
+                        element.setSort(baseSort - idx);
                         if (element.getId() == target.getId()) {
                             /*内存中的target与数据库中保持一直*/
-                            target.update(baseWeight - idx);
+                            target.setSort(baseSort - idx);
                         }
                         return element;
                     }).collect(Collectors.toList())
             );
         }
 
-        return doSort(executeMeta, target, duringStick, count);
+        return doSort(executeMeta, target, moveInStick, count);
     }
 
     @Override
@@ -139,10 +146,13 @@ public class SortableCommonServiceImpl implements SortableCommonService {
         if (target == null) {
             return false;
         }
+        if (target.isFrozen()) {
+            return false;
+        }
 
         List<SortableElement> sortableElements = sortableRepository.query(
                 SortableQuery.builder(executeMeta)
-                        .rowMin(0L).rowMax(0L)
+                        .row(false)
                         .stick(target.isStick())
                         .offset(0L).limit(1L)
                         .build()
@@ -155,7 +165,8 @@ public class SortableCommonServiceImpl implements SortableCommonService {
             // 已经是最上面的元素
             return false;
         }
-        target.update(top.getWeight() + 1);
+
+        target.setSort(top.getSort() + 1);
 
         sortableRepository.saveSortElements(executeMeta, Collections.singletonList(target));
         return true;
@@ -175,8 +186,9 @@ public class SortableCommonServiceImpl implements SortableCommonService {
         long nextMax = min + elements.size() - 1;
         List<SortableElement> sortableElements = sortableRepository.query(
                 SortableQuery.builder(executeMeta)
-                        .weightMin(min).weightMax(nextMax)
-                        .rowMin(0L).rowMax(0L)
+                        .condition(stick, it -> it.stickMin(min).stickMax(nextMax))
+                        .condition(!stick, it -> it.weightMin(min).weightMax(nextMax))
+                        .row(false)
                         .stick(stick)
                         .build()
         );
@@ -184,7 +196,7 @@ public class SortableCommonServiceImpl implements SortableCommonService {
     }
 
 
-    private boolean doSort(ExecuteMeta executeMeta, SortableElement target, boolean duringStick, int count) {
+    private boolean doSort(ExecuteMeta executeMeta, SortableElement target, boolean moveInStick, int count) {
         if (count == 0) {
             return false;
         }
@@ -198,11 +210,13 @@ public class SortableCommonServiceImpl implements SortableCommonService {
 
         // 再一次获取影响元素，这一次能够确保影响不扩散
         LinkedList<SortableElement> mayChange = sortableRepository.query(
-                        SortableQuery.builder(executeMeta).weightAsc(!moveDown)
-                                .weightMin(!moveDown ? target.getWeight() : null)
-                                .weightMax(moveDown ? target.getWeight() : null)
-                                .rowMin(0L).rowMax(0L)
-                                .stick(duringStick)
+                        SortableQuery.builder(executeMeta).orderAsc(!moveDown)
+                                .condition(moveInStick && moveDown, it -> it.stickMax(target.getStick()))
+                                .condition(moveInStick && !moveDown, it -> it.stickMin(target.getStick()))
+                                .condition(!moveInStick && moveDown, it -> it.weightMax(target.getWeight()))
+                                .condition(!moveInStick && !moveDown, it -> it.weightMin(target.getWeight()))
+                                .row(false)
+                                .stick(moveInStick)
                                 .offset(0L).limit(Math.abs(count) + 1L)
                                 .build()
                 ).stream()
@@ -215,16 +229,16 @@ public class SortableCommonServiceImpl implements SortableCommonService {
         }
 
         // 目标位于此排列的第一个，目标权重替换为此排列的第一个元素
-        target.update(mayChange.get(0).getWeight());
+        target.setSort(mayChange.getFirst().getSort());
         mayChange.addFirst(target);
 
         // 只进行必要的更新。当权重稀疏的时候 减少需要更新的数据个数
         SortableElement prev = null;
         for (SortableElement element : mayChange) {
             if (prev != null && (moveDown ?
-                    element.getWeight() <= prev.getWeight() :
-                    element.getWeight() >= prev.getWeight())) {
-                element.update(element.getWeight() + (moveDown ? 1 : -1));
+                    element.getSort() <= prev.getSort() :
+                    element.getSort() >= prev.getSort())) {
+                element.setSort(element.getSort() + (moveDown ? 1 : -1));
             }
             prev = element;
         }
@@ -239,12 +253,18 @@ public class SortableCommonServiceImpl implements SortableCommonService {
         if (target == null) {
             return false;
         }
-        if (target.getRow() > 0) {
+        if (target.isFrozen()) {
             // 固定行元素无法置顶
             return false;
         }
-        if (!target.stick(stick)) {
-            return false;
+        if (stick) {
+            if (target.isStick() || !target.stick(sortableStickWeightGenerator.nextWeight())) {
+                return false;
+            }
+        } else {
+            if (!target.isStick() || !target.unstick()) {
+                return false;
+            }
         }
 
         sortableRepository.saveSortElements(executeMeta, Collections.singletonList(target));
@@ -262,7 +282,7 @@ public class SortableCommonServiceImpl implements SortableCommonService {
         }
         // 取消固定行
         if (row <= 0) {
-            if (!target.frozen(0)) {
+            if (!target.unfrozen()) {
                 return false;
             }
             sortableRepository.saveSortElements(executeMeta, Collections.singletonList(target));
@@ -281,7 +301,7 @@ public class SortableCommonServiceImpl implements SortableCommonService {
                 return false;
             }
             // 覆盖模式,修改所有非目标的旧数据
-            previousFrozen.stream().filter(it -> it.getId() != target.getId()).forEach(it -> it.frozen(0));
+            previousFrozen.stream().filter(it -> it.getId() != target.getId()).forEach(SortableElement::unfrozen);
             toSave.addAll(previousFrozen);
         }
 

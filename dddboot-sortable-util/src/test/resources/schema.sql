@@ -14,7 +14,7 @@ create table `content_stick`
 (
     `id`        bigint not null auto_increment,
     `column_id` bigint not null,
-    `stick`     bit    not null default 0,
+    `stick`     bigint not null default 0,
     `weight`    bigint,
     primary key (`id`),
     index `content_stick__column_weight_index` (`column_id`, `weight`),
@@ -28,7 +28,7 @@ create table `content_stick_row`
 (
     `id`        bigint not null auto_increment,
     `column_id` bigint not null,
-    `stick`     bit    not null default 0,
+    `stick`     bigint not null default 0,
     `row`       bigint not null default 0,
     `weight`    bigint,
     primary key (`id`),

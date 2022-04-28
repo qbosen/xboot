@@ -17,18 +17,47 @@ public class SortableElement {
     private long id;
     private long weight;
     private long row;
-    private boolean stick;
+    private long stick;
 
-    public void update(long weight) {
-        if (this.weight == weight) {
-            flag.notModify();
+    public boolean setSort(long weight) {
+        if (isStick()) {
+            return stick(weight);
         } else {
-            this.weight = weight;
-            flag.modify();
+            return weight(weight);
         }
     }
 
-    public boolean stick(boolean stick) {
+    public long getSort() {
+        if (isStick()) {
+            return stick;
+        } else {
+            return weight;
+        }
+    }
+
+    public boolean weight(long weight) {
+        if (this.weight == weight) {
+            flag.notModify();
+            return false;
+        } else {
+            this.weight = weight;
+            flag.modify();
+            return true;
+        }
+    }
+
+    public boolean isStick() {
+        return stick > 0;
+    }
+
+    public boolean unstick() {
+        return stick(0);
+    }
+
+    public boolean stick(long stick) {
+        if (stick < 0) {
+            stick = 0;
+        }
         if (this.stick == stick) {
             flag.notModify();
             return false;
@@ -37,6 +66,14 @@ public class SortableElement {
             flag.modify();
             return true;
         }
+    }
+
+    public boolean isFrozen() {
+        return this.row > 0;
+    }
+
+    public boolean unfrozen() {
+        return frozen(0);
     }
 
     /**
@@ -58,6 +95,7 @@ public class SortableElement {
         }
     }
 
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -66,8 +104,8 @@ public class SortableElement {
         if (row != 0) {
             builder.append(", r:").append(row);
         }
-        if (stick) {
-            builder.append(", s");
+        if (stick != 0) {
+            builder.append(", s:").append(stick);
         }
         return builder.append('}').toString();
     }

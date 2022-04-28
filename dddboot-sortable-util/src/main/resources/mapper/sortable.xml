@@ -33,8 +33,13 @@
             <if test='weightMax != null'>
                 and ${weightField} &lt;= #{weightMax}
             </if>
-            <if test="stick!=null and stickField!=null and stickField.length>0">
-                and ${stickField} = #{stick}
+            <if test="stickField!=null and stickField.length>0">
+                <if test='stickMin != null'>
+                    and ${stickField} &gt;= #{stickMin}
+                </if>
+                <if test='stickMax != null'>
+                    and ${stickField} &lt;= #{stickMax}
+                </if>
             </if>
             <if test="rowField!=null and rowField.length>0">
                 <if test='rowMin != null'>
@@ -65,7 +70,7 @@
         from ${tableName}
         <include refid="conditionSQL"/>
         <choose>
-            <when test="weightAsc">
+            <when test="orderAsc">
                 order by
                 <if test="stickField!=null and stickField.length>0">
                     ${stickField} desc,

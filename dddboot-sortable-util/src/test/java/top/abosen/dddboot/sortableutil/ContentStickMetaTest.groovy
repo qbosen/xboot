@@ -47,24 +47,33 @@ class ContentStickMetaTest extends Specification {
     }
 
     def "常规置顶操作"() {
-        given: "2,3 置顶"
+        given:
         def meta = ContentStickMeta.executeMeta(100)
+        when: "2,3 置顶"
         sortableCommonService.stick(meta, 2, true)
         sortableCommonService.stick(meta, 3, true)
-        when: "查询前三个"
-        def data = sortableCommonService.query(meta, 1, 3).getData()
-        then: "3权重更高,在2前面,剩下的最高的是10"
-        data[0].id == 3
-        data[1].id == 2
-        data[2].id == 10
+        def data = sortableCommonService.query(meta, 1, 10).getData()
+        then: "3后置顶,在2前面,剩下的最高的是10"
+        data.id == [3, 2, 10, 9, 8, 7, 6, 5, 4, 1]
 
         when: "取消置顶:2"
         sortableCommonService.stick(meta, 2, false)
-        data = sortableCommonService.query(meta, 1, 3).getData()
-        then: "3,10,9"
-        data[0].id == 3
-        data[1].id == 10
-        data[2].id == 9
+        data = sortableCommonService.query(meta, 1, 10).getData()
+        then: "3,10,9,8,7,6,5,4,2,1"
+        data.id == [3, 10, 9, 8, 7, 6, 5, 4, 2, 1]
+
+        when: "取消置顶:3"
+        sortableCommonService.stick(meta, 3, false)
+        data = sortableCommonService.query(meta, 1, 10).getData()
+        then: "10,9,8,7,6,5,4,3,2,1"
+        data.id == [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+
+        when: "取消置顶:10"
+        sortableCommonService.stick(meta, 10, false)
+        data = sortableCommonService.query(meta, 1, 10).getData()
+        then: "10,9,8,7,6,5,4,3,2,1"
+        "10并没有置顶,无影响"
+        data.id == [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
     }
 
     def "置顶 和 移动"() {
@@ -77,40 +86,39 @@ class ContentStickMetaTest extends Specification {
         when: "移动非置顶元素1往上6位"
         "[1] 4 5 6 7 8 9 10 (2,3)"
         "4 5 6 7 8 9 [1] 10 (2,3)"
-        sortableCommonService.move(meta,1,-6)
-        data = sortableCommonService.query(meta, 1, 4).getData()
-        then: "3 2 10 1"
-        data[0].id == 3
-        data[1].id == 2
-        data[2].id == 10
-        data[3].id == 1
+        sortableCommonService.move(meta, 1, -6)
+        data = sortableCommonService.query(meta, 1, 10).getData()
+        then: "3 2 10 1 9 8 7 6 5 4"
+        data.id == [3, 2, 10, 1, 9, 8, 7, 6, 5, 4]
 
         when: "继续移动[1]往上3位"
         "4 5 6 7 8 9 [1] 10 (2,3)"
         "4 5 6 7 8 9 10 [1] (2,3)"
-        sortableCommonService.move(meta,1,-3)
-        data = sortableCommonService.query(meta, 1, 4).getData()
-        then: "3 2 1 10"
+        sortableCommonService.move(meta, 1, -3)
+        data = sortableCommonService.query(meta, 1, 10).getData()
+        then: "3 2 1 10 9 8 7 6 5 4"
         "无法超过置顶元素"
-        data[0].id == 3
-        data[1].id == 2
-        data[2].id == 1
-        data[3].id == 10
+        data.id == [3, 2, 1, 10, 9, 8, 7, 6, 5, 4]
 
-        when: "(2) 往上移动2位, (3) 往下移动一位, 10往下移动2位"
+
+        when: "(2) 往上移动2位, 10往下移动2位"
         "4 5 6 7 8 9 [10] 1 (2,3)"
         "4 5 6 7 [10] 8 9 1 (3,2)"
-        sortableCommonService.move(meta,2,-2)
-        sortableCommonService.move(meta,3,1)
-        sortableCommonService.move(meta,10,2)
-        data = sortableCommonService.query(meta, 1, 6).getData()
-        then: "2 3 1 9 8 10"
-        data[0].id == 2
-        data[1].id == 3
-        data[2].id == 1
-        data[3].id == 9
-        data[4].id == 8
-        data[5].id == 10
+        sortableCommonService.move(meta, 2, -2)
+        sortableCommonService.move(meta, 10, 2)
+        data = sortableCommonService.query(meta, 1, 10).getData()
+        then: "2 3 1 9 8 10 7 6 5 4"
+        data.id == [2, 3, 1, 9, 8, 10, 7, 6, 5, 4]
+
+        when: "取消置顶(2) (3)"
+        "4 5 6 7 [10] 8 9 1 (3,2)"
+        "2 3 4 5 6 7 [10] 8 9 1"
+        "置顶的权重 和 排序权重是分开的 所以2,3自身权重不变"
+        sortableCommonService.stick(meta, 2, false)
+        sortableCommonService.stick(meta, 3, false)
+        data = sortableCommonService.query(meta, 1, 10).getData()
+        then: "1 9 8 10 7 6 5 4 3 2"
+        data.id == [1, 9, 8, 10, 7, 6, 5, 4, 3, 2]
     }
 
 

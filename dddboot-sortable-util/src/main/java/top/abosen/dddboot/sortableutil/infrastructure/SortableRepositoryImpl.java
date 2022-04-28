@@ -31,8 +31,8 @@ public class SortableRepositoryImpl implements SortableElementRepository {
                 .map(it -> new SortedElementDto(
                         it.getId(),
                         it.getWeight(),
-                        it.getRow(),
-                        it.isStick()
+                        it.getStick(),
+                        it.getRow()
                 )).collect(Collectors.toList());
 
         if (modified.isEmpty()) {
@@ -59,18 +59,19 @@ public class SortableRepositoryImpl implements SortableElementRepository {
     @Override
     public List<SortableElement> query(SortableQuery query) {
         ExecuteMeta executeMeta = query.getExecuteMeta();
-        boolean weightAsc = query.isWeightAsc();
+        boolean orderAsc = query.isOrderAsc();
         Long weightMin = query.getWeightMin();
         Long weightMax = query.getWeightMax();
+        Long stickMin = query.getStickMin();
+        Long stickMax = query.getStickMax();
         Long rowMin = query.getRowMin();
         Long rowMax = query.getRowMax();
-        Boolean stick = query.getStick();
         Long offset = query.getOffset();
         Long limit = query.getLimit();
 
-        if ((offset != null && offset < 0) ||
-                (limit != null && limit <= 0) ||
+        if ((offset != null && offset < 0) || (limit != null && limit <= 0) ||
                 (weightMin != null && weightMax != null && weightMin > weightMax) ||
+                (stickMin != null && stickMax != null && stickMin > stickMax) ||
                 (rowMin != null && rowMax != null && rowMin > rowMax)
         ) {
             return Collections.emptyList();
@@ -82,24 +83,27 @@ public class SortableRepositoryImpl implements SortableElementRepository {
                         executeMeta.getStickField(),
                         executeMeta.getRowField(),
                         executeMeta.getCondition(),
-                        weightMin, weightMax, weightAsc,
-                        rowMin, rowMax, stick,
+                        orderAsc, weightMin, weightMax,
+                        stickMin, stickMax,
+                        rowMin, rowMax,
                         offset, limit
-                ).stream().map(it -> new SortableElement(it.getId(), it.getWeight(), it.getRow(), it.isStick()))
+                ).stream().map(it -> new SortableElement(it.getId(), it.getWeight(), it.getRow(), it.getStick()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public long count(SortableQuery query) {
         ExecuteMeta executeMeta = query.getExecuteMeta();
-        boolean weightAsc = query.isWeightAsc();
+        boolean orderAsc = query.isOrderAsc();
         Long weightMin = query.getWeightMin();
         Long weightMax = query.getWeightMax();
+        Long stickMin = query.getStickMin();
+        Long stickMax = query.getStickMax();
         Long rowMin = query.getRowMin();
         Long rowMax = query.getRowMax();
-        Boolean stick = query.getStick();
 
         if ((weightMin != null && weightMax != null && weightMin > weightMax) ||
+                (stickMin != null && stickMax != null && stickMin > stickMax) ||
                 (rowMin != null && rowMax != null && rowMin > rowMax)
         ) {
             return 0L;
@@ -111,8 +115,9 @@ public class SortableRepositoryImpl implements SortableElementRepository {
                 executeMeta.getStickField(),
                 executeMeta.getRowField(),
                 executeMeta.getCondition(),
-                weightMin, weightMax, weightAsc,
-                rowMin, rowMax, stick
+                orderAsc, weightMin, weightMax,
+                stickMin, stickMax,
+                rowMin, rowMax
         );
     }
 
@@ -128,7 +133,7 @@ public class SortableRepositoryImpl implements SortableElementRepository {
                         executeMeta.getCondition(),
                         idValue
                 )
-        ).map(it -> new SortableElement(it.getId(), it.getWeight(), it.getRow(), it.isStick())).orElse(null);
+        ).map(it -> new SortableElement(it.getId(), it.getWeight(), it.getRow(), it.getStick())).orElse(null);
     }
 
 }

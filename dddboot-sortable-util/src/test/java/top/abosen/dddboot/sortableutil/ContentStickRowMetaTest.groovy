@@ -132,7 +132,24 @@ class ContentStickRowMetaTest extends Specification {
         then: "3 7 8 6 9 5 4 2 1 10"
         data.id == [3, 7, 8, 6, 9, 5, 4, 2, 1, 10]
 
+        when: "把[2]置顶, {4}覆盖固定到第1行"
+        "{10} 1 2 4 5 9 6 8 [7] {3}"
+        "{10} 1 3 5 9 6 8 [7] [2] {4}"
+        sortableCommonService.stick(meta, 2, true)
+        sortableCommonService.frozenRow(meta, 4, 1, true)
+        data = sortableCommonService.query(meta, 1, 10).getData()
+        then: "4 2 7 8 6 9 5 3 1 10"
+        data.id == [4, 2, 7, 8, 6, 9, 5, 3, 1, 10]
 
+        when: "3往下移2, 7往上移动1, 6往上移动2"
+        "{10} 1 3 5 9 6 8 [7] [2] {4}"
+        "{10} 3 1 5 9 8 6 [2] [7] {4}"
+        sortableCommonService.move(meta, 3, 2)
+        sortableCommonService.move(meta, 7, -1)
+        sortableCommonService.move(meta, 6, -2)
+        data = sortableCommonService.query(meta, 1, 10).getData()
+        then: "4 7 2 6 8 9 5 1 3 10"
+        data.id == [4, 7, 2, 6, 8, 9, 5, 1, 3, 10]
     }
 
 

@@ -33,12 +33,13 @@ public interface SortableElementMapper {
      * @param stickField  置顶字段名，null表示无置顶字段
      * @param rowField    固定行字段名，null表示无置顶字段
      * @param condition   排序纬度条件，null表示无条件
-     * @param weightMin   权重最小值，可相等。null表示无限制
-     * @param weightMax   权重最大值，可相等。null表示无限制
-     * @param weightAsc   排序方向，true：权重增序，false：权重降序
-     * @param rowMin      固定行最小值，可相等，固定行字段存在时生效。null表示无限制
-     * @param rowMax      固定行最大值，可相等，固定行字段存在时生效。null表示无限制
-     * @param stick       是否是置顶状态，置顶字段存在时生效。null表示无限制
+     * @param orderAsc    排序方向，true：权重增序，false：权重降序
+     * @param weightMin   权重最小值. null表示无限制
+     * @param weightMax   权重最大值. null表示无限制
+     * @param stickMin    置顶权重最小值. 置顶字段存在时生效。null表示无限制
+     * @param stickMax    置顶权重最大值. 置顶字段存在时生效。null表示无限制
+     * @param rowMin      固定行最小值. 固定行字段存在时生效。null表示无限制
+     * @param rowMax      固定行最大值. 固定行字段存在时生效。null表示无限制
      * @param offset      位移，offset、limit均不为null时生效
      * @param limit       单页大小，offset、limit均不为null时生效
      * @return 查询数据结果
@@ -52,14 +53,16 @@ public interface SortableElementMapper {
             @Nullable @Param("rowField") String rowField,
 
             @Nullable @Param("condition") String condition,
+            @Param("orderAsc") boolean orderAsc,
 
             @Nullable @Param("weightMin") Long weightMin,
             @Nullable @Param("weightMax") Long weightMax,
-            @Param("weightAsc") boolean weightAsc,
+
+            @Nullable @Param("stickMin") Long stickMin,
+            @Nullable @Param("stickMax") Long stickMax,
 
             @Nullable @Param("rowMin") Long rowMin,
             @Nullable @Param("rowMax") Long rowMax,
-            @Nullable @Param("stick") Boolean stick,
 
             @Nullable @Param("offset") Long offset,
             @Nullable @Param("limit") Long limit
@@ -74,15 +77,17 @@ public interface SortableElementMapper {
             @Nullable @Param("rowField") String rowField,
 
             @Nullable @Param("condition") String condition,
+            @Param("orderAsc") boolean orderAsc,
 
             @Nullable @Param("weightMin") Long weightMin,
             @Nullable @Param("weightMax") Long weightMax,
-            @Param("weightAsc") boolean weightAsc,
+
+            @Nullable @Param("stickMin") Long stickMin,
+            @Nullable @Param("stickMax") Long stickMax,
 
             @Nullable @Param("rowMin") Long rowMin,
-            @Nullable @Param("rowMax") Long rowMax,
-            @Nullable @Param("stick") Boolean stick
-    );
+            @Nullable @Param("rowMax") Long rowMax
+            );
 
     SortedElementDto findSortElement(
             @Param("tableName") String tableName,
