@@ -22,8 +22,9 @@ static String loadMavenUrl(Project pj, String prop) {
 
 subprojects {
     apply plugin: 'java-library'
+    apply plugin: 'signing'
     repositories {
-        def localMavenPublicRU = loadMavenUrl(project, "localMavenPublicRU")
+        def localMavenPublicRU = loadMavenUrl(project, "MavenPublicRU")
 
         if (localMavenPublicRU != null) {
             maven {
@@ -53,14 +54,42 @@ subprojects {
         def localMavenSnapshotRU = loadMavenUrl(project, "localMavenSnapshotRU")
 
         if (plugins.hasPlugin("maven-publish") && localMavenReleaseRU != null && localMavenSnapshotRU != null) {
-            logger.quiet("配置[$project.name]发布仓库")
             publishing {
                 publications {
                     mavenJava(MavenPublication) {
                         groupId = rootProject.group
                         version = rootProject.version
                         artifactId = project.name
+
                         from components.java
+
+                        pom {
+                            name = 'xboot'
+                            packaging 'jar'
+                            description = 'A scaffold to help you develop DDD java projects quickly.'
+                            url = 'https://github.com/qbosen/xboot'
+
+                            scm {
+                                connection = 'scm:git:https://github.com:qbosen/xboot.git'
+                                developerConnection = 'scm:git:https://github.com:qbosen/xboot.git'
+                                url = 'https://github.com/qbosen/xboot.git'
+                            }
+
+                            licenses {
+                                license {
+                                    name = 'The Apache License, Version 2.0'
+                                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                                }
+                            }
+
+                            developers {
+                                developer {
+                                    id = 'qbosen'
+                                    name = 'Baisen Qiu'
+                                    email = 'abosen@qq.com'
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -71,10 +100,20 @@ subprojects {
                         url = version.endsWith('SNAPSHOT') ? localMavenSnapshotRU : localMavenReleaseRU
                         allowInsecureProtocol true
                     }
+                    maven {
+                        name 'central'
+                        credentials { username "$mavenUsername"; password "$mavenPassword" }
+                        url = version.endsWith('SNAPSHOT') ? localMavenSnapshotRU : localMavenReleaseRU
+                    }
+                }
+
+                signing {
+                    required { gradle.taskGraph.allTasks.any { it.name == 'publishMavenJavaPublicationToCentralRepository' } }
+
+                    sign publishing.publications.mavenJava
                 }
             }
         }
-
     }
     test {
         useJUnitPlatform()

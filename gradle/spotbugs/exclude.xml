@@ -3,7 +3,7 @@
     <!-- https://spotbugs.readthedocs.io/en/stable/filter.html -->
 
     <Match>
-        <Package name="top.abosen.dddboot.shared"/>
+        <Package name="top.abosen.xboot.shared"/>
     </Match>
 
     <Match>

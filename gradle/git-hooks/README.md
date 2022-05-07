@@ -9,6 +9,7 @@
 ```
 
 ### HEADER
+
 Header的部分只有一行,包括三个字段: type(必需), scope(可选), subject(必需)
 
 #### type:  commit的类别
@@ -73,8 +74,6 @@ Header的部分只有一行,包括三个字段: type(必需), scope(可选), sub
 # - BREAKING CHANGE
 # - Close issues
 ```
-
-
 
 ## Demo
 

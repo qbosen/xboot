@@ -1,11 +1,11 @@
 rootProject.name = 'xboot'
 
-include 'dddboot-shared-model'
-include 'dddboot-spring-common'
-include 'dddboot-sortable-util'
+include 'xboot-shared-model'
+include 'xboot-spring-common'
+include 'xboot-sortable-util'
 
-include 'dddboot-consul-config-util'
+include 'xboot-consul-config-util'
 
-include 'dddboot-sortable-util:sortable-demo'
+include 'xboot-sortable-util:sortable-demo'
 include 'diff-match-patch-util'
 

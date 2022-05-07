@@ -1,2 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  top.abosen.dddboot.sortableutil.SortableAutoConfiguration
