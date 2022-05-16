@@ -63,4 +63,11 @@ public abstract class CollectionHelper {
         data.forEach(d -> multiMap.put(orderMapping.apply(d), d));
         return order.stream().flatMap(o -> multiMap.get(o).stream()).collect(Collectors.toList());
     }
+
+    public static <T, O, I> List<T> keepOrder(Collection<O> order, Function<O, I> orderMapping,
+                                              Collection<T> data, Function<T, I> dataMapping) {
+        ListMultimap<I, T> multiMap = MultimapBuilder.hashKeys().arrayListValues().build();
+        data.forEach(d -> multiMap.put(dataMapping.apply(d), d));
+        return order.stream().flatMap(o -> multiMap.get(orderMapping.apply(o)).stream()).collect(Collectors.toList());
+    }
 }
