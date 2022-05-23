@@ -66,7 +66,7 @@ public class SortableCommonServiceImpl implements SortableCommonService {
         // 5. 数据不足, 填充超出范围的固定行数据
         if (data.size() < size) {
             List<SortableElement> outsideFrozen = sortableRepository.query(
-                    SortableQuery.builder(executeMeta).rowMin(offset + 1).offset(0L).limit(size - data.size()).build()
+                    SortableQuery.builder(executeMeta).rowMin(offset + 1 + data.size()).offset(0L).limit(size - data.size()).build()
             );
             outsideFrozen.sort(Comparator.comparingLong(SortableElement::getRow));
             data.addAll(outsideFrozen);
