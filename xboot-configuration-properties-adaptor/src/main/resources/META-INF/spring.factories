@@ -1,0 +1,4 @@
+
+#org.springframework.context.ApplicationListener=\
+#  top.abosen.xboot.propertyadaptor.ConversionHack
+
