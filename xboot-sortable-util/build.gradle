@@ -24,17 +24,17 @@ dependencies {
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     // spock test
-    testImplementation platform("org.spockframework:spock-bom:2.0-groovy-3.0")
-    testImplementation "org.codehaus.groovy:groovy:3.0.8"
+    testImplementation platform("org.spockframework:spock-bom:$spockGroovyVersion")
+    testImplementation "org.codehaus.groovy:groovy:$groovyVersion"
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.spockframework:spock-spring"
     // optional dependencies for using Spock
-    testImplementation "org.hamcrest:hamcrest-core:2.2"   // only necessary if Hamcrest matchers are used
-    testRuntimeOnly "net.bytebuddy:byte-buddy:1.11.0" // allows mocking of classes (in addition to interfaces)
-    testRuntimeOnly "org.objenesis:objenesis:3.2"
+    testImplementation "org.hamcrest:hamcrest-core:$hamcrestVersion"   // only necessary if Hamcrest matchers are used
+    testRuntimeOnly "net.bytebuddy:byte-buddy:$byteBuddyVersion" // allows mocking of classes (in addition to interfaces)
+    testRuntimeOnly "org.objenesis:objenesis:$objenesisVersion"
     // allows mocking of classes without default constructor (together with ByteBuddy or CGLIB)
-    testRuntimeOnly "com.h2database:h2:1.4.200"        // allows H2 database to be used for testing
-    testImplementation "org.codehaus.groovy:groovy-sql:3.0.8"
+    testRuntimeOnly "com.h2database:h2:$h2Version"        // allows H2 database to be used for testing
+    testImplementation "org.codehaus.groovy:groovy-sql:$groovyVersion"
 
 }
 

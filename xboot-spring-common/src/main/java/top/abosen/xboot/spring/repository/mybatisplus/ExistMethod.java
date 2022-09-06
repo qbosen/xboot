@@ -10,6 +10,10 @@ import org.apache.ibatis.mapping.SqlSource;
  * @date 2021/2/22
  */
 public class ExistMethod extends AbstractMethod {
+    protected ExistMethod() {
+        super("exist");
+    }
+
     @Override
     public MappedStatement injectMappedStatement(Class<?> mapperClass, Class<?> modelClass, TableInfo tableInfo) {
         String sql = String.format(

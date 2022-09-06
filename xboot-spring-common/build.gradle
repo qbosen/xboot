@@ -16,8 +16,9 @@ dependencies {
     api 'org.springframework.boot:spring-boot-starter-validation'
     api "org.springdoc:springdoc-openapi-ui:$springDocVersion"
     api('org.springframework.boot:spring-boot-starter-web')
+    // 暴露出去,不然这边版本高了,客户端有兼容性问题
+    api("com.baomidou:mybatis-plus:$mybatisPlusVersion")
 
-    implementation "com.baomidou:mybatis-plus:$mybatisPlusVersion"
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
     // lombok dependencies
     compileOnly "org.projectlombok:lombok:$lombokVersion"
