@@ -23,6 +23,7 @@ Security 对安全的改进
 - [properties-adaptor](xboot-configuration-properties-adaptor)
     - 配置bean属性修改工具;
     - 提供null string映射工具
+    - 支持条件配置
 
 - [consul-config](xboot-consul-config-util)
     - 增加acl token;

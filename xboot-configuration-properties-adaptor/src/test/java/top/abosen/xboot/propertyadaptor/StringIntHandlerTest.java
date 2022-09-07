@@ -1,7 +1,8 @@
 package top.abosen.xboot.propertyadaptor;
 
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -30,7 +31,7 @@ class StringIntHandlerTest {
             Class<?> type = context.getCurrentDescriptor().getPropertyType();
             if (type == int.class || type == Integer.class) {
                 Integer integer = ((Integer) value);
-                if (integer != null && integer < 0) {
+                if (integer != null && integer < 0 && context.matchCondition()) {
                     System.out.printf("Set config property [%s] to 0 %n", context.currentPath());
                     PropertyHandler.set(context.getCurrentDescriptor(), context.getCurrentParent(), 0);
                     return true;
@@ -59,7 +60,7 @@ class StringIntHandlerTest {
                 return false;
             }
 
-            if (String.class.equals(context.getCurrentDescriptor().getPropertyType())) {
+            if (String.class.equals(context.getCurrentDescriptor().getPropertyType()) && context.matchCondition()) {
                 System.out.printf("Set config property [%s] CAPS%n", context.currentPath());
                 PropertyHandler.set(context.getCurrentDescriptor(), context.getCurrentParent(), ((String) value).toUpperCase());
                 return true;
@@ -70,7 +71,7 @@ class StringIntHandlerTest {
 
     @Test
     public void should_be_caps() {
-        ConfigurationPropertyBeanPostProcessor processor = YamlTest.postProcessor(true, "@null", stringMustCaps);
+        ConfigurationPropertyBeanPostProcessor processor = YamlTest.postProcessor(true, "@null", new HashSet<>(), stringMustCaps);
         TestConf bean = new TestConf("@null", -1, new TestConf("some thing", 1, null));
 
         processor.postProcessAfterInitialization(bean, "test_bean");
@@ -80,7 +81,7 @@ class StringIntHandlerTest {
     @Test
     public void test_complex() {
         ConfigurationPropertyBeanPostProcessor processor = YamlTest.postProcessor(true, "@null",
-                new NullStringPropertyHandler(), intMustPositiveOrZero, stringMustCaps);
+                new HashSet<>(), new NullStringPropertyHandler(), intMustPositiveOrZero, stringMustCaps);
         TestConf bean = new TestConf("@null", -1, new TestConf("some thing", 1, null));
 
         processor.postProcessAfterInitialization(bean, "test_bean");

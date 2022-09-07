@@ -39,7 +39,9 @@ public class NullStringPropertyHandler implements PropertyHandler {
         }
 
         if (String.class.equals(context.getCurrentDescriptor().getPropertyType()) &&
-                Objects.equals(value, context.getProperties().getNullString())) {
+                Objects.equals(value, context.getProperties().getNullString()) &&
+                context.matchCondition()
+        ) {
             log.info(String.format("Set nullable config property [%s]", context.currentPath()));
             PropertyHandler.set(context.getCurrentDescriptor(), context.getCurrentParent(), null);
             return true;

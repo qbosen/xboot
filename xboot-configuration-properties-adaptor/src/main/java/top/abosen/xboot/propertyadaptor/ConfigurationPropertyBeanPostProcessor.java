@@ -29,8 +29,9 @@ public class ConfigurationPropertyBeanPostProcessor implements BeanPostProcessor
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (properties.isEnabled() && AopUtils.getTargetClass(bean).isAnnotationPresent(ConfigurationProperties.class)) {
-            recursiveDeal(new HandlerContext(bean, beanName, properties));
+        Class<?> targetClass = AopUtils.getTargetClass(bean);
+        if (properties.isEnabled() && targetClass.isAnnotationPresent(ConfigurationProperties.class)) {
+            recursiveDeal(new HandlerContext(bean, targetClass.getName(), properties));
         }
         return bean;
     }

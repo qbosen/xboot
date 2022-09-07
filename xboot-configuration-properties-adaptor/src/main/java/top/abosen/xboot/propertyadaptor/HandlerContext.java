@@ -15,7 +15,7 @@ import java.util.Set;
 @Getter
 public class HandlerContext implements IHandlerContext {
     final Object bean;
-    final String beanName;
+    final String className;
     final Deque<String> path;
     final Set<String> handled;
     final PropertyAdaptorProperties properties;
@@ -23,9 +23,9 @@ public class HandlerContext implements IHandlerContext {
     PropertyDescriptor currentDescriptor;
     Object currentParent;
 
-    public HandlerContext(Object bean, String beanName, PropertyAdaptorProperties properties) {
+    public HandlerContext(Object bean, String className, PropertyAdaptorProperties properties) {
         this.bean = bean;
-        this.beanName = beanName;
+        this.className = className;
         this.properties = properties;
         this.path = new ArrayDeque<>();
         this.handled = new HashSet<>();
@@ -66,8 +66,16 @@ public class HandlerContext implements IHandlerContext {
 
     @Override
     public String currentPath() {
-        return beanName + "#" + String.join(".", path);
+        return className + "#" + String.join(".", path);
     }
 
 
+    @Override
+    public boolean matchCondition() {
+        if (properties.getCondition() == null || properties.getCondition().isEmpty()) {
+            return true;
+        }
+        String path = currentPath();
+        return properties.getCondition().stream().anyMatch(path::endsWith);
+    }
 }

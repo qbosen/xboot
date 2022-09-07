@@ -1,16 +1,12 @@
 package top.abosen.xboot.propertyadaptor;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.env.YamlPropertySourceLoader;
 import org.springframework.core.env.PropertySource;
 import org.springframework.core.io.ByteArrayResource;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -31,10 +27,11 @@ class YamlTest {
     }
 
 
-    public static ConfigurationPropertyBeanPostProcessor postProcessor(boolean enabled, String nullString, PropertyHandler... handlers) {
+    public static ConfigurationPropertyBeanPostProcessor postProcessor(boolean enabled, String nullString, Set<String> limits, PropertyHandler... handlers) {
         PropertyAdaptorProperties config = new PropertyAdaptorProperties();
         config.setEnabled(enabled);
         config.setNullString(nullString);
+        config.setCondition(limits);
         return new ConfigurationPropertyBeanPostProcessor(config, Arrays.asList(handlers));
     }
 

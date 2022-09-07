@@ -14,4 +14,6 @@ public interface IHandlerContext {
     Object getCurrentParent();
 
     String currentPath();
+
+    boolean matchCondition();
 }
