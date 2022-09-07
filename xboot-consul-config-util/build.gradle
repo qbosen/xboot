@@ -6,7 +6,7 @@ plugins {
 }
 
 dependencies {
-    implementation("org.springframework.cloud:spring-cloud-starter-consul-config:3.0.3")
+    implementation("org.springframework.cloud:spring-cloud-starter-consul-config:$springCloudConsulVersion")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     // lombok dependencies

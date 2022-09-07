@@ -21,7 +21,7 @@ public class ConsulConfigRegistryProperties {
     private boolean queryPassing = true;
 
     private Map<String, KV> kv = Collections.emptyMap();
-    private Map<String, String> service = Collections.emptyMap();
+    private Map<String, Service> service = Collections.emptyMap();
 
     /**
      * 归一化配置，对于未配置别名的，均按key名称处理
@@ -31,26 +31,34 @@ public class ConsulConfigRegistryProperties {
             if (entry.getValue() == null) {
                 entry.setValue(new KV());
             }
-            if (KV.ALIAS_SAME_TO_KEY.equals(entry.getValue().getAlias())) {
+            if (ALIAS_SAME_TO_KEY.equals(entry.getValue().getAlias())) {
                 entry.getValue().setAlias(entry.getKey());
             }
         }
-        for (Map.Entry<String, String> entry : service.entrySet()) {
-            if (entry.getValue() == null || entry.getValue().length() == 0) {
-                entry.setValue(entry.getKey());
+        for (Map.Entry<String, Service> entry : service.entrySet()) {
+            if (entry.getValue() == null) {
+                entry.setValue(new Service());
+            }
+            if (ALIAS_SAME_TO_KEY.equals(entry.getValue().getAlias())) {
+                entry.getValue().setAlias(entry.getKey());
             }
         }
     }
 
+    public static final String ALIAS_SAME_TO_KEY = "@@ALIAS_SAME_TO_KEY@@";
+
     @Data
     @NoArgsConstructor
     public static class KV {
-        public static final String ALIAS_SAME_TO_KEY = "@@ALIAS_SAME_TO_KEY@@";
         private String alias = ALIAS_SAME_TO_KEY;
         /**
          * kv 配置中存在key时，value为空串，有时候业务上表示为未配置，此时转换为null
          */
         private boolean blankToNull = true;
+        /**
+         * blankToNull 之后,如果值为null,可以进行映射
+         */
+        private String nullToValue = null;
         /**
          * true: 如果不存在对应的key, 会抛出异常
          */
@@ -60,6 +68,40 @@ public class ConsulConfigRegistryProperties {
          * 如果什么都不配置，或者无法解析为对象，使用默认配置
          */
         public KV(String string) {
+
+        }
+    }
+
+    @Data
+    @NoArgsConstructor
+    public static class Service {
+        public enum Action {
+            /**
+             * 默认选项. 随机选一个服务, 追加 [alias].host/[alias].port 配置
+             */
+            RANDOM_HOST_PORT,
+            /**
+             * 追加[alias]配置: 按 host1:port1()host2:port2()host3:port3 拼接, 拼接参数为 {@link Service#joinWith}
+             */
+            JOIN_ALL,
+        }
+
+        private String alias = ALIAS_SAME_TO_KEY;
+        private Action action = Action.RANDOM_HOST_PORT;
+        /**
+         * <p>
+         * elasticsearch, redis 按 `,` 拼接
+         * </p>
+         * <p>
+         * rocketmq 按 `;` 拼接
+         * </p>
+         */
+        private String joinWith = ",";
+
+        /**
+         * 如果什么都不配置，或者无法解析为对象，使用默认配置
+         */
+        public Service(String string) {
 
         }
     }
