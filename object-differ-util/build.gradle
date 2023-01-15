@@ -10,13 +10,12 @@ dependencies {
     annotationProcessor "org.projectlombok:lombok:$lombokVersion"
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    compileOnly("org.slf4j:slf4j-api:2.0.5")
     implementation 'de.danielbechler:java-object-diff:0.95'
+
     //test dependencies
-    testImplementation("org.slf4j:slf4j-api:2.0.5")
     testImplementation("org.slf4j:slf4j-simple:2.0.5")
-    testImplementation platform("org.junit:junit-bom:$junitVersion")
-    testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
 }
 
