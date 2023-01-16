@@ -42,15 +42,19 @@ public class DiffFormatterConfiguration {
         String removedTemplate = "【" + FIELD_NAME + "】从【" + SOURCE_VALUE + "】修改为【" + TARGET_VALUE + "】";
 
         public String formatAdd(String fieldName, Object targetValue) {
-            return format(addedTemplate, fieldName, nullTemplateValue, String.valueOf(targetValue));
+            return format(addedTemplate, fieldName, nullTemplateValue, stringify(targetValue));
         }
 
         public String formatChange(String fieldName, Object sourceValue, Object targetValue) {
-            return format(changedTemplate, fieldName, String.valueOf(sourceValue), String.valueOf(targetValue));
+            return format(changedTemplate, fieldName, stringify(sourceValue), stringify(targetValue));
         }
 
         public String formatRemove(String fieldName, Object sourceValue) {
-            return format(removedTemplate, fieldName, String.valueOf(sourceValue), nullTemplateValue);
+            return format(removedTemplate, fieldName, stringify(sourceValue), nullTemplateValue);
+        }
+
+        private String stringify(Object sourceValue) {
+            return sourceValue == null ? nullTemplateValue : String.valueOf(sourceValue);
         }
 
         private static String format(String template, String fieldName, String sourceValue, String targetValue) {

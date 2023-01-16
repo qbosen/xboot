@@ -16,26 +16,33 @@ public class Difference {
     private final Class<?> valueType;
     private final Object sourceValue;
     private final Object targetValue;
-    private final Class<? extends DiffFieldParser> functionClass;
     private final DiffNode node;
     private final Object rootSource;
     private final Object rootTarget;
+    private final DiffField.Format valueFormat;
+
 
     Difference(DiffNode node, Object source, Object target) {
         DiffField diffField = Optional.ofNullable(node.getPropertyAnnotation(DiffField.class))
                 .orElseGet(() -> node.getFieldAnnotation(DiffField.class));
         this.node = node;
-        propertyName = node.getPropertyName();
+        valueType = node.getValueType() == null ? Object.class : node.getValueType();
+        // 获取属性名称;获取最近层级的属性名称;类型名称(root节点,且root可比较)
+        propertyName = Optional.ofNullable(node.getPropertyName()).orElseGet(valueType::getSimpleName);
         displayName = Optional.ofNullable(diffField).map(DiffField::name)
                 .filter(s -> s.length() != 0)
                 .orElse(propertyName);
         rootSource = source;
         rootTarget = target;
-        valueType = node.getValueType() == null ? Object.class : node.getValueType();
         sourceValue = node.canonicalGet(rootSource);
         targetValue = node.canonicalGet(rootTarget);
-        functionClass = diffField == null ? DiffFieldParser.NONE.class : diffField.function();
-    }
 
+        // 先从字段注解获取, 再从类上获取
+        valueFormat = Optional.ofNullable(diffField).map(DiffField::format)
+                .filter(it -> it.source().handle())
+                .orElseGet(() -> Optional.ofNullable(node.getValueType())
+                        .map(type -> type.getAnnotation(DiffField.Format.class))
+                        .orElse(null));
+    }
 
 }
