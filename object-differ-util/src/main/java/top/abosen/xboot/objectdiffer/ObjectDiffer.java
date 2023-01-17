@@ -72,15 +72,16 @@ public class ObjectDiffer {
             IntrospectionService introspectionService = new IntrospectionService(dummy);
             CategoryService categoryService = new CategoryService(dummy);
             InclusionService inclusionService = new InclusionService(categoryService, dummy);
-            // hack
             ComparisonService comparisonService = new DelegateComparisonService(dummy);
-            IdentityService identityService = new IdentityService(dummy);
+            IdentityService identityService = new DelegateIdentityService(dummy);
             ReturnableNodeService returnableNodeService = new ReturnableNodeService(dummy);
             CircularReferenceService circularReferenceService = new CircularReferenceService(dummy);
             final DifferDispatcher differDispatcher = new DifferDispatcher(differProvider, circularReferenceService, circularReferenceService, inclusionService, returnableNodeService, introspectionService, categoryService);
 
+            inclusionService.resolveUsing(new DifferAnnotationInclusionResolver());
             differProvider.push(new BeanDiffer(differDispatcher, introspectionService, returnableNodeService, comparisonService, introspectionService));
             differProvider.push(new CollectionDiffer(differDispatcher, comparisonService, identityService));
+            differProvider.push(new ArrayDiffer(differDispatcher, comparisonService, identityService));
             differProvider.push(new MapDiffer(differDispatcher, comparisonService));
             differProvider.push(new PrimitiveDiffer(comparisonService));
             return new de.danielbechler.diff.ObjectDiffer(differDispatcher);

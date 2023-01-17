@@ -3,6 +3,7 @@ package top.abosen.xboot.objectdiffer;
 import de.danielbechler.diff.node.DiffNode;
 import lombok.Getter;
 
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -42,4 +43,23 @@ public class Difference {
     }
 
 
+    /**
+     * 存在特定的 diffValue表达, 就不用深入对比子节点了
+     *
+     * @return 是不是子节点
+     */
+    public boolean isEndPoint() {
+        return valueFormat != null && valueFormat.source().handle();
+    }
+
+    /**
+     * @return 是否为一个 不同端点
+     */
+    public boolean isDifferent() {
+        return node.hasChanges() && (isEndPoint() || isContainer() || !node.hasChildren());
+    }
+
+    public boolean isContainer() {
+        return valueType != null && (Collection.class.isAssignableFrom(valueType) || valueType.isArray());
+    }
 }

@@ -31,7 +31,15 @@ class ObjectDifferTest {
         System.out.println(ObjectDiffer.buildDefault().compare(source, target));
     }
 
+    @Test
+    void should_compare_user() {
+        User source = new User("a", "123");
+        User target = new User("b", "234");
+        System.out.println(ObjectDiffer.buildDefault().compare(source, target));
+    }
+
     @Value
+    @Diff(displayName = "用户", format = @DiffValue(source = SourceType.PROVIDER, providerName = ""))
     static class User {
         @Diff(displayName = "用户名")
         String name;

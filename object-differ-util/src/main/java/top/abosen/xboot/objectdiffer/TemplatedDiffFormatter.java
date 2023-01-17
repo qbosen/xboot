@@ -21,7 +21,9 @@ class TemplatedDiffFormatter implements DiffFormatter {
 
         FormatContext context = new FormatContext(configuration, formatSources, differences);
 
-        return differences.stream().map(difference -> format(context, difference, fieldName(context, difference)))
+        return differences.stream()
+                .filter(Difference::isDifferent)
+                .map(difference -> format(context, difference, fieldName(context, difference)))
                 .filter(it -> it.length() != 0)
                 .collect(Collectors.joining(configuration.getFieldSeparator()));
     }

@@ -29,10 +29,9 @@ public class DiffVisitor implements DiffNode.Visitor {
 
     @Override
     public void node(DiffNode node, Visit visit) {
-        if (filter(node)) {
-            differences.add(new Difference(node, source, target));
-        }
-
+        Difference difference = new Difference(node, source, target);
+        if (difference.isEndPoint() || difference.isContainer()) visit.dontGoDeeper();
+        differences.add(difference);
     }
 
     public List<Difference> getDifferences() {

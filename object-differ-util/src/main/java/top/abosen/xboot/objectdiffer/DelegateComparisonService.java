@@ -22,12 +22,12 @@ public class DelegateComparisonService extends ComparisonService {
         super(objectDifferBuilder);
     }
 
-    private final Map<Class<?>, ComparisonStrategy> diffFieldIdStrategies = new HashMap<>();
+    private final Map<Class<?>, ComparisonStrategy> diffEqualsStrategies = new HashMap<>();
 
     @Override
     public ComparisonStrategy resolveComparisonStrategy(final DiffNode node) {
         return Optional.of(node.getValueType()).map(type ->
-                        diffFieldIdStrategies.computeIfAbsent(type, key ->
+                        diffEqualsStrategies.computeIfAbsent(type, key ->
                                 diffEqualsMethod(key).orElseGet(() -> diffEqualsField(key).orElse(null))))
                 .orElseGet(() -> super.resolveComparisonStrategy(node));
     }
@@ -56,7 +56,7 @@ public class DelegateComparisonService extends ComparisonService {
             throw Exceptions.escalate(e);
         }
     }
-    interface ValueGetter {
+    private interface ValueGetter {
         Object getValue(Object target) throws Exception;
 
     }
