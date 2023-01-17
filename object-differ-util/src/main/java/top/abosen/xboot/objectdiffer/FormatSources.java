@@ -17,30 +17,30 @@ import java.util.Optional;
  */
 
 @Slf4j
-public class FormatSource {
+public class FormatSources {
 
-    private final Map<String, LinkedList<FormatProvider>> holder = new HashMap<>();
+    private final Map<String, LinkedList<ValueProvider>> holder = new HashMap<>();
 
-    public FormatSource registerInstance(FormatProvider provider) {
+    public FormatSources registerProvider(ValueProvider provider) {
         holder.compute(provider.name(), (k, v) -> v == null ? new LinkedList<>() : v).addFirst(provider);
         return this;
     }
 
-    public Object provideValue(DiffField.Format format, Class<?> type, Object target) {
+    public Object provideValue(DiffValue format, Class<?> type, Object target) {
         return pickProvider(format, type, target).provide(type, target);
     }
 
-    private FormatProvider instanceProvider(String source, Class<?> type, Object target) {
-        return Optional.ofNullable(holder.getOrDefault(source, holder.get(FormatProvider.DEFAULT_FORMAT_PROVIDER)))
+    private ValueProvider byProvider(String source, Class<?> type, Object target) {
+        return Optional.ofNullable(holder.getOrDefault(source, holder.get(ValueProvider.DEFAULT_FORMAT_PROVIDER)))
                 .flatMap(providers -> providers.stream().filter(it -> it.filter(type, target)).findFirst())
                 .orElse(TO_STRING);
     }
 
 
-    protected static final FormatProvider TO_STRING = (type, target) -> Optional.ofNullable(target).map(String::valueOf).orElse(null);
+    protected static final ValueProvider TO_STRING = (type, target) -> Optional.ofNullable(target).map(String::valueOf).orElse(null);
 
 
-    private FormatProvider errorOr(FormatProvider provider, FormatProvider defaultProvider) {
+    private ValueProvider errorOr(ValueProvider provider, ValueProvider defaultProvider) {
         return (type, target) -> {
             try {
                 return provider.provide(type, target);
@@ -51,20 +51,20 @@ public class FormatSource {
         };
     }
 
-    private FormatProvider pickProvider(DiffField.Format format, Class<?> type, Object target) {
+    private ValueProvider pickProvider(DiffValue format, Class<?> type, Object target) {
         if (format == null) return TO_STRING;
         switch (format.source()) {
             case METHOD:
-                return errorOr(methodProvider(format), TO_STRING);
-            case INSTANCE:
-                return errorOr(instanceProvider(format.instanceSource(), type, target), TO_STRING);
+                return errorOr(byMethod(format), TO_STRING);
+            case PROVIDER:
+                return errorOr(byProvider(format.providerName(), type, target), TO_STRING);
             default:
                 return TO_STRING;
         }
     }
 
-    private static FormatProvider methodProvider(DiffField.Format format) {
-        return (type, target) -> access(type, target, format.methodSource());
+    private static ValueProvider byMethod(DiffValue format) {
+        return (type, target) -> access(type, target, format.methodName());
     }
 
 
@@ -91,27 +91,3 @@ public class FormatSource {
 
 }
 
-interface FormatProvider {
-
-    String DEFAULT_FORMAT_PROVIDER = "&DEFAULT_PROVIDER&";
-
-    /**
-     * 在{@link DiffField.Format#name()} 中使用
-     *
-     * @return 注册的实例名称
-     */
-    default String name() {
-        return DEFAULT_FORMAT_PROVIDER;
-    }
-
-    /**
-     * 同名时可以设置匹配规则
-     *
-     * @return true 选中执行
-     */
-    default boolean filter(Class<?> type, Object target) {
-        return true;
-    }
-
-    Object provide(Class<?> type, Object target);
-}

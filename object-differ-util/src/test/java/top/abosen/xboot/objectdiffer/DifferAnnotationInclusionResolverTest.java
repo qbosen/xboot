@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 
 @SuppressWarnings("ClassCanBeRecord")
-class DifferFieldAnnotationInclusionResolverTest {
+class DifferAnnotationInclusionResolverTest {
 
     @Test
     void should_include_by_default() {
@@ -47,7 +47,7 @@ class DifferFieldAnnotationInclusionResolverTest {
     static class ObjectWithGetterInclusion {
         String name;
 
-        @DiffField
+        @Diff
         public String getName() {
             return name;
         }
@@ -65,7 +65,7 @@ class DifferFieldAnnotationInclusionResolverTest {
 
     @Value
     static class ObjectWithFieldInclusion {
-        @DiffField
+        @Diff
         String name;
     }
 
@@ -84,7 +84,7 @@ class DifferFieldAnnotationInclusionResolverTest {
     static class ObjectWithGetterExclusion {
         String name;
 
-        @DiffField(ignore = true)
+        @Diff(ignore = true)
         public String getName() {
             return name;
         }
@@ -103,7 +103,7 @@ class DifferFieldAnnotationInclusionResolverTest {
 
     @Value
     static class ObjectWithFieldExclusion {
-        @DiffField(ignore = true)
+        @Diff(ignore = true)
         String name;
     }
 
@@ -119,7 +119,7 @@ class DifferFieldAnnotationInclusionResolverTest {
 
     @Value
     static class ObjectWithInclusionAndSibling {
-        @DiffField
+        @Diff
         String name;
         String sibling;
     }
@@ -137,15 +137,55 @@ class DifferFieldAnnotationInclusionResolverTest {
 
     @Value
     static class ObjectWithExclusionAndSibling {
-        @DiffField(ignore = true)
+        @Diff(ignore = true)
         String name;
         String sibling;
+    }
+
+    @Test
+    void should_include_all_no_anno_fields_but_not_type_annotated_ignore(){
+        var working = new ObjectWithFieldTypeIgnore("working", new ObjectTypedIgnore("working"));
+        var base = new ObjectWithFieldTypeIgnore("base", new ObjectTypedIgnore("base"));
+        DiffNode node = getDiffNode(working, base, IGNORED);
+        assertEquals(2, node.childCount());
+        assertTrue(node.getChild("wrap").isIgnored());
+        assertTrue(node.getChild("name").isChanged());
+    }
+
+    @Value
+    @Diff(ignore = true)
+    static class ObjectTypedIgnore {
+        String value;
+    }
+
+    @Value
+    static class ObjectWithFieldTypeIgnore {
+        String name;
+        ObjectTypedIgnore wrap;
+    }
+
+
+    @Test
+    void should_include_anno_override_type_anno() {
+        var working = new ObjectWithOverrideFieldTypeIgnore("working", new ObjectTypedIgnore("working"));
+        var base = new ObjectWithOverrideFieldTypeIgnore("base", new ObjectTypedIgnore("base"));
+        DiffNode node = getDiffNode(working, base, IGNORED);
+        assertEquals(2, node.childCount());
+        assertTrue(node.getChild("wrap").isChanged());
+        assertTrue(node.getChild("name").isIgnored());
+    }
+
+    @Value
+    static class ObjectWithOverrideFieldTypeIgnore {
+        String name;
+        @Diff
+        ObjectTypedIgnore wrap;
     }
 
 
     private static DiffNode getDiffNode(Object working, Object base, DiffNode.State... lookStates) {
         ObjectDifferBuilder builder = ObjectDifferBuilder.startBuilding();
-        builder.inclusion().resolveUsing(new DifferFieldAnnotationInclusionResolver());
+        builder.inclusion().resolveUsing(new DifferAnnotationInclusionResolver());
         for (DiffNode.State state : lookStates) {
             builder.filtering().returnNodesWithState(state);
         }

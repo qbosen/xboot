@@ -18,12 +18,12 @@ import de.danielbechler.diff.introspection.IntrospectionService;
 public class ObjectDiffer {
     final de.danielbechler.diff.ObjectDiffer objectDiffer;
     final DiffFormatter formatter;
-    final FormatSource formatSource;
+    final FormatSources formatSources;
 
-    private ObjectDiffer(de.danielbechler.diff.ObjectDiffer objectDiffer, DiffFormatter formatter, FormatSource formatSource) {
+    private ObjectDiffer(de.danielbechler.diff.ObjectDiffer objectDiffer, DiffFormatter formatter, FormatSources formatSources) {
         this.objectDiffer = objectDiffer;
         this.formatter = formatter;
-        this.formatSource = formatSource;
+        this.formatSources = formatSources;
     }
 
     public static Builder builder() {
@@ -37,29 +37,29 @@ public class ObjectDiffer {
     static class Builder {
         final de.danielbechler.diff.ObjectDiffer objectDiffer;
         final DiffFormatter diffFormatter;
-        final FormatSource formatSource;
+        final FormatSources formatSources;
 
         public Builder() {
             objectDiffer = defaultObjectDiffer();
-            formatSource = defaultFormatSource();
-            diffFormatter = defaultDiffFormatter(formatSource);
+            formatSources = defaultFormatSource();
+            diffFormatter = defaultDiffFormatter(formatSources);
         }
 
-        public Builder registerProvider(FormatProvider provider) {
-            formatSource.registerInstance(provider);
+        public Builder registerProvider(ValueProvider provider) {
+            formatSources.registerProvider(provider);
             return this;
         }
 
         public ObjectDiffer build() {
-            return new ObjectDiffer(objectDiffer, diffFormatter, formatSource);
+            return new ObjectDiffer(objectDiffer, diffFormatter, formatSources);
         }
 
-        private static FormatSource defaultFormatSource() {
-            return new FormatSource();
+        private static FormatSources defaultFormatSource() {
+            return new FormatSources();
         }
 
-        public static DiffFormatter defaultDiffFormatter(FormatSource formatSource) {
-            return new TemplatedDiffFormatter(defaultFormatterConfiguration(),formatSource);
+        public static DiffFormatter defaultDiffFormatter(FormatSources formatSources) {
+            return new TemplatedDiffFormatter(defaultFormatterConfiguration(), formatSources);
         }
 
         private static DiffFormatterConfiguration defaultFormatterConfiguration() {
@@ -73,7 +73,7 @@ public class ObjectDiffer {
             CategoryService categoryService = new CategoryService(dummy);
             InclusionService inclusionService = new InclusionService(categoryService, dummy);
             // hack
-            ComparisonService comparisonService = new CustomComparisonService(dummy);
+            ComparisonService comparisonService = new DelegateComparisonService(dummy);
             IdentityService identityService = new IdentityService(dummy);
             ReturnableNodeService returnableNodeService = new ReturnableNodeService(dummy);
             CircularReferenceService circularReferenceService = new CircularReferenceService(dummy);

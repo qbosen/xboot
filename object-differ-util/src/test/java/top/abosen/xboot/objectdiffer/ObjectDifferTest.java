@@ -33,20 +33,20 @@ class ObjectDifferTest {
 
     @Value
     static class User {
-        @DiffField(name = "用户名")
+        @Diff(displayName = "用户名")
         String name;
         String password;
     }
 
     @Nested
-    class DiffFieldIdTest {
+    class DiffIdFieldTest {
 
         @Value
         static class ObjectIdentified {
-            @DiffField.Id
+            @DiffEquals
             long idButIgnore;
 
-            @DiffField
+            @Diff
             String name;
         }
 
@@ -67,23 +67,22 @@ class ObjectDifferTest {
     }
 
     @Nested
-    class FormatSource {
+    class DiffValueSources {
         @Nested
         class MethodSource {
 
             @Test
             void should_invoke_to_string_if_method_not_present() {
                 ObjectDiffer objectDiffer = ObjectDiffer.buildDefault();
-                String compare = objectDiffer.compare(new ObjectWithMethodSource(1234, "手机"), new ObjectWithMethodSource(4321, "手机"));
+                String compare = objectDiffer.compare(new ObjectWithMethodSource(1234, "手机"), null);
                 System.out.println(compare);
             }
 
             @Value
-            @DiffField.Format(source = DiffField.Format.Source.METHOD, methodSource = "customToString")
+            @Diff(format = @DiffValue(source = SourceType.METHOD, methodName = "customToString"))
             static class ObjectWithMethodSource {
-                @DiffField.Id
+                @DiffEquals
                 long id;
-
                 String goods;
 
                 public String customToString() {

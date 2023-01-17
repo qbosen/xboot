@@ -12,16 +12,12 @@ import static java.util.Collections.emptyList;
  * @author qiubaisen
  * @date 2023/1/13
  */
-public class DifferFieldAnnotationInclusionResolver implements InclusionResolver {
+public class DifferAnnotationInclusionResolver implements InclusionResolver {
     @Override
     public Inclusion getInclusion(DiffNode node) {
-
-        DiffField propertyAnnotation = node.getPropertyAnnotation(DiffField.class);
-        if (propertyAnnotation == null) {
-            propertyAnnotation = node.getFieldAnnotation(DiffField.class);
-        }
-        if (propertyAnnotation != null) {
-            return propertyAnnotation.ignore() ? Inclusion.EXCLUDED : Inclusion.INCLUDED;
+        Diff diff = Annotations.getNodeAnno(node, Diff.class);
+        if (diff != null) {
+            return diff.ignore() ? Inclusion.EXCLUDED : Inclusion.INCLUDED;
         }
         if (hasIncludedSibling(node)) {
             return Inclusion.EXCLUDED;
@@ -31,9 +27,9 @@ public class DifferFieldAnnotationInclusionResolver implements InclusionResolver
 
     private static boolean hasIncludedSibling(final DiffNode node) {
         for (final PropertyAwareAccessor accessor : getSiblingAccessors(node)) {
-            DiffField annotation = accessor.getReadMethodAnnotation(DiffField.class);
+            Diff annotation = accessor.getReadMethodAnnotation(Diff.class);
             if (annotation == null) {
-                annotation = accessor.getFieldAnnotation(DiffField.class);
+                annotation = accessor.getFieldAnnotation(Diff.class);
             }
 
             if (annotation != null && !annotation.ignore()) {
