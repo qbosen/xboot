@@ -30,13 +30,13 @@ public class DelegateIdentityService extends IdentityService {
     }
 
     private static Optional<IdentityStrategy> diffIdentityMethod(Class<?> valueType) {
-        return Arrays.stream(valueType.getDeclaredMethods()).filter(it -> it.isAnnotationPresent(DiffEquals.class))
+        return Arrays.stream(valueType.getDeclaredMethods()).filter(it -> it.isAnnotationPresent(DiffIdentity.class))
                 .filter(m -> m.getParameterCount() == 0 && m.getReturnType() != Void.TYPE)
                 .findFirst().map(IdentityMethodIdentityStrategy::new);
     }
 
     private static Optional<IdentityStrategy> diffIdentityField(Class<?> valueType) {
-        return Optional.of(Arrays.stream(valueType.getDeclaredFields()).filter(it -> it.isAnnotationPresent(DiffEquals.class)).collect(Collectors.toList()))
+        return Optional.of(Arrays.stream(valueType.getDeclaredFields()).filter(it -> it.isAnnotationPresent(DiffIdentity.class)).collect(Collectors.toList()))
                 .filter(it -> !it.isEmpty()).map(IdentityFieldIdentityStrategy::new);
     }
 
