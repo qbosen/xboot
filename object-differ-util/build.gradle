@@ -17,6 +17,7 @@ dependencies {
     testImplementation("org.slf4j:slf4j-simple:2.0.5")
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
+    testImplementation("org.mockito:mockito-inline:$mockitoJunitVersion")
 }
 
 compileJava {

@@ -4,7 +4,6 @@ import de.danielbechler.diff.ObjectDifferBuilder;
 import de.danielbechler.diff.comparison.ComparisonService;
 import de.danielbechler.diff.comparison.ComparisonStrategy;
 import de.danielbechler.diff.node.DiffNode;
-import de.danielbechler.util.Exceptions;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -42,24 +41,6 @@ public class DelegateComparisonService extends ComparisonService {
         return Optional.of(Arrays.stream(valueType.getDeclaredFields()).filter(it -> it.isAnnotationPresent(DiffEquals.class)).collect(Collectors.toList()))
                 .filter(it -> !it.isEmpty()).map(EqualsFieldComparisonStrategy::new);
     }
-
-    private static boolean isEquals(Object working, Object base, ValueGetter valueGetter) {
-        try {
-            if (working == null && base == null) return true;
-            else if (working == null || base == null) return false;
-            else {
-                Object workingValue = valueGetter.getValue(working);
-                Object baseValue = valueGetter.getValue(base);
-                return Objects.equals(workingValue, baseValue);
-            }
-        } catch (Exception e) {
-            throw Exceptions.escalate(e);
-        }
-    }
-    private interface ValueGetter {
-        Object getValue(Object target) throws Exception;
-
-    }
     public static class EqualsMethodComparisonStrategy implements ComparisonStrategy {
         final Method method;
 
@@ -70,8 +51,7 @@ public class DelegateComparisonService extends ComparisonService {
 
         @Override
         public void compare(DiffNode node, Class<?> type, Object working, Object base) {
-            node.setState(isEquals(working, base, method::invoke) ? DiffNode.State.UNTOUCHED : DiffNode.State.CHANGED);
-
+            node.setState(ValueGetter.filterNull(method::invoke).isEquals(working, base) ? DiffNode.State.UNTOUCHED : DiffNode.State.CHANGED);
         }
 
     }
@@ -87,7 +67,7 @@ public class DelegateComparisonService extends ComparisonService {
 
         @Override
         public void compare(DiffNode node, Class<?> type, Object working, Object base) {
-            boolean allEquals = fields.stream().allMatch(f -> isEquals(working, base, f::get));
+            boolean allEquals = fields.stream().allMatch(f -> ValueGetter.filterNull(f::get).isEquals(working, base));
             node.setState(allEquals ? DiffNode.State.UNTOUCHED : DiffNode.State.CHANGED);
         }
     }

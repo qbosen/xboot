@@ -4,7 +4,7 @@ package top.abosen.xboot.objectdiffer;
  * @author qiubaisen
  * @date 2023/1/16
  */
-interface ValueProvider {
+public interface ValueProvider {
 
     String DEFAULT_FORMAT_PROVIDER = "&DEFAULT_PROVIDER&";
 

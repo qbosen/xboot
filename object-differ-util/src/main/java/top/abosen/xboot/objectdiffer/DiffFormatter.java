@@ -6,7 +6,7 @@ import java.util.List;
  * @author qiubaisen
  * @date 2023/1/11
  */
-interface DiffFormatter {
+public interface DiffFormatter {
 
     String format(List<Difference> differences);
 }

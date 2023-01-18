@@ -52,14 +52,14 @@ public class Difference {
         return valueFormat != null && valueFormat.source().handle();
     }
 
+    public boolean isContainer() {
+        return valueType != null && (Collection.class.isAssignableFrom(valueType) || valueType.isArray());
+    }
+
     /**
      * @return 是否为一个 不同端点
      */
     public boolean isDifferent() {
         return node.hasChanges() && (isEndPoint() || isContainer() || !node.hasChildren());
-    }
-
-    public boolean isContainer() {
-        return valueType != null && (Collection.class.isAssignableFrom(valueType) || valueType.isArray());
     }
 }

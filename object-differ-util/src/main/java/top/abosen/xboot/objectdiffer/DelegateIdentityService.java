@@ -4,7 +4,6 @@ import de.danielbechler.diff.ObjectDifferBuilder;
 import de.danielbechler.diff.identity.IdentityService;
 import de.danielbechler.diff.identity.IdentityStrategy;
 import de.danielbechler.diff.node.DiffNode;
-import de.danielbechler.util.Exceptions;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -41,25 +40,6 @@ public class DelegateIdentityService extends IdentityService {
                 .filter(it -> !it.isEmpty()).map(IdentityFieldIdentityStrategy::new);
     }
 
-    private static boolean isEquals(Object working, Object base, ValueGetter valueGetter) {
-        try {
-            if (working == null && base == null) return true;
-            else if (working == null || base == null) return false;
-            else {
-                Object workingValue = valueGetter.getValue(working);
-                Object baseValue = valueGetter.getValue(base);
-                return Objects.equals(workingValue, baseValue);
-            }
-        } catch (Exception e) {
-            throw Exceptions.escalate(e);
-        }
-    }
-
-    private interface ValueGetter {
-        Object getValue(Object target) throws Exception;
-
-    }
-
     public static class IdentityMethodIdentityStrategy implements IdentityStrategy {
         final Method method;
 
@@ -70,7 +50,7 @@ public class DelegateIdentityService extends IdentityService {
 
         @Override
         public boolean equals(Object working, Object base) {
-            return isEquals(working, base, method::invoke);
+            return ValueGetter.filterNull(method::invoke).isEquals(working, base);
         }
     }
 
@@ -85,7 +65,7 @@ public class DelegateIdentityService extends IdentityService {
 
         @Override
         public boolean equals(Object working, Object base) {
-            return fields.stream().allMatch(f -> isEquals(working, base, f::get));
+            return fields.stream().allMatch(f -> ValueGetter.filterNull(f::get).isEquals(working, base));
         }
     }
 }
