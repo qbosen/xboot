@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 class FormatContext {
     DiffFormatterConfiguration configuration;
     Map<DiffNode, Difference> differenceMap;
-    FormatSources formatSources;
+    ValueProviders valueProviders;
 
-    public FormatContext(DiffFormatterConfiguration configuration, FormatSources formatSources, List<Difference> differences) {
+    public FormatContext(DiffFormatterConfiguration configuration, ValueProviders valueProviders, List<Difference> differences) {
         this.configuration = configuration;
-        this.formatSources = formatSources;
+        this.valueProviders = valueProviders;
         this.differenceMap = differences.stream().collect(Collectors.toMap(Difference::getNode, Function.identity()));
     }
 

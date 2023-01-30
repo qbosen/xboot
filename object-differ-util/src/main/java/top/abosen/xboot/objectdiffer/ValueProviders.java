@@ -17,11 +17,11 @@ import java.util.Optional;
  */
 
 @Slf4j
-public class FormatSources {
+public class ValueProviders {
 
     private final Map<String, LinkedList<ValueProvider>> holder = new HashMap<>();
 
-    public FormatSources registerProvider(ValueProvider provider) {
+    public ValueProviders register(ValueProvider provider) {
         holder.compute(provider.name(), (k, v) -> v == null ? new LinkedList<>() : v).addFirst(provider);
         return this;
     }

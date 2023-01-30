@@ -9,17 +9,17 @@ import java.util.stream.Collectors;
  */
 class TemplatedDiffFormatter implements DiffFormatter {
     final DiffFormatterConfiguration configuration;
-    private final FormatSources formatSources;
+    private final ValueProviders valueProviders;
 
-    TemplatedDiffFormatter(DiffFormatterConfiguration configuration, FormatSources formatSources) {
+    TemplatedDiffFormatter(DiffFormatterConfiguration configuration, ValueProviders valueProviders) {
         this.configuration = configuration;
-        this.formatSources = formatSources;
+        this.valueProviders = valueProviders;
     }
 
     @Override
     public String format(List<Difference> differences) {
 
-        FormatContext context = new FormatContext(configuration, formatSources, differences);
+        FormatContext context = new FormatContext(configuration, valueProviders, differences);
 
         return differences.stream()
                 .filter(Difference::isDifferent)
@@ -33,14 +33,14 @@ class TemplatedDiffFormatter implements DiffFormatter {
             return "";
         }
         DiffFormatterConfiguration configuration = context.getConfiguration();
-        FormatSources formatSources = context.getFormatSources();
+        ValueProviders valueProviders = context.getValueProviders();
         switch (difference.getNode().getState()) {
             case ADDED:
-                return configuration.getTemplate().formatAdd(fieldName, targetValue(difference, formatSources));
+                return configuration.getTemplate().formatAdd(fieldName, targetValue(difference, valueProviders));
             case CHANGED:
-                return configuration.getTemplate().formatChange(fieldName, sourceValue(difference, formatSources), targetValue(difference, formatSources));
+                return configuration.getTemplate().formatChange(fieldName, sourceValue(difference, valueProviders), targetValue(difference, valueProviders));
             case REMOVED:
-                return configuration.getTemplate().formatRemove(fieldName, sourceValue(difference, formatSources));
+                return configuration.getTemplate().formatRemove(fieldName, sourceValue(difference, valueProviders));
             case UNTOUCHED:
             case CIRCULAR:
             case IGNORED:
@@ -52,12 +52,12 @@ class TemplatedDiffFormatter implements DiffFormatter {
         return "";
     }
 
-    private static Object sourceValue(Difference difference, FormatSources formatSources) {
-        return formatSources.provideValue(difference.getValueFormat(), difference.getValueType(), difference.getSourceValue());
+    private static Object sourceValue(Difference difference, ValueProviders valueProviders) {
+        return valueProviders.provideValue(difference.getValueFormat(), difference.getValueType(), difference.getSourceValue());
     }
 
-    private static Object targetValue(Difference difference, FormatSources formatSources) {
-        return formatSources.provideValue(difference.getValueFormat(), difference.getValueType(), difference.getTargetValue());
+    private static Object targetValue(Difference difference, ValueProviders valueProviders) {
+        return valueProviders.provideValue(difference.getValueFormat(), difference.getValueType(), difference.getTargetValue());
 
     }
 

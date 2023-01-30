@@ -18,12 +18,12 @@ import de.danielbechler.diff.introspection.IntrospectionService;
 public class ObjectDiffer {
     final de.danielbechler.diff.ObjectDiffer objectDiffer;
     final DiffFormatter formatter;
-    final FormatSources formatSources;
+    final ValueProviders valueProviders;
 
-    private ObjectDiffer(de.danielbechler.diff.ObjectDiffer objectDiffer, DiffFormatter formatter, FormatSources formatSources) {
+    private ObjectDiffer(de.danielbechler.diff.ObjectDiffer objectDiffer, DiffFormatter formatter, ValueProviders valueProviders) {
         this.objectDiffer = objectDiffer;
         this.formatter = formatter;
-        this.formatSources = formatSources;
+        this.valueProviders = valueProviders;
     }
 
     public static Builder builder() {
@@ -37,29 +37,29 @@ public class ObjectDiffer {
     static class Builder {
         final de.danielbechler.diff.ObjectDiffer objectDiffer;
         final DiffFormatter diffFormatter;
-        final FormatSources formatSources;
+        final ValueProviders valueProviders;
 
         public Builder() {
             objectDiffer = defaultObjectDiffer();
-            formatSources = defaultFormatSource();
-            diffFormatter = defaultDiffFormatter(formatSources);
+            valueProviders = defaultFormatSource();
+            diffFormatter = defaultDiffFormatter(valueProviders);
         }
 
         public Builder registerProvider(ValueProvider provider) {
-            formatSources.registerProvider(provider);
+            valueProviders.register(provider);
             return this;
         }
 
         public ObjectDiffer build() {
-            return new ObjectDiffer(objectDiffer, diffFormatter, formatSources);
+            return new ObjectDiffer(objectDiffer, diffFormatter, valueProviders);
         }
 
-        private static FormatSources defaultFormatSource() {
-            return new FormatSources();
+        private static ValueProviders defaultFormatSource() {
+            return new ValueProviders();
         }
 
-        public static DiffFormatter defaultDiffFormatter(FormatSources formatSources) {
-            return new TemplatedDiffFormatter(defaultFormatterConfiguration(), formatSources);
+        public static DiffFormatter defaultDiffFormatter(ValueProviders valueProviders) {
+            return new TemplatedDiffFormatter(defaultFormatterConfiguration(), valueProviders);
         }
 
         private static DiffFormatterConfiguration defaultFormatterConfiguration() {

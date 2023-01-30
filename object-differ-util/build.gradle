@@ -18,6 +18,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
     testImplementation("org.mockito:mockito-inline:$mockitoJunitVersion")
+    testImplementation("org.assertj:assertj-core:3.24.2")
 }
 
 compileJava {

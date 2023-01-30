@@ -30,7 +30,7 @@ public class DiffVisitor implements DiffNode.Visitor {
     @Override
     public void node(DiffNode node, Visit visit) {
         Difference difference = new Difference(node, source, target);
-        if (difference.isEndPoint() || difference.isContainer()) visit.dontGoDeeper();
+        if (difference.isEndPoint()) visit.dontGoDeeper();
         differences.add(difference);
     }
 

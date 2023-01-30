@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @date 2023/1/13
  */
 class ObjectDifferTest {
+    // todo 自定义root对象名称,在 DiffFormat里面
     @Test
     void should_diff_list() {
         List<Integer> working = List.of(1, 2, 3);

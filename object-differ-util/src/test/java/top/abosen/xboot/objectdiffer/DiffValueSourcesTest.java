@@ -80,47 +80,47 @@ public class DiffValueSourcesTest {
 
         @Test
         void should_access_method_belong_target() {
-            assertEquals(PUBLIC_MEMBER_METHOD, FormatSources.access(new Target(), PUBLIC_MEMBER_METHOD));
+            assertEquals(PUBLIC_MEMBER_METHOD, ValueProviders.access(new Target(), PUBLIC_MEMBER_METHOD));
         }
 
         @Test
         void should_access_parent_public_member_method() {
-            assertEquals(PUBLIC_PARENT_METHOD, FormatSources.access(new Target(), PUBLIC_PARENT_METHOD));
+            assertEquals(PUBLIC_PARENT_METHOD, ValueProviders.access(new Target(), PUBLIC_PARENT_METHOD));
         }
 
         @Test
         void should_invoke_override_parent_member_method() {
-            assertEquals(PUBLIC_PARENT_OVERRIDE_METHOD, FormatSources.access(new Target(), PUBLIC_PARENT_OVERRIDE_METHOD));
+            assertEquals(PUBLIC_PARENT_OVERRIDE_METHOD, ValueProviders.access(new Target(), PUBLIC_PARENT_OVERRIDE_METHOD));
         }
 
         @Test
         void should_throw_exception_if_access_private_method() {
-            assertThrows(Exception.class, () -> FormatSources.access(new Target(), PRIVATE_MEMBER_METHOD));
+            assertThrows(Exception.class, () -> ValueProviders.access(new Target(), PRIVATE_MEMBER_METHOD));
         }
 
         @Test
         void should_throw_exception_if_method_not_found() {
-            assertThrows(Exception.class, () -> FormatSources.access(new Target(), "method_not_exist"));
+            assertThrows(Exception.class, () -> ValueProviders.access(new Target(), "method_not_exist"));
         }
 
         @Test
         void should_throw_exception_if_method_declared_with_parameter() {
-            assertThrows(Exception.class, () -> FormatSources.access(new Target(), PUBLIC_MEMBER_METHOD_WITH_PARAMS));
+            assertThrows(Exception.class, () -> ValueProviders.access(new Target(), PUBLIC_MEMBER_METHOD_WITH_PARAMS));
         }
 
         @Test
         void should_access_public_static_method() {
-            assertEquals(PUBLIC_STATIC_METHOD, FormatSources.access(new Target(), PUBLIC_STATIC_METHOD));
+            assertEquals(PUBLIC_STATIC_METHOD, ValueProviders.access(new Target(), PUBLIC_STATIC_METHOD));
         }
 
         @Test
         void should_throw_exception_if_access_private_static_method() {
-            assertThrows(Exception.class, () -> FormatSources.access(new Target(), PRIVATE_STATIC_METHOD));
+            assertThrows(Exception.class, () -> ValueProviders.access(new Target(), PRIVATE_STATIC_METHOD));
         }
 
         @Test
         void should_access_static_method_even_target_is_null() {
-            assertEquals(PUBLIC_STATIC_METHOD, FormatSources.access(Target.class, null, PUBLIC_STATIC_METHOD));
+            assertEquals(PUBLIC_STATIC_METHOD, ValueProviders.access(Target.class, null, PUBLIC_STATIC_METHOD));
         }
     }
 
@@ -136,10 +136,10 @@ public class DiffValueSourcesTest {
             when(provider.name()).thenReturn(sourceName);
             when(provider.filter(any(), any())).thenReturn(true);
 
-            FormatSources formatSources = new FormatSources();
-            formatSources.registerProvider(provider);
+            ValueProviders valueProviders = new ValueProviders();
+            valueProviders.register(provider);
             DiffValueLiteral format = new DiffValueLiteral(SourceType.PROVIDER, "", sourceName, "");
-            formatSources.provideValue(format, type, target);
+            valueProviders.provideValue(format, type, target);
             verify(provider).provide(type, target);
         }
     }

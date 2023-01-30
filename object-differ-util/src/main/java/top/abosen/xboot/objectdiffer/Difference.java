@@ -49,7 +49,7 @@ public class Difference {
      * @return 是不是子节点
      */
     public boolean isEndPoint() {
-        return valueFormat != null && valueFormat.source().handle();
+        return !node.hasChildren() || (valueFormat != null && valueFormat.source().handle());
     }
 
     public boolean isContainer() {
@@ -60,6 +60,6 @@ public class Difference {
      * @return 是否为一个 不同端点
      */
     public boolean isDifferent() {
-        return node.hasChanges() && (isEndPoint() || isContainer() || !node.hasChildren());
+        return node.hasChanges() && isEndPoint();
     }
 }
