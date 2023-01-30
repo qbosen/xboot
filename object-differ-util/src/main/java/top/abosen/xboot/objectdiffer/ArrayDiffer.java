@@ -107,8 +107,8 @@ public class ArrayDiffer implements Differ {
                                                        final ComparisonStrategy comparisonStrategy) {
         comparisonStrategy.compare(collectionNode,
                 collectionInstances.getType(),
-                collectionInstances.getWorking(Collection.class),
-                collectionInstances.getBase(Collection.class));
+                collectionInstances.getWorking(),
+                collectionInstances.getBase());
     }
 
     private void remove(final Iterable<?> from, final Iterable<?> these, final IdentityStrategy identityStrategy) {

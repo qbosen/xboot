@@ -24,9 +24,12 @@ public class DelegateIdentityService extends IdentityService {
     @Override
     public IdentityStrategy resolveIdentityStrategy(DiffNode node) {
         return Optional.of(node.getValueType()).map(type ->
-                        diffIdentityStrategies.computeIfAbsent(type, key ->
-                                diffIdentityMethod(key).orElseGet(() -> diffIdentityField(key).orElse(null))))
+                        diffIdentityStrategies.computeIfAbsent(type, DelegateIdentityService::diffIdentityStrategy))
                 .orElseGet(() -> super.resolveIdentityStrategy(node));
+    }
+
+    public static IdentityStrategy diffIdentityStrategy(Class<?> key) {
+        return diffIdentityMethod(key).orElseGet(() -> diffIdentityField(key).orElse(null));
     }
 
     private static Optional<IdentityStrategy> diffIdentityMethod(Class<?> valueType) {

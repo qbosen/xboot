@@ -7,11 +7,6 @@ import de.danielbechler.diff.identity.IdentityStrategy;
 import de.danielbechler.diff.selector.CollectionItemElementSelector;
 import de.danielbechler.diff.selector.ElementSelector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
-
 
 public class ArrayItemAccessor implements TypeAwareAccessor, Accessor {
 
@@ -35,9 +30,12 @@ public class ArrayItemAccessor implements TypeAwareAccessor, Accessor {
 
     @Override
     public String toString() {
-        return "collection item " + getElementSelector();
+        return "array item " + getElementSelector();
     }
 
+    /**
+     * {@link ElementSelector} 的目的是在NodePath中提供 equals,用于匹配路径, array和collection可以共用一个
+     */
     @Override
     public ElementSelector getElementSelector() {
         final CollectionItemElementSelector selector = new CollectionItemElementSelector(referenceItem);
@@ -46,11 +44,11 @@ public class ArrayItemAccessor implements TypeAwareAccessor, Accessor {
 
     @Override
     public Object get(final Object target) {
-        final Collection targetCollection = objectAsCollection(target);
-        if (targetCollection == null) {
+        Object[] targetArray = objectAsArray(target);
+        if (targetArray == null) {
             return null;
         }
-        for (final Object item : targetCollection) {
+        for (final Object item : targetArray) {
             if (item != null && identityStrategy.equals(item, referenceItem)) {
                 return item;
             }
@@ -60,40 +58,20 @@ public class ArrayItemAccessor implements TypeAwareAccessor, Accessor {
 
     @Override
     public void set(final Object target, final Object value) {
-        final Collection<Object> targetCollection = objectAsCollection(target);
-        if (targetCollection == null) {
-            return;
-        }
-        final Object previous = get(target);
-        if (previous != null) {
-            unset(target);
-        }
-        targetCollection.add(value);
+        throw new UnsupportedOperationException("Cannot modify array item");
     }
 
-    @SuppressWarnings("unchecked")
-    private static Collection<Object> objectAsCollection(final Object object) {
+    private static Object[] objectAsArray(final Object object) {
         if (object == null) {
             return null;
         } else if (object.getClass().isArray()) {
-            return new ArrayList<>(Arrays.asList((Object[]) object));
+            return (Object[]) object;
         }
         throw new IllegalArgumentException(object.getClass().toString());
     }
 
     @Override
     public void unset(final Object target) {
-        final Collection<?> targetCollection = objectAsCollection(target);
-        if (targetCollection == null) {
-            return;
-        }
-        final Iterator<?> iterator = targetCollection.iterator();
-        while (iterator.hasNext()) {
-            final Object item = iterator.next();
-            if (item != null && identityStrategy.equals(item, referenceItem)) {
-                iterator.remove();
-                break;
-            }
-        }
+        throw new UnsupportedOperationException("Cannot modify array item");
     }
 }
