@@ -10,6 +10,8 @@ import de.danielbechler.diff.identity.IdentityService;
 import de.danielbechler.diff.inclusion.InclusionService;
 import de.danielbechler.diff.introspection.IntrospectionService;
 
+import java.util.List;
+
 /**
  * @author qiubaisen
  * @date 2023/1/15
@@ -95,6 +97,12 @@ public class ObjectDiffer {
         DiffVisitor visitor = new DiffVisitor(source, target);
         objectDiffer.compare(target, source).visit(visitor);
         return formatter.format(visitor.getDifferences());
+    }
+
+    public List<Difference> difference(Object source, Object target) {
+        DiffVisitor visitor = new DiffVisitor(source, target);
+        objectDiffer.compare(target, source).visit(visitor);
+        return visitor.getDifferences();
     }
 
 

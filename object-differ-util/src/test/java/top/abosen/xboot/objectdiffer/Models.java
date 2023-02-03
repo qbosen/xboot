@@ -4,6 +4,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import lombok.experimental.UtilityClass;
 
+import java.util.Collection;
+
 /**
  * @author qiubaisen
  * @date 2023/1/30
@@ -22,5 +24,15 @@ public class Models {
     public static class ObjectWithIdAndValueByHashEquals {
         String id;
         String value;
+    }
+
+    @Value
+    public class ObjectWithString {
+        String value;
+    }
+
+    @Value
+    public class ObjectWithCollection {
+        Collection collection;
     }
 }

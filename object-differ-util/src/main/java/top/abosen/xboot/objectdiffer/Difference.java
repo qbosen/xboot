@@ -12,34 +12,64 @@ import java.util.Optional;
  */
 @Getter
 public class Difference {
-    private final String displayName;
-    private final String propertyName;
-    private final Class<?> valueType;
-    private final Object sourceValue;
-    private final Object targetValue;
+
     private final DiffNode node;
     private final Object rootSource;
     private final Object rootTarget;
-    private final DiffValue valueFormat;
+
+
+    @Getter(lazy = true)
+    private final Diff diff = diffAnno(node);
+    @Getter(lazy = true)
+    private final Class<?> valueType = valueType(node);
+    @Getter(lazy = true)
+    private final String propertyName = propertyName(node);
+    @Getter(lazy = true)
+    private final String displayName = displayName();
+    @Getter(lazy = true)
+    private final Object sourceValue = sourceValue(node);
+    @Getter(lazy = true)
+    private final Object targetValue = targetValue(node);
+    @Getter(lazy = true)
+    private final DiffValue valueFormat = valueFormat();
 
 
     Difference(DiffNode node, Object source, Object target) {
-        Diff diff = Annotations.getNodeAnno(node, Diff.class);
         this.node = node;
-        valueType = node.getValueType() == null ? Object.class : node.getValueType();
-        // 获取属性名称;获取最近层级的属性名称;类型名称(root节点,且root可比较)
-        propertyName = Optional.ofNullable(node.getPropertyName()).orElseGet(valueType::getSimpleName);
-        displayName = Optional.ofNullable(diff).map(Diff::displayName)
-                .filter(s -> s.length() != 0)
-                .orElse(propertyName);
-        rootSource = source;
-        rootTarget = target;
-        sourceValue = node.canonicalGet(rootSource);
-        targetValue = node.canonicalGet(rootTarget);
+        this.rootSource = source;
+        this.rootTarget = target;
+    }
 
-        valueFormat = Optional.ofNullable(diff).map(Diff::format)
+    private DiffValue valueFormat() {
+        return Optional.ofNullable(getDiff()).map(Diff::format)
                 .filter(it -> it.source().handle())
                 .orElse(null);
+    }
+
+    private Object targetValue(DiffNode node) {
+        return node.canonicalGet(rootTarget);
+    }
+
+    private Object sourceValue(DiffNode node) {
+        return node.canonicalGet(getRootSource());
+    }
+
+    private String displayName() {
+        return Optional.ofNullable(getDiff()).map(Diff::displayName)
+                .filter(s -> s.length() != 0)
+                .orElseGet(this::getPropertyName);
+    }
+
+    private String propertyName(DiffNode node) {
+        return Optional.ofNullable(node.getPropertyName()).orElseGet(() -> getValueType().getSimpleName());
+    }
+
+    private static Class<?> valueType(DiffNode node) {
+        return node.getValueType() == null ? Object.class : node.getValueType();
+    }
+
+    private static Diff diffAnno(DiffNode node) {
+        return Annotations.getNodeAnno(node, Diff.class);
     }
 
 
@@ -49,17 +79,17 @@ public class Difference {
      * @return 是不是子节点
      */
     public boolean isEndPoint() {
-        return !node.hasChildren() || (valueFormat != null && valueFormat.source().handle());
+        return !getNode().hasChildren() || (getValueFormat() != null && getValueFormat().source().handle());
     }
 
     public boolean isContainer() {
-        return valueType != null && (Collection.class.isAssignableFrom(valueType) || valueType.isArray());
+        return getValueType() != null && (Collection.class.isAssignableFrom(getValueType()) || getValueType().isArray());
     }
 
     /**
      * @return 是否为一个 不同端点
      */
     public boolean isDifferent() {
-        return node.hasChanges() && isEndPoint();
+        return getNode().hasChanges() && isEndPoint();
     }
 }

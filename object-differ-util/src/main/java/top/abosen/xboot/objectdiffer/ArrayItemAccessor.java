@@ -33,9 +33,6 @@ public class ArrayItemAccessor implements TypeAwareAccessor, Accessor {
         return "array item " + getElementSelector();
     }
 
-    /**
-     * {@link ElementSelector} 的目的是在NodePath中提供 equals,用于匹配路径, array和collection可以共用一个
-     */
     @Override
     public ElementSelector getElementSelector() {
         final CollectionItemElementSelector selector = new CollectionItemElementSelector(referenceItem);

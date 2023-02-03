@@ -1,6 +1,5 @@
 package top.abosen.xboot.objectdiffer;
 
-import de.danielbechler.diff.access.CollectionItemAccessor;
 import de.danielbechler.diff.access.Instances;
 import de.danielbechler.diff.access.RootAccessor;
 import de.danielbechler.diff.comparison.ComparisonStrategy;
@@ -19,17 +18,12 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 
-import java.util.Collection;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.isA;
-import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.argThat;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.times;
 
 /**
  * @author qiubaisen
