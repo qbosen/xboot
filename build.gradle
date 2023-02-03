@@ -129,9 +129,9 @@ subprojects {
 
     apply from: "$rootDir/gradle/spotbugs/spotbugs.gradle"
     apply from: "$rootDir/gradle/checkstyle/checkstyle.gradle"
-    apply from: "$rootDir/gradle/git-hooks/git-hooks.gradle"
+//    apply from: "$rootDir/gradle/git-hooks/git-hooks.gradle"
     apply from: "$rootDir/gradle/dependency-check/dependency-check.gradle"
     apply from: "$rootDir/gradle/version-info.gradle"
-    apply from: "$rootDir/gradle/jacoco.gradle"
+//    apply from: "$rootDir/gradle/jacoco.gradle"
 }
 

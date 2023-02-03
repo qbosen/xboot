@@ -1,0 +1,40 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'idea'
+}
+
+dependencies {
+    // lombok dependencies
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
+    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    compileOnly("org.slf4j:slf4j-api:2.0.5")
+    implementation 'de.danielbechler:java-object-diff:0.95'
+
+    //test dependencies
+    testImplementation("org.slf4j:slf4j-simple:2.0.5")
+    testImplementation("org.junit.jupiter:junit-jupiter:$junitVersion")
+    testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
+    testImplementation("org.mockito:mockito-inline:$mockitoJunitVersion")
+    testImplementation("org.assertj:assertj-core:3.24.2")
+}
+
+compileJava {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+}
+
+compileTestJava {
+    sourceCompatibility = 17
+    targetCompatibility = 17
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+jar { enabled = true; archiveClassifier.set('') }

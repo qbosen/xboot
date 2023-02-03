@@ -9,4 +9,5 @@ include 'xboot-consul-config-util'
 include 'xboot-sortable-util:sortable-demo'
 include 'diff-match-patch-util'
 include 'xboot-configuration-properties-adaptor'
+include 'object-differ-util'
 
