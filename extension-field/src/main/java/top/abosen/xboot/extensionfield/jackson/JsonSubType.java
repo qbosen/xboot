@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.ANNOTATION_TYPE, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @JacksonAnnotation
-public @interface JsonSubtype {
+public @interface JsonSubType {
     /**
      * 通过该名称确定具体的类型,空不处理
      * @return 子类型名称

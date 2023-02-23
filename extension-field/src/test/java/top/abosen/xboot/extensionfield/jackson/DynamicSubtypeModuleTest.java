@@ -45,7 +45,7 @@ class DynamicSubtypeModuleTest {
         jsonTester = new BasicJsonTester(getClass());
     }
 
-    @JsonSubtype("child")
+    @JsonSubType("child")
     @AutoService(Parent.class)
     @Data
     public static class Child implements Parent {
@@ -69,7 +69,7 @@ class DynamicSubtypeModuleTest {
     }
 
 
-    @JsonSubtype({"another-child", "child2"})
+    @JsonSubType({"another-child", "child2"})
     @AutoService(Parent.class)
     @Data
     public static class AlternativeChild implements Parent {
@@ -85,7 +85,7 @@ class DynamicSubtypeModuleTest {
     }
 
 
-    @JsonSubtype("grandson")
+    @JsonSubType("grandson")
     @AutoService(Parent.class)
     @Data
     @EqualsAndHashCode(callSuper = true)

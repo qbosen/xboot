@@ -104,7 +104,7 @@ public class DynamicSubtypeModule extends Module {
     }
 
     private static List<NamedType> namedSubtypesFromAnno(Class<?> type) {
-        return Utils.getAnno(type, JsonSubtype.class).map(anno ->
+        return Utils.getAnno(type, JsonSubType.class).map(anno ->
                         Arrays.stream(anno.value()).filter(StrUtil::isNotBlank)
                                 .map(name -> new NamedType(type, name)).collect(Collectors.toList()))
                 .orElseGet(Collections::emptyList);
