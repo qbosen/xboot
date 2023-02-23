@@ -62,30 +62,48 @@ public class DynamicSubtypeModule extends Module {
     private void initSubtypes() {
         StreamUtil.of(ServiceLoader.load(ParentTypeResolver.class).iterator())
                 .flatMap(resolver -> resolver.getParentTypes().stream())
-                .distinct().forEach(this::register);
+                .distinct().forEach(this::registerParentSpiType);
     }
 
 
-    private void register(Class<?> parentType) {
-        if (!typeMap.containsKey(parentType)) {
+    public void registerParentSpiType(Class<?> parentType) {
+        if (shouldRegister(parentType)) {
+            registerSubtypesNamedByAnno(parentType, StreamUtil.of(ServiceLoader.load(parentType).iterator()).map(Object::getClass).collect(Collectors.toList()));
+        }
+    }
+
+    public void registerSubtypesNamedByAnno(Class<?> parentType, List<Class<?>> subtypes) {
+        if (shouldRegister(parentType)) {
+            List<NamedType> namedTypes = subtypes.stream().flatMap(subtype -> namedSubtypesFromAnno(subtype).stream()).collect(Collectors.toList());
+            registerNamedSubtypes(parentType, namedTypes);
+        }
+    }
+
+    public void registerNamedSubtypes(Class<?> parentType, List<NamedType> namedTypes) {
+        if (shouldRegister(parentType)) {
             Set<String> seenNames = new HashSet<>();
             List<NamedType> namedSubtypes = new ArrayList<>();
-            StreamUtil.of(ServiceLoader.load(parentType).iterator())
-                    .map(Object::getClass)
-                    .flatMap(subtype -> subtypesFromAnno(subtype).stream())
-                    .forEach(namedType -> {
-                        if (seenNames.contains(namedType.getName())) {
-                            throw new IllegalArgumentException("Parent type [" + parentType + "] got repeated subtype name [" + namedType.getName() + "]");
-                        }
-                        seenNames.add(namedType.getName());
-                        namedSubtypes.add(namedType);
-                        typeNameMap.putIfAbsent(namedType.getType(), namedType.getName());
-                    });
+            namedTypes.forEach(namedType -> {
+                if (seenNames.contains(namedType.getName())) {
+                    throw new IllegalArgumentException("Parent type [" + parentType + "] got repeated subtype name [" + namedType.getName() + "]");
+                }
+                seenNames.add(namedType.getName());
+                namedSubtypes.add(namedType);
+                typeNameMap.putIfAbsent(namedType.getType(), namedType.getName());
+            });
             typeMap.put(parentType, namedSubtypes);
         }
     }
 
-    private static <P> List<NamedType> subtypesFromAnno(Class<P> type) {
+    public boolean shouldRegister(Class<?> parentType) {
+        return !typeMap.containsKey(parentType);
+    }
+
+    public void removeRegister(Class<?> parentType) {
+        typeMap.remove(parentType);
+    }
+
+    private static List<NamedType> namedSubtypesFromAnno(Class<?> type) {
         return Utils.getAnno(type, JsonSubtype.class).map(anno ->
                         Arrays.stream(anno.value()).filter(StrUtil::isNotBlank)
                                 .map(name -> new NamedType(type, name)).collect(Collectors.toList()))

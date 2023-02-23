@@ -4,19 +4,19 @@ import cn.hutool.core.collection.ListUtil;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.google.auto.service.AutoService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.boot.test.json.BasicJsonTester;
 import org.springframework.boot.test.json.JsonContent;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 /**
  * @author qiubaisen
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DynamicSubtypeModuleTest {
 
     @AutoService(ParentTypeResolver.class)
-    public static class ParentTypeContainer implements ParentTypeResolver{
+    public static class ParentTypeContainer implements ParentTypeResolver {
         @Override
         public List<Class<?>> getParentTypes() {
             return ListUtil.of(Parent.class);
@@ -85,7 +85,6 @@ class DynamicSubtypeModuleTest {
     }
 
 
-
     @JsonSubtype("grandson")
     @AutoService(Parent.class)
     @Data
@@ -114,5 +113,18 @@ class DynamicSubtypeModuleTest {
         assertThat(unmarshal).isInstanceOf(Grandson.class)
                 .hasFieldOrPropertyWithValue("foo", "bar")
                 .hasFieldOrPropertyWithValue("data", "meta");
+    }
+
+
+    @Test
+    void should_throw_exception_if_subtype_name_duplicated() {
+        DynamicSubtypeModule module = new DynamicSubtypeModule();
+        module.removeRegister(Parent.class);
+
+        assertThatExceptionOfType(IllegalArgumentException.class)
+                .isThrownBy(() -> module.registerNamedSubtypes(Parent.class, ListUtil.of(
+                        new NamedType(Child.class, "duplicate-name"),
+                        new NamedType(AlternativeChild.class, "duplicate-name"))))
+                .withMessageContainingAll("repeated subtype", "duplicate-name");
     }
 }
