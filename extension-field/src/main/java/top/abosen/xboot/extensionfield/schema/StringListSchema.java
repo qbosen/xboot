@@ -1,8 +1,10 @@
 package top.abosen.xboot.extensionfield.schema;
 
 import com.google.auto.service.AutoService;
-import lombok.*;
-import top.abosen.xboot.extensionfield.ValueHolder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 
 /**
@@ -12,20 +14,27 @@ import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-@JsonSubType("string-list")
 
-public class StringListSchema extends StringSchema implements ListSchema {
-    @Override
-    protected boolean checkSchema(ValueHolder valueHolder) {
-        return listValue(valueHolder).stream().allMatch(super::checkSchema);
+
+public class StringListSchema extends AbstractListSchema {
+    public static final String TYPE = "string-list";
+    Integer minLength;
+    Integer maxLength;
+    String regex;
+
+    public StringListSchema() {
+        super(TYPE);
     }
 
     @Override
-    public void resolveValue(ValueHolder holder) {
-        listValue(holder).forEach(super::resolveValue);
+    protected Schema contentSchema() {
+        StringSchema schema = new StringSchema();
+        schema.setMinLength(minLength);
+        schema.setMaxLength(maxLength);
+        schema.setRegex(regex);
+        return schema;
     }
 }

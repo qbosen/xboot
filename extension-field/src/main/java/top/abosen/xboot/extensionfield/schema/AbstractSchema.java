@@ -10,10 +10,16 @@ import top.abosen.xboot.extensionfield.ValueHolder;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
 @EqualsAndHashCode
 public abstract class AbstractSchema implements Schema {
+
+    private final String type;
+
+    protected AbstractSchema(String type) {
+        this.type = type;
+    }
+
     private boolean required = false;
     private Object defaultValue = null;
 

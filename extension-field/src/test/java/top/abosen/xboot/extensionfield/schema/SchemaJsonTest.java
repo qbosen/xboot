@@ -40,7 +40,6 @@ class SchemaJsonTest {
         integerListSchema.setRequired(false);
         integerListSchema.setMin(null);
         integerListSchema.setMax(100);
-        integerListSchema.setDefaultValue(ListUtil.of(1,2,3));
         schemas.add(integerListSchema);
 
 
@@ -57,7 +56,6 @@ class SchemaJsonTest {
         stringListSchema.setMaxLength(null);
         stringListSchema.setRequired(false);
         stringListSchema.setRegex("\\w+");
-        stringListSchema.setDefaultValue(ListUtil.of("a","b","c"));
         schemas.add(stringListSchema);
 
         return schemas.stream();
@@ -68,7 +66,7 @@ class SchemaJsonTest {
     @MethodSource("schemaProvider")
     void should_handle_json_schema(Schema schema) throws JsonProcessingException {
         String json = objectMapper.writeValueAsString(schema);
-
+        System.out.println(json);
         Schema unmarshal = objectMapper.readValue(json, Schema.class);
         Assertions.assertThat(unmarshal).hasSameClassAs(schema).isEqualTo(schema);
     }

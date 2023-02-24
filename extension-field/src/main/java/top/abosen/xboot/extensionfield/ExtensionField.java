@@ -5,6 +5,7 @@ import com.google.auto.service.AutoService;
 import lombok.Getter;
 import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 import top.abosen.xboot.extensionfield.schema.Schema;
+import top.abosen.xboot.extensionfield.widget.Widget;
 
 import java.util.List;
 import java.util.Map;

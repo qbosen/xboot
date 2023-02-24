@@ -2,6 +2,10 @@ package top.abosen.xboot.extensionfield;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
@@ -13,6 +17,8 @@ import java.util.Map;
  * @author qiubaisen
  * @date 2023/2/22
  */
+@JsonSerialize(as = ExtensionTypeValueMap.class)
+@JsonDeserialize(as = ExtensionTypeValueMap.class)
 public interface ExtensionTypeValue {
 
     Map<String, Object> toMap();
@@ -21,29 +27,26 @@ public interface ExtensionTypeValue {
 
 }
 
-@Data
-@NoArgsConstructor
 class ExtensionTypeValueMap implements ExtensionTypeValue {
-    Map<String, Object> map = new LinkedHashMap<>();
-
-    public ExtensionTypeValueMap(Map<String, Object> map) {
-        this.map = map;
-    }
+    final Map<String, Object> map;
 
     @JsonAnySetter
     public void setter(String key, Object value) {
         map.put(key, value);
     }
 
+    @Override
     @JsonAnyGetter
-    public Map<String, Object> getter() {
+    public Map<String, Object> toMap() {
         return map;
     }
 
+    public ExtensionTypeValueMap() {
+        this.map = new LinkedHashMap<>();
+    }
 
-    @Override
-    public Map<String, Object> toMap() {
-        return map;
+    public ExtensionTypeValueMap(Map<String, Object> map) {
+        this.map = map;
     }
 
     @Override

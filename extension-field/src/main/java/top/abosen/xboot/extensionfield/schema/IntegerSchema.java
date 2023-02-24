@@ -15,14 +15,18 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-@JsonSubType("integer")
+
 public class IntegerSchema extends AbstractSchema {
+    public static final String TYPE = "integer";
     Integer min;
     Integer max;
+
+    public IntegerSchema() {
+        super(TYPE);
+    }
 
     @Override
     protected boolean checkSchema(ValueHolder valueHolder) {

@@ -1,10 +1,9 @@
 package top.abosen.xboot.extensionfield.schema;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.google.auto.service.AutoService;
 import top.abosen.xboot.extensionfield.ValueHolder;
 import top.abosen.xboot.extensionfield.ValueHolderChecker;
-import top.abosen.xboot.extensionfield.jackson.ParentTypeResolver;
 
 /**
  * @author qiubaisen
@@ -13,6 +12,8 @@ import top.abosen.xboot.extensionfield.jackson.ParentTypeResolver;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
 public interface Schema extends ValueHolderChecker {
 
+    @JsonIgnore
+    String getType();
     /**
      * 根据自身schema的值定义,可以修改/转换目标值
      *

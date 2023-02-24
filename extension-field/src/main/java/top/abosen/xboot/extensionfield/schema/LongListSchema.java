@@ -12,20 +12,26 @@ import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-@JsonSubType("long-list")
 
-public class LongListSchema extends LongSchema implements ListSchema {
-    @Override
-    protected boolean checkSchema(ValueHolder valueHolder) {
-        return listValue(valueHolder).stream().allMatch(super::checkSchema);
+public class LongListSchema extends AbstractListSchema{
+
+    Long min;
+    Long max;
+
+    public static final String TYPE = "long-list";
+
+    public LongListSchema() {
+        super(TYPE);
     }
 
     @Override
-    public void resolveValue(ValueHolder holder) {
-        listValue(holder).forEach(super::resolveValue);
+    protected Schema contentSchema() {
+        LongSchema schema = new LongSchema();
+        schema.setMin(min);
+        schema.setMax(max);
+        return null;
     }
 }

@@ -15,15 +15,18 @@ import java.util.Objects;
  */
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-@JsonSubType("double")
 
 public class DoubleSchema extends AbstractSchema {
+    public static final String TYPE = "double";
     Double min;
     Double max;
+
+    public DoubleSchema() {
+        super(TYPE);
+    }
 
     @Override
     protected boolean checkSchema(ValueHolder valueHolder) {

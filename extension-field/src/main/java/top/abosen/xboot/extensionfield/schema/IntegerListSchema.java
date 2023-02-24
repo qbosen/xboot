@@ -12,19 +12,24 @@ import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-@JsonSubType("integer-list")
-public class IntegerListSchema extends IntegerSchema implements ListSchema {
-    @Override
-    protected boolean checkSchema(ValueHolder valueHolder) {
-        return listValue(valueHolder).stream().allMatch(super::checkSchema);
+
+public class IntegerListSchema extends AbstractListSchema {
+    public static final String TYPE = "integer-list";
+    Integer min;
+    Integer max;
+
+    public IntegerListSchema() {
+        super(TYPE);
     }
 
     @Override
-    public void resolveValue(ValueHolder holder) {
-        listValue(holder).forEach(super::resolveValue);
+    protected Schema contentSchema() {
+        IntegerSchema schema = new IntegerSchema();
+        schema.setMin(min);
+        schema.setMax(max);
+        return schema;
     }
 }

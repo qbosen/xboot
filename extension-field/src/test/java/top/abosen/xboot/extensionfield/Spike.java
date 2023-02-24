@@ -48,4 +48,6 @@ public class Spike {
         System.out.println(Arrays.toString(Demo.class.getAnnotationsByType(Meta.class)));
 
     }
+
+
 }

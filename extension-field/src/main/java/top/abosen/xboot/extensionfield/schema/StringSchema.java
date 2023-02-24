@@ -15,15 +15,19 @@ import top.abosen.xboot.extensionfield.validator.ValueValidator;
  */
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-@JsonSubType("string")
+
 public class StringSchema extends AbstractSchema {
+    public static final String TYPE = "string";
     Integer minLength;
     Integer maxLength;
     String regex;
+
+    public StringSchema() {
+        super(TYPE);
+    }
 
     @Override
     protected boolean checkSchema(ValueHolder valueHolder) {

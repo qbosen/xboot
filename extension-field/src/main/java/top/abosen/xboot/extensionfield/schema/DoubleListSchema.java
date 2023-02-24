@@ -2,7 +2,6 @@ package top.abosen.xboot.extensionfield.schema;
 
 import com.google.auto.service.AutoService;
 import lombok.*;
-import top.abosen.xboot.extensionfield.ValueHolder;
 import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 
 /**
@@ -12,19 +11,24 @@ import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-@JsonSubType("double-list")
-public class DoubleListSchema extends DoubleSchema implements ListSchema {
-    @Override
-    protected boolean checkSchema(ValueHolder valueHolder) {
-        return listValue(valueHolder).stream().allMatch(super::checkSchema);
+
+public class DoubleListSchema extends AbstractListSchema {
+    public static final String TYPE = "double-list";
+    Double min;
+    Double max;
+
+    public DoubleListSchema() {
+        super(TYPE);
     }
 
     @Override
-    public void resolveValue(ValueHolder holder) {
-        listValue(holder).forEach(super::resolveValue);
+    protected Schema contentSchema() {
+        DoubleSchema schema = new DoubleSchema();
+        schema.setMin(min);
+        schema.setMax(max);
+        return schema;
     }
 }
