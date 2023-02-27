@@ -1,15 +1,7 @@
 package top.abosen.xboot.extensionfield.schema;
 
-import cn.hutool.core.stream.StreamUtil;
 import lombok.*;
-import top.abosen.xboot.extensionfield.ValueHolder;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 /**
  * @author qiubaisen

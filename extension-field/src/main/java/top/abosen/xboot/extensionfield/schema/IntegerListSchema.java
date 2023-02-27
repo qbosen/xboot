@@ -2,8 +2,6 @@ package top.abosen.xboot.extensionfield.schema;
 
 import com.google.auto.service.AutoService;
 import lombok.*;
-import top.abosen.xboot.extensionfield.ValueHolder;
-import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 
 /**
  * @author qiubaisen

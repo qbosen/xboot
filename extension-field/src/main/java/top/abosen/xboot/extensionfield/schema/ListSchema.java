@@ -1,8 +1,7 @@
 package top.abosen.xboot.extensionfield.schema;
 
 import cn.hutool.core.stream.StreamUtil;
-import com.google.common.collect.Lists;
-import top.abosen.xboot.extensionfield.ValueHolder;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +17,9 @@ import java.util.stream.IntStream;
 
 public interface ListSchema extends Schema {
 
+    /**
+     * 将 holder 的值转换为list,并返回对应的holder
+     */
     default List<ValueHolder> listValue(ValueHolder holder) {
         if (holder == null || holder.get() == null) return Collections.emptyList();
 

@@ -2,8 +2,7 @@ package top.abosen.xboot.extensionfield.schema;
 
 import com.google.auto.service.AutoService;
 import lombok.*;
-import top.abosen.xboot.extensionfield.ValueHolder;
-import top.abosen.xboot.extensionfield.jackson.JsonSubType;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 import top.abosen.xboot.extensionfield.validator.CombinedValidator;
 import top.abosen.xboot.extensionfield.validator.LengthValidator;
 import top.abosen.xboot.extensionfield.validator.RegexValidator;

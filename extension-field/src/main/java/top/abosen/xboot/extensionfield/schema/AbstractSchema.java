@@ -1,7 +1,7 @@
 package top.abosen.xboot.extensionfield.schema;
 
 import lombok.*;
-import top.abosen.xboot.extensionfield.ValueHolder;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 /**
  * @author qiubaisen

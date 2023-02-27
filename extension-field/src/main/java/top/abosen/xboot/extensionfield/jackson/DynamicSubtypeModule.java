@@ -11,7 +11,9 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.google.auto.service.AutoService;
 import top.abosen.xboot.extensionfield.Utils;
+import top.abosen.xboot.extensionfield.extension.ExtensionField;
 import top.abosen.xboot.extensionfield.schema.Schema;
+import top.abosen.xboot.extensionfield.widget.Widget;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -41,6 +43,8 @@ public class DynamicSubtypeModule extends Module {
     @Override
     public void setupModule(SetupContext context) {
         initSchemaSubtypes();
+        initWidgetSubtypes();
+        initFieldSubtypes();
         initSubtypes();
 
         context.insertAnnotationIntrospector(new AnnotationIntrospector() {
@@ -66,6 +70,15 @@ public class DynamicSubtypeModule extends Module {
                 .map(it -> new NamedType(it.getClass(), it.getType()))
                 .collect(Collectors.toList());
         registerNamedSubtypes(Schema.class, schemaSubtypes);
+    }
+    private void initWidgetSubtypes() {
+        List<NamedType> widgetSubtypes = StreamUtil.of(ServiceLoader.load(Widget.class).iterator())
+                .map(it -> new NamedType(it.getClass(), it.getType()))
+                .collect(Collectors.toList());
+        registerNamedSubtypes(Schema.class, widgetSubtypes);
+    }
+  private void initFieldSubtypes() {
+      registerParentSpiType(ExtensionField.class);
     }
 
     private void initSubtypes() {

@@ -3,8 +3,7 @@ package top.abosen.xboot.extensionfield.schema;
 import cn.hutool.core.util.NumberUtil;
 import com.google.auto.service.AutoService;
 import lombok.*;
-import top.abosen.xboot.extensionfield.ValueHolder;
-import top.abosen.xboot.extensionfield.jackson.JsonSubType;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 import top.abosen.xboot.extensionfield.validator.NumberValidator;
 
 import java.util.Objects;
