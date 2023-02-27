@@ -1,5 +1,6 @@
 package top.abosen.xboot.extensionfield.widget;
 
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.google.auto.service.AutoService;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -18,10 +19,12 @@ import lombok.ToString;
 public class SelectWidget extends AbstractWidget {
     public static final String TYPE = "select";
     private boolean multiple;
-    private String biz;
+    private BizWidgetExtension biz;
 
     public SelectWidget() {
         super(TYPE);
     }
-
+    public void setBizString(String bizString) {
+        this.biz = new DefaultBizWidgetExtension(bizString);
+    }
 }

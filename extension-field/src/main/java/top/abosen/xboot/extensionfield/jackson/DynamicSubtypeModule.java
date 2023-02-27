@@ -13,6 +13,7 @@ import com.google.auto.service.AutoService;
 import top.abosen.xboot.extensionfield.Utils;
 import top.abosen.xboot.extensionfield.extension.ExtensionField;
 import top.abosen.xboot.extensionfield.schema.Schema;
+import top.abosen.xboot.extensionfield.widget.BizWidgetExtension;
 import top.abosen.xboot.extensionfield.widget.Widget;
 
 import java.util.*;
@@ -45,6 +46,7 @@ public class DynamicSubtypeModule extends Module {
         initSchemaSubtypes();
         initWidgetSubtypes();
         initFieldSubtypes();
+        initBizSubtypes();
         initSubtypes();
 
         context.insertAnnotationIntrospector(new AnnotationIntrospector() {
@@ -71,14 +73,23 @@ public class DynamicSubtypeModule extends Module {
                 .collect(Collectors.toList());
         registerNamedSubtypes(Schema.class, schemaSubtypes);
     }
+
     private void initWidgetSubtypes() {
         List<NamedType> widgetSubtypes = StreamUtil.of(ServiceLoader.load(Widget.class).iterator())
                 .map(it -> new NamedType(it.getClass(), it.getType()))
                 .collect(Collectors.toList());
-        registerNamedSubtypes(Schema.class, widgetSubtypes);
+        registerNamedSubtypes(Widget.class, widgetSubtypes);
     }
-  private void initFieldSubtypes() {
-      registerParentSpiType(ExtensionField.class);
+
+    private void initBizSubtypes() {
+        List<NamedType> bizExtensionSubtypes = StreamUtil.of(ServiceLoader.load(BizWidgetExtension.class).iterator())
+                .map(it -> new NamedType(it.getClass(), it.getKey()))
+                .collect(Collectors.toList());
+        registerNamedSubtypes(BizWidgetExtension.class, bizExtensionSubtypes);
+    }
+
+    private void initFieldSubtypes() {
+        registerParentSpiType(ExtensionField.class);
     }
 
     private void initSubtypes() {

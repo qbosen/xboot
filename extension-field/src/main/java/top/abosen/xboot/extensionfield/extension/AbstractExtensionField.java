@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -24,5 +25,10 @@ public abstract class AbstractExtensionField implements ExtensionField {
      */
     @JsonAnySetter
     @JsonAnyGetter
-    Map<String, Object> extension;
+    Map<String, Object> extension = new HashMap<>();
+
+    @Override
+    public Map<String, Object> extension(){
+        return extension;
+    }
 }
