@@ -27,12 +27,7 @@ public class NestedExtensionField extends AbstractExtensionField {
         Object nestedValue = valueHolder.get();
         if (!(nestedValue instanceof Map)) return false;
         return new ExtensionTypeValueMap((Map<String, Object>) nestedValue)
-                .valid(new ExtensionType() {
-                    @Override
-                    public List<ExtensionField> getFields() {
-                        return fields;
-                    }
-                });
+                .valid(() -> fields);
     }
 
     @Override

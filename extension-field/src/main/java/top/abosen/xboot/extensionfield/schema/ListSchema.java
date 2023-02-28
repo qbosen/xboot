@@ -1,6 +1,7 @@
 package top.abosen.xboot.extensionfield.schema;
 
 import cn.hutool.core.stream.StreamUtil;
+import top.abosen.xboot.extensionfield.valueholder.ListValueHolder;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 import java.util.ArrayList;
@@ -29,22 +30,12 @@ public interface ListSchema extends Schema {
             data = Arrays.stream((Object[]) value).collect(Collectors.toList());
         } else if (value instanceof Iterable) {
             data = StreamUtil.of(((Iterable<?>) value)).collect(Collectors.toList());
-        }else{
+        } else {
             data = new ArrayList<>();
         }
         holder.set(data);
 
-        return IntStream.range(0, data.size()).mapToObj(i -> new ValueHolder() {
-            @Override
-            public Object get() {
-                return data.get(i);
-            }
-
-            @Override
-            public void set(Object value) {
-                data.set(i, value);
-            }
-        }).collect(Collectors.toList());
+        return IntStream.range(0, data.size()).mapToObj(i -> ListValueHolder.of(data, i)).collect(Collectors.toList());
     }
 
 }

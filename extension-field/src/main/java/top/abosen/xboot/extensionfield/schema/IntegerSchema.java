@@ -32,6 +32,7 @@ public class IntegerSchema extends AbstractSchema {
 
     @Override
     public void resolveValue(ValueHolder holder) {
+        if(holder == null || holder.get() == null) return;
         Object value = holder.get();
 
         if(value instanceof Number){

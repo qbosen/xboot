@@ -1,17 +1,21 @@
 package top.abosen.xboot.extensionfield.valueholder;
 
-import lombok.Value;
-import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
-
 import java.util.Map;
 
 /**
  * @author qiubaisen
  * @date 2023/2/27
  */
-@Value(staticConstructor = "of")
-public class EntryValueHolder implements ValueHolder {
-    Map.Entry<String, Object> entry;
+public final class EntryValueHolder implements ValueHolder {
+    private final Map.Entry<String, Object> entry;
+
+    private EntryValueHolder(Map.Entry<String, Object> entry) {
+        this.entry = entry;
+    }
+
+    public static ValueHolder of(Map.Entry<String, Object> entry) {
+        return new EntryValueHolder(entry);
+    }
 
     @Override
     public Object get() {
@@ -22,4 +26,5 @@ public class EntryValueHolder implements ValueHolder {
     public void set(Object value) {
         entry.setValue(value);
     }
+
 }

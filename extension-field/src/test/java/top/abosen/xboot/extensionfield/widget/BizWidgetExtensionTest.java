@@ -5,9 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.json.BasicJsonTester;
+import top.abosen.xboot.extensionfield.valueholder.RefValueHolder;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
-
-import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -60,20 +59,10 @@ class BizWidgetExtensionTest {
         Wrapper unmarshal = objectMapper.readValue(json, Wrapper.class);
         assertThat(unmarshal.getBiz()).isInstanceOf(PictureBizExtension.class);
 
-        AtomicLong ref = new AtomicLong(123);
-        boolean checkValue = unmarshal.getBiz().checkValue(new ValueHolder() {
-            @Override
-            public Object get() {
-                return ref.get();
-            }
-
-            @Override
-            public void set(Object value) {
-                ref.set(((long) value));
-            }
-        });
+        ValueHolder ref = RefValueHolder.of(123L);
+        boolean checkValue = unmarshal.getBiz().checkValue(ref);
 
         assertThat(checkValue).isTrue();
-        assertThat(ref).hasValue(1000123);
+        assertThat(ref.get()).isEqualTo(1000123L);
     }
 }

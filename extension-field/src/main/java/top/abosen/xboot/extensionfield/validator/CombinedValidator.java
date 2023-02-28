@@ -10,8 +10,7 @@ import java.util.List;
  * @date 2023/2/23
  */
 @Value
-public
-class CombinedValidator implements ValueValidator {
+public class CombinedValidator implements ValueValidator {
     List<ValueValidator> validators;
 
     public CombinedValidator(List<ValueValidator> validators) {

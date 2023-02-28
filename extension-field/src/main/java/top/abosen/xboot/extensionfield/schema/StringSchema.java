@@ -17,7 +17,6 @@ import top.abosen.xboot.extensionfield.validator.ValueValidator;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-
 public class StringSchema extends AbstractSchema {
     public static final String TYPE = "string";
     Integer minLength;
@@ -35,13 +34,14 @@ public class StringSchema extends AbstractSchema {
 
     @Override
     public void resolveValue(ValueHolder holder) {
+        if(holder == null || holder.get() == null) return;
         Object value = holder.get();
         holder.set(String.valueOf(value));
     }
 
     private ValueValidator buildValidator() {
         return new CombinedValidator(
-                new LengthValidator(minLength, maxLength, it -> String.valueOf(it).length()),
+                LengthValidator.string(minLength, maxLength),
                 new RegexValidator(regex)
         );
     }

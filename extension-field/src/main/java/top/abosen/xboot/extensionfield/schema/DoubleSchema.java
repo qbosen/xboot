@@ -17,7 +17,6 @@ import java.util.Objects;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-
 public class DoubleSchema extends AbstractSchema {
     public static final String TYPE = "double";
     Double min;
@@ -27,6 +26,15 @@ public class DoubleSchema extends AbstractSchema {
         super(TYPE);
     }
 
+    public static DoubleSchema of(Double min, Double max, boolean required, Double defaultValue) {
+        DoubleSchema schema = new DoubleSchema();
+        schema.setMin(min);
+        schema.setMax(max);
+        schema.setRequired(required);
+        schema.setDefaultValue(defaultValue);
+        return schema;
+    }
+
     @Override
     protected boolean checkSchema(ValueHolder valueHolder) {
         return new NumberValidator<>(min, max).valid(valueHolder.get());
@@ -34,9 +42,8 @@ public class DoubleSchema extends AbstractSchema {
 
     @Override
     public void resolveValue(ValueHolder holder) {
-        Objects.requireNonNull(holder);
+        if(holder == null || holder.get() == null) return;
         Object value = holder.get();
-        Objects.requireNonNull(value);
 
         if(value instanceof Number){
             holder.set(((Number) value).doubleValue());

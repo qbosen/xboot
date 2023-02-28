@@ -1,7 +1,13 @@
 package top.abosen.xboot.extensionfield.schema;
 
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+import top.abosen.xboot.extensionfield.validator.LengthValidator;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
+
+import java.util.List;
 
 /**
  * @author qiubaisen
@@ -15,6 +21,8 @@ import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 public abstract class AbstractListSchema implements ListSchema {
     private final String type;
     private boolean required = false;
+    Integer minSize;
+    Integer maxSize;
 
     protected AbstractListSchema(String type) {
         this.type = type;
@@ -30,7 +38,13 @@ public abstract class AbstractListSchema implements ListSchema {
         if (required && valueHolder.get() == null) return false;
 
         Schema contentSchema = contentSchema();
-        return listValue(valueHolder).stream().allMatch(contentSchema::checkValue);
+        List<ValueHolder> valueHolders = listValue(valueHolder);
+
+        if (!LengthValidator.collection(minSize, maxSize).valid(valueHolders)) {
+            return false;
+        }
+
+        return valueHolders.stream().allMatch(contentSchema::checkValue);
     }
 
     @Override

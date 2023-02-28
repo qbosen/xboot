@@ -1,9 +1,7 @@
 package top.abosen.xboot.extensionfield.schema;
 
-import cn.hutool.core.collection.ListUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,11 +20,11 @@ class SchemaJsonTest {
     static ObjectMapper objectMapper;
 
     @BeforeAll
-    static void setup(){
+    static void setup() {
         objectMapper = new ObjectMapper().findAndRegisterModules();
     }
 
-    static Stream<Schema> schemaProvider(){
+    static Stream<Schema> schemaProvider() {
         List<Schema> schemas = new ArrayList<>();
 
         IntegerSchema integerSchema = new IntegerSchema();
@@ -52,8 +50,10 @@ class SchemaJsonTest {
         schemas.add(stringSchema);
 
         StringListSchema stringListSchema = new StringListSchema();
-        stringListSchema.setMinLength(3);
-        stringListSchema.setMaxLength(null);
+        stringListSchema.setMinSize(3);
+        stringListSchema.setMaxSize(null);
+        stringListSchema.setMinLength(0);
+        stringListSchema.setMaxLength(10);
         stringListSchema.setRequired(false);
         stringListSchema.setRegex("\\w+");
         schemas.add(stringListSchema);
