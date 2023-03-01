@@ -1,13 +1,7 @@
 package top.abosen.xboot.demo;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import io.swagger.v3.core.converter.AnnotatedType;
-import io.swagger.v3.core.converter.ModelConverter;
-import io.swagger.v3.core.converter.ModelConverterContext;
-import io.swagger.v3.oas.models.media.Schema;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.SpringApplication;
@@ -16,10 +10,8 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import top.abosen.xboot.extensionfield.jackson.DynamicSubtypeModule;
-
-import javax.annotation.PostConstruct;
-import java.util.Iterator;
 
 /**
  * @author qiubaisen
@@ -37,6 +29,15 @@ public class Application implements ApplicationContextAware {
         Application.context = applicationContext;
     }
 
+    /**
+     * 主要目的:
+     * <p>
+     * 1. 给 {@link com.fasterxml.jackson.databind.ObjectMapper} 注册 {@link DynamicSubtypeModule} 模块
+     * <p>
+     * 2. 将配置好的 objectMapper 应用到 {@link MappingJackson2HttpMessageConverter} 用于REST接口
+     * <p>
+     * 3. 将配置好的 objectMapper 应用到 {@link ExtensionFieldTypeHandler} 用于 mybatis 转换存储
+     */
     @Bean
     Jackson2ObjectMapperBuilderCustomizer configObjectMapper() {
         return builder -> {
@@ -44,8 +45,8 @@ public class Application implements ApplicationContextAware {
             builder.propertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
             // 注册 动态子类型模块
             builder.modules(new DynamicSubtypeModule());
-            // 将配置好的 ObjectMapper 应用到 JacksonTypeHandler
-            builder.postConfigurer(JacksonTypeHandler::setObjectMapper);
+            // 将配置好module的 ObjectMapper 应用到 ExtensionFieldTypeHandler
+            builder.postConfigurer(ExtensionFieldTypeHandler::setObjectMapper);
         };
     }
 
