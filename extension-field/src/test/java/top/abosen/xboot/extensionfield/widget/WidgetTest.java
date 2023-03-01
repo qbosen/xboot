@@ -54,7 +54,7 @@ class WidgetTest {
         void setup() {
             widget = new SelectWidget();
             widget.setMultiple(true);
-            widget.setBizString("foo");
+            widget.setBiz(new DefaultBizWidgetExtension("foo"));
         }
 
         @Test

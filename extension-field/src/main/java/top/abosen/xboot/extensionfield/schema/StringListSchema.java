@@ -1,11 +1,8 @@
 package top.abosen.xboot.extensionfield.schema;
 
 import com.google.auto.service.AutoService;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import top.abosen.xboot.extensionfield.jackson.JsonSubType;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author qiubaisen
@@ -17,17 +14,14 @@ import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-
-
+@SuperBuilder
+@NoArgsConstructor
 public class StringListSchema extends AbstractListSchema {
-    public static final String TYPE = "string-list";
+    public final String type = "string-list";
     Integer minLength;
     Integer maxLength;
     String regex;
 
-    public StringListSchema() {
-        super(TYPE);
-    }
 
     @Override
     protected Schema contentSchema() {

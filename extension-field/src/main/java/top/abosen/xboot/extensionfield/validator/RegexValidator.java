@@ -16,7 +16,7 @@ class RegexValidator implements ValueValidator {
 
     @Override
     public boolean valid(Object value) {
-        if (StrUtil.isBlank(regex)) return true;
+        if (StrUtil.isEmptyIfStr(value) || StrUtil.isBlank(regex)) return true;
         return Pattern.matches(regex, String.valueOf(value));
     }
 }

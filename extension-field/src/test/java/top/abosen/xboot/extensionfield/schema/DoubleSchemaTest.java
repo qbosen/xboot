@@ -20,7 +20,7 @@ class DoubleSchemaTest {
 
     @Test
     void should_valid_required() {
-        Schema schema = DoubleSchema.of(null, null, true, null);
+        Schema schema = DoubleSchema.builder().min(null).max(null).required(true).defaultValue(null).build();
         assertThat(schema.checkValue(null)).isFalse();
         assertThat(schema.checkValue(RefValueHolder.of(null))).isFalse();
         assertThat(schema.checkValue(RefValueHolder.of(1.0))).isTrue();
@@ -28,7 +28,7 @@ class DoubleSchemaTest {
 
     @Test
     void should_set_default_value() {
-        Schema schema = DoubleSchema.of(null, null, true, 9.9);
+        Schema schema = DoubleSchema.builder().min(null).max(null).required(true).defaultValue(9.9).build();
         ValueHolder holder = RefValueHolder.of(null);
         assertThat(schema.checkValue(holder)).isTrue();
         assertThat(holder.get()).isEqualTo(9.9);
@@ -36,7 +36,7 @@ class DoubleSchemaTest {
 
     @Test
     void should_check_min_max() {
-        Schema schema = DoubleSchema.of(1d, 2d, true, 9.9);
+        Schema schema = DoubleSchema.builder().min(1d).max(2d).required(true).defaultValue(9.9).build();
         assertThat(schema.checkValue(RefValueHolder.of(1d))).isTrue();
         assertThat(schema.checkValue(RefValueHolder.of(2d))).isTrue();
         assertThat(schema.checkValue(RefValueHolder.of(1.5555))).isTrue();
@@ -46,13 +46,13 @@ class DoubleSchemaTest {
 
     @Test
     void should_check_min_max_for_default_value() {
-        Schema schema = DoubleSchema.of(1d, 2d, true, 9.9);
+        Schema schema = DoubleSchema.builder().min(1d).max(2d).required(true).defaultValue(9.9).build();
         ValueHolder holder = RefValueHolder.of(null);
         assertThat(schema.checkValue(holder)).isFalse();
         assertThat(holder.get()).isEqualTo(9.9);
 
         holder = RefValueHolder.of(null);
-        schema = DoubleSchema.of(1d, 2d, true, 1.5);
+        schema = DoubleSchema.builder().min(1d).max(2d).required(true).defaultValue(1.5).build();
         assertThat(schema.checkValue(holder)).isTrue();
         assertThat(holder.get()).isEqualTo(1.5);
     }

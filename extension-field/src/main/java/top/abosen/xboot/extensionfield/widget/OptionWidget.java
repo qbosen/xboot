@@ -2,10 +2,8 @@ package top.abosen.xboot.extensionfield.widget;
 
 import cn.hutool.core.collection.CollUtil;
 import com.google.auto.service.AutoService;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 import java.util.Map;
@@ -20,8 +18,10 @@ import java.util.Optional;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Widget.class)
+@SuperBuilder
+@NoArgsConstructor
 public class OptionWidget extends AbstractWidget {
-    public static final String TYPE = "option";
+    public final String type = "option";
     private boolean multiple;
     private String style;
 
@@ -30,10 +30,6 @@ public class OptionWidget extends AbstractWidget {
      */
     private Map<String, Object> options;
 
-    public OptionWidget() {
-        super(TYPE);
-    }
-
     @Override
     public boolean checkValue(ValueHolder valueHolder) {
         return options != null && options.containsValue(valueHolder.get());
@@ -41,7 +37,7 @@ public class OptionWidget extends AbstractWidget {
 
     @Override
     public Optional<String> validMessage() {
-        if(CollUtil.isEmpty(options)){
+        if (CollUtil.isEmpty(options)) {
             return Optional.of("选项不能为空");
         }
         return Optional.empty();

@@ -3,8 +3,9 @@ package top.abosen.xboot.extensionfield.schema;
 import cn.hutool.core.util.NumberUtil;
 import com.google.auto.service.AutoService;
 import lombok.*;
-import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
+import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.extensionfield.validator.NumberValidator;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 /**
  * @author qiubaisen
@@ -15,15 +16,13 @@ import top.abosen.xboot.extensionfield.validator.NumberValidator;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-
-public class IntegerSchema extends AbstractSchema {
-    public static final String TYPE = "integer";
+@SuperBuilder
+@NoArgsConstructor
+public class IntegerSchema extends AbstractSchema<Integer> {
+    public final String type = "integer";
     Integer min;
     Integer max;
 
-    public IntegerSchema() {
-        super(TYPE);
-    }
 
     @Override
     protected boolean checkSchema(ValueHolder valueHolder) {
@@ -32,12 +31,12 @@ public class IntegerSchema extends AbstractSchema {
 
     @Override
     public void resolveValue(ValueHolder holder) {
-        if(holder == null || holder.get() == null) return;
+        if (holder == null || holder.get() == null) return;
         Object value = holder.get();
 
-        if(value instanceof Number){
+        if (value instanceof Number) {
             holder.set(((Number) value).intValue());
-        }else{
+        } else {
             holder.set(NumberUtil.parseInt(String.valueOf(value)));
         }
     }

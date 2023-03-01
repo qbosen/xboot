@@ -11,16 +11,21 @@ import top.abosen.xboot.extensionfield.valueholder.ValueHolderChecker;
  * @date 2023/2/21
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME)
+@io.swagger.v3.oas.annotations.media.Schema(oneOf = {
+        IntegerSchema.class, DoubleSchema.class, LongSchema.class, StringSchema.class,
+        IntegerListSchema.class, DoubleListSchema.class, LongListSchema.class, StringListSchema.class,
+})
 public interface Schema extends ValueHolderChecker, Validatable {
 
     @JsonIgnore
     String getType();
+
     /**
      * 根据自身schema的值定义,可以修改/转换目标值
      *
      * @param holder 值
      */
-    default  void resolveValue(ValueHolder holder) {
+    default void resolveValue(ValueHolder holder) {
     }
 
 }

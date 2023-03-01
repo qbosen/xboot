@@ -1,10 +1,8 @@
 package top.abosen.xboot.extensionfield.widget;
 
 import com.google.auto.service.AutoService;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author qiubaisen
@@ -15,14 +13,11 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Widget.class)
+@SuperBuilder
+@NoArgsConstructor
 public class InputWidget extends AbstractWidget {
-    public static final String TYPE = "input";
+    public final String type = "input";
 
     private boolean multiple;
-
-    public InputWidget() {
-        super(TYPE);
-    }
-
 
 }

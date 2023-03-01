@@ -7,7 +7,7 @@ import java.util.Optional;
  * @date 2023/2/27
  */
 public interface Validatable {
-    default Optional<String> validMessage(){
+    default Optional<String> validMessage() {
         return Optional.empty();
     }
 }

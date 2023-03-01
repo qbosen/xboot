@@ -12,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    compileOnly("io.swagger.core.v3:swagger-core:2.2.8")
     implementation("cn.hutool:hutool-core:5.8.12")
     implementation("com.fasterxml.jackson.core:jackson-core:2.14.2")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")

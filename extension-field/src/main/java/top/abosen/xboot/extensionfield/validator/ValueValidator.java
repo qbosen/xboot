@@ -1,14 +1,5 @@
 package top.abosen.xboot.extensionfield.validator;
 
-import cn.hutool.core.util.StrUtil;
-import lombok.Value;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.function.Function;
-import java.util.regex.Pattern;
-
 /**
  * 值校验器
  * <p>

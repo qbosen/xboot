@@ -1,7 +1,6 @@
 package top.abosen.xboot.extensionfield.extension;
 
 import cn.hutool.core.collection.CollUtil;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import top.abosen.xboot.extensionfield.validator.Validatable;
 import top.abosen.xboot.extensionfield.valueholder.MapValueHolder;
 
@@ -14,7 +13,7 @@ import java.util.stream.Collectors;
  * @author qiubaisen
  * @date 2023/2/22
  */
-@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "@type")
+
 public interface ExtensionType extends Validatable {
     List<ExtensionField> getFields();
 

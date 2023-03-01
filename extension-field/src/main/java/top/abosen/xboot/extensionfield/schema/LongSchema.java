@@ -3,8 +3,9 @@ package top.abosen.xboot.extensionfield.schema;
 import cn.hutool.core.util.NumberUtil;
 import com.google.auto.service.AutoService;
 import lombok.*;
-import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
+import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.extensionfield.validator.NumberValidator;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 /**
  * @author qiubaisen
@@ -15,15 +16,13 @@ import top.abosen.xboot.extensionfield.validator.NumberValidator;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-
-public class LongSchema extends AbstractSchema {
-    public static final String TYPE = "long";
+@SuperBuilder
+@NoArgsConstructor
+public class LongSchema extends AbstractSchema<Long> {
+    public final String type = "long";
     Long min;
     Long max;
 
-    public LongSchema() {
-        super(TYPE);
-    }
 
     @Override
     protected boolean checkSchema(ValueHolder valueHolder) {
@@ -32,12 +31,12 @@ public class LongSchema extends AbstractSchema {
 
     @Override
     public void resolveValue(ValueHolder holder) {
-        if(holder == null || holder.get() == null) return;
+        if (holder == null || holder.get() == null) return;
         Object value = holder.get();
 
-        if(value instanceof Number){
+        if (value instanceof Number) {
             holder.set(((Number) value).longValue());
-        }else{
+        } else {
             holder.set(NumberUtil.parseLong(String.valueOf(value)));
         }
     }

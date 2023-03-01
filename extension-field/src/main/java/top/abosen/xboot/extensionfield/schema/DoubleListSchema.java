@@ -2,6 +2,7 @@ package top.abosen.xboot.extensionfield.schema;
 
 import com.google.auto.service.AutoService;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author qiubaisen
@@ -13,24 +14,13 @@ import lombok.*;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-
+@SuperBuilder
+@NoArgsConstructor
 public class DoubleListSchema extends AbstractListSchema {
-    public static final String TYPE = "double-list";
+    public final String type = "double-list";
     Double min;
     Double max;
 
-    public DoubleListSchema() {
-        super(TYPE);
-    }
-    public static DoubleListSchema of(Double min, Double max, Integer minSize, Integer maxSize, boolean required) {
-        DoubleListSchema schema = new DoubleListSchema();
-        schema.setMin(min);
-        schema.setMax(max);
-        schema.setMinSize(minSize);
-        schema.setMaxSize(maxSize);
-        schema.setRequired(required);
-        return schema;
-    }
     @Override
     protected Schema contentSchema() {
         DoubleSchema schema = new DoubleSchema();

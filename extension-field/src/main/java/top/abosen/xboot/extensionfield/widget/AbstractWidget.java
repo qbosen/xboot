@@ -1,9 +1,7 @@
 package top.abosen.xboot.extensionfield.widget;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author qiubaisen
@@ -13,10 +11,8 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode
+@SuperBuilder
+@NoArgsConstructor
 public abstract class AbstractWidget implements Widget {
-    private final String type;
-
-    protected AbstractWidget(String type) {
-        this.type = type;
-    }
+    String name;
 }

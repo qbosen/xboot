@@ -22,14 +22,14 @@ class DoubleListSchemaTest {
 
     @Test
     void should_valid_required() {
-        DoubleListSchema schema = DoubleListSchema.of(null, null, null, null, true);
+        DoubleListSchema schema = DoubleListSchema.builder().required(true).build();
         assertThat(schema.checkValue(null)).isFalse();
         assertThat(schema.checkValue(RefValueHolder.of(null))).isFalse();
     }
 
     @Test
     void should_check_min_max_value() {
-        DoubleListSchema schema = DoubleListSchema.of(1d, 2d, null, null, true);
+        DoubleListSchema schema = DoubleListSchema.builder().min(1d).max(2d).required(true).build();
         assertThat(schema.checkValue(RefValueHolder.of(Arrays.asList(1, 2, "1.55")))).isTrue();
         assertThat(schema.checkValue(RefValueHolder.of(Arrays.asList(1, 2, 0)))).isFalse();
         assertThat(schema.checkValue(RefValueHolder.of(Arrays.asList(1, 2, "999")))).isFalse();
@@ -37,7 +37,7 @@ class DoubleListSchemaTest {
 
     @Test
     void should_check_min_max_length() {
-        DoubleListSchema schema = DoubleListSchema.of(null, null, 2, 3, true);
+        DoubleListSchema schema = DoubleListSchema.builder().minSize(2).maxSize(3).required(true).build();
         assertThat(schema.checkValue(RefValueHolder.of(Arrays.asList(1, 2, 3)))).isTrue();
         assertThat(schema.checkValue(RefValueHolder.of(Arrays.asList(1)))).isFalse();
         assertThat(schema.checkValue(RefValueHolder.of(Arrays.asList(1, 2, "999","0.01")))).isFalse();

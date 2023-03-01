@@ -2,11 +2,11 @@ package top.abosen.xboot.extensionfield.extension;
 
 import cn.hutool.core.lang.Opt;
 import com.google.auto.service.AutoService;
-import lombok.Getter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 import top.abosen.xboot.extensionfield.schema.Schema;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
-import top.abosen.xboot.extensionfield.widget.OptionWidget;
 import top.abosen.xboot.extensionfield.widget.Widget;
 
 import java.util.Optional;
@@ -16,8 +16,13 @@ import java.util.Optional;
  * @date 2023/2/27
  */
 @Getter
+@Setter
 @AutoService(ExtensionField.class)
 @JsonSubType("simple")
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@NoArgsConstructor
 public class SimpleExtensionField extends AbstractExtensionField {
     Schema schema;
     Widget widget;
@@ -29,7 +34,7 @@ public class SimpleExtensionField extends AbstractExtensionField {
 
     @Override
     public Optional<String> validMessage() {
-        if(schema == null || widget == null) return Optional.of("值 和 组件 定义不能为空");
+        if (schema == null || widget == null) return Optional.of("值 和 组件 定义不能为空");
         return Opt.of(1).flattedMap(it -> schema.validMessage())
                 .or(() -> Opt.of(1).flattedMap(it -> widget.validMessage()))
                 .toOptional();

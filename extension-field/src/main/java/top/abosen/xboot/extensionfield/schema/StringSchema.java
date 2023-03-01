@@ -1,12 +1,14 @@
 package top.abosen.xboot.extensionfield.schema;
 
+import cn.hutool.core.util.StrUtil;
 import com.google.auto.service.AutoService;
 import lombok.*;
-import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
+import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.extensionfield.validator.CombinedValidator;
 import top.abosen.xboot.extensionfield.validator.LengthValidator;
 import top.abosen.xboot.extensionfield.validator.RegexValidator;
 import top.abosen.xboot.extensionfield.validator.ValueValidator;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 /**
  * @author qiubaisen
@@ -17,14 +19,17 @@ import top.abosen.xboot.extensionfield.validator.ValueValidator;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-public class StringSchema extends AbstractSchema {
-    public static final String TYPE = "string";
+@SuperBuilder
+@NoArgsConstructor
+public class StringSchema extends AbstractSchema<String> {
+    public final String type = "string";
     Integer minLength;
     Integer maxLength;
     String regex;
 
-    public StringSchema() {
-        super(TYPE);
+    @Override
+    protected boolean shouldUseDefault(ValueHolder valueHolder) {
+        return StrUtil.isEmptyIfStr(valueHolder.get());
     }
 
     @Override
@@ -34,7 +39,7 @@ public class StringSchema extends AbstractSchema {
 
     @Override
     public void resolveValue(ValueHolder holder) {
-        if(holder == null || holder.get() == null) return;
+        if (holder == null || holder.get() == null) return;
         Object value = holder.get();
         holder.set(String.valueOf(value));
     }

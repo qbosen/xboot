@@ -6,7 +6,7 @@ import java.util.Map;
  * @author qiubaisen
  * @date 2023/2/28
  */
-public class MapValueHolder implements ValueHolder{
+public class MapValueHolder implements ValueHolder {
     final Map<String, Object> map;
     final String key;
 

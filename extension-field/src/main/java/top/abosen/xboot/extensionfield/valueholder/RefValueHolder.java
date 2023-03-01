@@ -1,7 +1,5 @@
 package top.abosen.xboot.extensionfield.valueholder;
 
-import lombok.Value;
-
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -10,7 +8,7 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 
 
-public class RefValueHolder implements ValueHolder{
+public class RefValueHolder implements ValueHolder {
 
     final AtomicReference<Object> ref;
 

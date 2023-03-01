@@ -27,9 +27,16 @@ import java.util.stream.Collectors;
 @AutoService(Module.class)
 public class DynamicSubtypeModule extends Module {
 
+    public static final Version VERSION = VersionUtil.parseVersion("2.14.3", "top.abosen.xboot", "extension-field");
     private final ConcurrentHashMap<Class<?>, List<NamedType>> typeMap = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Class<?>, String> typeNameMap = new ConcurrentHashMap<>();
-    public static final Version VERSION = VersionUtil.parseVersion("2.14.3", "top.abosen.xboot", "extension-field");
+
+    private static List<NamedType> namedSubtypesFromAnno(Class<?> type) {
+        return Utils.getAnno(type, JsonSubType.class).map(anno ->
+                        Arrays.stream(anno.value()).filter(StrUtil::isNotBlank)
+                                .map(name -> new NamedType(type, name)).collect(Collectors.toList()))
+                .orElseGet(Collections::emptyList);
+    }
 
     @Override
     public String getModuleName() {
@@ -98,7 +105,6 @@ public class DynamicSubtypeModule extends Module {
                 .distinct().forEach(this::registerParentSpiType);
     }
 
-
     public void registerParentSpiType(Class<?> parentType) {
         if (shouldRegister(parentType)) {
             registerSubtypesNamedByAnno(parentType, StreamUtil.of(ServiceLoader.load(parentType).iterator()).map(Object::getClass).collect(Collectors.toList()));
@@ -134,13 +140,6 @@ public class DynamicSubtypeModule extends Module {
 
     public void removeRegister(Class<?> parentType) {
         typeMap.remove(parentType);
-    }
-
-    private static List<NamedType> namedSubtypesFromAnno(Class<?> type) {
-        return Utils.getAnno(type, JsonSubType.class).map(anno ->
-                        Arrays.stream(anno.value()).filter(StrUtil::isNotBlank)
-                                .map(name -> new NamedType(type, name)).collect(Collectors.toList()))
-                .orElseGet(Collections::emptyList);
     }
 
 }

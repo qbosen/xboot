@@ -18,6 +18,7 @@ import java.lang.annotation.Target;
 public @interface JsonSubType {
     /**
      * 通过该名称确定具体的类型,空不处理
+     *
      * @return 子类型名称
      */
     String[] value() default {};

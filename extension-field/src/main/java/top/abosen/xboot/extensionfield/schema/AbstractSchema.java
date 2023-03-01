@@ -1,6 +1,7 @@
 package top.abosen.xboot.extensionfield.schema;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 /**
@@ -12,25 +13,26 @@ import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 @Setter
 @ToString
 @EqualsAndHashCode
-public abstract class AbstractSchema implements Schema {
-
-    private final String type;
-
-    protected AbstractSchema(String type) {
-        this.type = type;
-    }
-
+@SuperBuilder
+@NoArgsConstructor
+public abstract class AbstractSchema<T> implements Schema {
+    @Builder.Default
     private boolean required = false;
-    private Object defaultValue = null;
+    @Builder.Default
+    private T defaultValue = null;
+
+    protected boolean shouldUseDefault(ValueHolder valueHolder){
+        return valueHolder.get() == null;
+    }
 
     @Override
     public final boolean checkValue(ValueHolder valueHolder) {
         // key not exists
-        if(valueHolder == null) return !required;
+        if (valueHolder == null) return !required;
 
-        if (valueHolder.get() == null) {
+        if (shouldUseDefault (valueHolder)) {
             valueHolder.set(defaultValue);
-        }else{
+        } else {
             resolveValue(valueHolder);
         }
         if (required && valueHolder.get() == null) return false;

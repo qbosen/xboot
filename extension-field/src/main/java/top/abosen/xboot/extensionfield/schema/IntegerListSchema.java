@@ -2,6 +2,7 @@ package top.abosen.xboot.extensionfield.schema;
 
 import com.google.auto.service.AutoService;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 /**
  * @author qiubaisen
@@ -13,15 +14,13 @@ import lombok.*;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AutoService(Schema.class)
-
+@SuperBuilder
+@NoArgsConstructor
 public class IntegerListSchema extends AbstractListSchema {
-    public static final String TYPE = "integer-list";
+    public final String type = "integer-list";
     Integer min;
     Integer max;
 
-    public IntegerListSchema() {
-        super(TYPE);
-    }
 
     @Override
     protected Schema contentSchema() {

@@ -1,10 +1,6 @@
 package top.abosen.xboot.extensionfield.valueholder;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.ListUtil;
-
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author qiubaisen

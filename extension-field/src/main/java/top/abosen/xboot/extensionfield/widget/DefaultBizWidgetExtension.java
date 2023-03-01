@@ -1,9 +1,6 @@
 package top.abosen.xboot.extensionfield.widget;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.google.auto.service.AutoService;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
@@ -14,15 +11,15 @@ import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 @Data
 @NoArgsConstructor
-public class DefaultBizWidgetExtension implements BizWidgetExtension{
+public class DefaultBizWidgetExtension implements BizWidgetExtension {
     String key;
+
+    public DefaultBizWidgetExtension(String key) {
+        this.key = key;
+    }
 
     @Override
     public boolean checkValue(ValueHolder valueHolder) {
         return true;
-    }
-
-    public DefaultBizWidgetExtension(String key) {
-        this.key = key;
     }
 }

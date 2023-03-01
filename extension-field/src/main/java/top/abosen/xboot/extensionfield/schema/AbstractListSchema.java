@@ -1,9 +1,7 @@
 package top.abosen.xboot.extensionfield.schema;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.extensionfield.validator.LengthValidator;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
@@ -18,15 +16,13 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
+@SuperBuilder
+@NoArgsConstructor
 public abstract class AbstractListSchema implements ListSchema {
-    private final String type;
+    @Builder.Default
     private boolean required = false;
     Integer minSize;
     Integer maxSize;
-
-    protected AbstractListSchema(String type) {
-        this.type = type;
-    }
 
     @Override
     public final boolean checkValue(ValueHolder valueHolder) {
