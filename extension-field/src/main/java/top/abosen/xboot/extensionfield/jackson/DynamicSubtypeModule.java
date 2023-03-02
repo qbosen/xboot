@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.introspect.AnnotatedClass;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import com.google.auto.service.AutoService;
-import top.abosen.xboot.extensionfield.Utils;
+import top.abosen.xboot.extensionfield.util.Utils;
 import top.abosen.xboot.extensionfield.extension.ExtensionField;
 import top.abosen.xboot.extensionfield.schema.Schema;
 import top.abosen.xboot.extensionfield.widget.BizWidgetExtension;

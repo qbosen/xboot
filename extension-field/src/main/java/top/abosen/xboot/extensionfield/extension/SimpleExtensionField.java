@@ -3,8 +3,10 @@ package top.abosen.xboot.extensionfield.extension;
 import cn.hutool.core.lang.Opt;
 import com.google.auto.service.AutoService;
 import lombok.*;
+import lombok.experimental.ExtensionMethod;
 import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.extensionfield.schema.Schema;
+import top.abosen.xboot.extensionfield.util.Opt8;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 import top.abosen.xboot.extensionfield.widget.Widget;
 
@@ -21,6 +23,7 @@ import java.util.Optional;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
+@ExtensionMethod(Opt8.class)
 public class SimpleExtensionField extends AbstractExtensionField {
     public final String type = "simple";
     Schema schema;
@@ -33,9 +36,7 @@ public class SimpleExtensionField extends AbstractExtensionField {
 
     @Override
     protected Optional<String> validMsg() {
-        if (schema == null || widget == null) return Optional.of("值 和 组件 定义不能为空");
-        return Opt.of(1).flattedMap(it -> schema.validMessage())
-                .or(() -> Opt.of(1).flattedMap(it -> widget.validMessage()))
-                .toOptional();
+        if (schema == null || widget == null) return Optional.of("值和组件不能为空");
+        return schema.validMessage().or(() -> widget.validMessage());
     }
 }

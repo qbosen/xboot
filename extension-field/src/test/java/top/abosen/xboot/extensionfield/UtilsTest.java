@@ -3,6 +3,7 @@ package top.abosen.xboot.extensionfield;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import top.abosen.xboot.extensionfield.util.Utils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

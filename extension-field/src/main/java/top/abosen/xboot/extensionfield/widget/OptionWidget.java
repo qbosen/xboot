@@ -32,6 +32,7 @@ public class OptionWidget extends AbstractWidget {
 
     @Override
     public boolean checkValue(ValueHolder valueHolder) {
+        if (valueHolder == null) return true;
         return options != null && options.containsValue(valueHolder.get());
     }
 

@@ -1,4 +1,4 @@
-package top.abosen.xboot.extensionfield;
+package top.abosen.xboot.extensionfield.util;
 
 import cn.hutool.core.lang.Opt;
 import lombok.experimental.UtilityClass;
