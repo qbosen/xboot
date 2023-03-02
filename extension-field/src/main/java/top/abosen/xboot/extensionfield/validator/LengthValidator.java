@@ -16,7 +16,7 @@ public class LengthValidator implements ValueValidator {
     Integer maxLength;
     Function<Object, Integer> lengthFunc;
 
-    public static LengthValidator collection(Integer minLength, Integer maxLength) {
+    public static ValueValidator collection(Integer minLength, Integer maxLength) {
         return new LengthValidator(minLength, maxLength, CollUtil::size);
     }
 
@@ -34,4 +34,13 @@ public class LengthValidator implements ValueValidator {
         return (minLength == null || length >= minLength) && (maxLength == null || length <= maxLength);
     }
 
+    @Override
+    public Optional<String> validMessage() {
+        if (minLength != null && minLength < 0) return Optional.of("最小长度不能为负数");
+        if (maxLength != null && maxLength < 0) return Optional.of("最大长度不能为负数");
+        if (minLength != null && maxLength != null && minLength > maxLength)
+            return Optional.of("最大长度不能小于大小长度");
+        if (lengthFunc == null) return Optional.of("长度映射关系不能为空");
+        return Optional.empty();
+    }
 }

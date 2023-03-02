@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import top.abosen.xboot.extensionfield.validator.LengthValidator;
 import top.abosen.xboot.extensionfield.validator.NumberValidator;
+import top.abosen.xboot.extensionfield.validator.ValueValidator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,7 +18,7 @@ class ValueValidatorTest {
     @Nested
     class LengthTest {
 
-        private LengthValidator validator;
+        private ValueValidator validator;
 
         @BeforeEach
         void setup() {

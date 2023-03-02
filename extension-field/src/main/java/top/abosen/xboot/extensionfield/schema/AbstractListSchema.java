@@ -2,6 +2,7 @@ package top.abosen.xboot.extensionfield.schema;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import top.abosen.xboot.extensionfield.util.Utils;
 import top.abosen.xboot.extensionfield.validator.LengthValidator;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
@@ -34,7 +35,7 @@ public abstract class AbstractListSchema implements ListSchema {
         if (required && valueHolder.get() == null) return false;
 
         Schema contentSchema = contentSchema();
-        List<ValueHolder> valueHolders = listValue(valueHolder);
+        List<ValueHolder> valueHolders = Utils.listValue(valueHolder);
 
         if (!LengthValidator.collection(minSize, maxSize).valid(valueHolders)) {
             return false;
@@ -46,7 +47,7 @@ public abstract class AbstractListSchema implements ListSchema {
     @Override
     public void resolveValue(ValueHolder holder) {
         Schema contentSchema = contentSchema();
-        listValue(holder).forEach(contentSchema::resolveValue);
+        Utils.listValue(holder).forEach(contentSchema::resolveValue);
     }
 
     protected abstract Schema contentSchema();
