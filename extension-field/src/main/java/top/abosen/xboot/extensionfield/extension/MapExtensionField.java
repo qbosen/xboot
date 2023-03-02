@@ -40,10 +40,10 @@ public class MapExtensionField extends AbstractExtensionField {
     }
 
     @Override
-    public Optional<String> validMessage() {
-        if (CollUtil.isEmpty(fields)) return Optional.of("嵌套字段不能为空");
+    protected Optional<String> validMsg() {
+        if (CollUtil.isEmpty(fields)) return Optional.of("字段列表不能为空");
         if (fields.stream().map(ExtensionField::getKey).distinct().count() != fields.size())
-            return Optional.of("嵌套字段key不能重复");
+            return Optional.of("字段key不能重复");
 
         return fields.stream().map(Validatable::validMessage)
                 .filter(Optional::isPresent)

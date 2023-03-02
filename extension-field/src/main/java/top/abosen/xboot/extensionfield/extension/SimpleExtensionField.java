@@ -32,7 +32,7 @@ public class SimpleExtensionField extends AbstractExtensionField {
     }
 
     @Override
-    public Optional<String> validMessage() {
+    protected Optional<String> validMsg() {
         if (schema == null || widget == null) return Optional.of("值 和 组件 定义不能为空");
         return Opt.of(1).flattedMap(it -> schema.validMessage())
                 .or(() -> Opt.of(1).flattedMap(it -> widget.validMessage()))

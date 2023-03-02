@@ -1,13 +1,14 @@
 package top.abosen.xboot.extensionfield.extension;
 
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * @author qiubaisen
@@ -41,4 +42,12 @@ public abstract class AbstractExtensionField implements ExtensionField {
     public Map<String, Object> extension() {
         return extension;
     }
+
+    @Override
+    public final Optional<String> validMessage() {
+        if(StrUtil.isBlank(key)) return Optional.of("字段key不能为空");
+        return validMsg();
+    }
+
+    protected abstract Optional<String> validMsg();
 }
