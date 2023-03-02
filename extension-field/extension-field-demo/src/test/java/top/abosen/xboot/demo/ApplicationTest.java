@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import top.abosen.xboot.extensionfield.extension.ExtensionTypeValueMap;
-import top.abosen.xboot.extensionfield.extension.NestedExtensionField;
+import top.abosen.xboot.extensionfield.extension.MapExtensionField;
 import top.abosen.xboot.extensionfield.extension.SimpleExtensionField;
 import top.abosen.xboot.extensionfield.schema.IntegerSchema;
 import top.abosen.xboot.extensionfield.schema.LongListSchema;
@@ -60,7 +60,7 @@ class ApplicationTest {
                                         .name("输入框")
                                         .build())
                                 .build(),
-                        NestedExtensionField.builder()
+                        MapExtensionField.builder()
                                 .key("videos")
                                 .name("星选视频")
                                 .extension(Map.of(
@@ -142,10 +142,10 @@ class ApplicationTest {
                 .body("正文...")
                 .extension(new ExtensionTypeValueMap(Map.of(
                         "share_template", "",
-                        "videos", List.of(
-                                Map.of("title", "精选视频集合2022"),
-                                Map.of("score", 5),
-                                Map.of("videos", List.of(1000, 1005))
+                        "videos", Map.of(
+                                "title", "精选视频集合2022",
+                                "score", 5,
+                                "videos", List.of(1000, 1005)
                         ))
                 )).build();
 

@@ -96,7 +96,10 @@ public class DynamicSubtypeModule extends Module {
     }
 
     private void initFieldSubtypes() {
-        registerParentSpiType(ExtensionField.class);
+        List<NamedType> extensionFieldSubtypes = StreamUtil.of(ServiceLoader.load(ExtensionField.class).iterator())
+                .map(it -> new NamedType(it.getClass(), it.getType()))
+                .collect(Collectors.toList());
+        registerNamedSubtypes(ExtensionField.class, extensionFieldSubtypes);
     }
 
     private void initSubtypes() {

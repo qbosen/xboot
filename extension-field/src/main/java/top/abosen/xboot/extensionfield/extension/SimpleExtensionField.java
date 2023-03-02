@@ -4,7 +4,6 @@ import cn.hutool.core.lang.Opt;
 import com.google.auto.service.AutoService;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import top.abosen.xboot.extensionfield.jackson.JsonSubType;
 import top.abosen.xboot.extensionfield.schema.Schema;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 import top.abosen.xboot.extensionfield.widget.Widget;
@@ -18,12 +17,12 @@ import java.util.Optional;
 @Getter
 @Setter
 @AutoService(ExtensionField.class)
-@JsonSubType("simple")
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 @NoArgsConstructor
 public class SimpleExtensionField extends AbstractExtensionField {
+    public final String type = "simple";
     Schema schema;
     Widget widget;
 
