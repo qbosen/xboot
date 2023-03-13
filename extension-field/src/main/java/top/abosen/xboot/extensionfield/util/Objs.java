@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * @author qiubaisen
@@ -28,5 +29,12 @@ public class Objs {
         return value;
     }
 
+    public static <T> T filter(T value, Predicate<T> action) {
+        Objects.requireNonNull(action);
+        if (action.test(value)) {
+            return value;
+        }
+        return null;
+    }
 
 }
