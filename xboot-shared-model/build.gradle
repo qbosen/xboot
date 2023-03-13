@@ -32,6 +32,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api")
     testImplementation('org.junit.jupiter:junit-jupiter-engine')
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
+    testImplementation("org.assertj:assertj-core:$assertjVersion")
+
 }
 
 jar { enabled = true; archiveClassifier.set('') }

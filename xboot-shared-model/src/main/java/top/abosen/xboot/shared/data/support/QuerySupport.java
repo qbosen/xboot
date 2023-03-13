@@ -1,6 +1,8 @@
 package top.abosen.xboot.shared.data.support;
 
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.shared.data.Query;
 import top.abosen.xboot.shared.data.Sort;
 
@@ -12,8 +14,13 @@ import java.util.Objects;
  */
 
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+@SuperBuilder
 public abstract class QuerySupport extends PageableSupport implements Query {
     private Sort sort;
+
+    protected QuerySupport() {
+    }
 
     @Override
     public Sort getSort() {

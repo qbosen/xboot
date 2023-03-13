@@ -10,7 +10,7 @@ import org.apache.ibatis.mapping.SqlSource;
  * @date 2021/2/22
  */
 public class ExistMethod extends AbstractMethod {
-    protected ExistMethod() {
+    public ExistMethod() {
         super("exist");
     }
 
