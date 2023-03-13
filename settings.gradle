@@ -10,4 +10,8 @@ include 'xboot-sortable-util:sortable-demo'
 include 'diff-match-patch-util'
 include 'xboot-configuration-properties-adaptor'
 include 'object-differ-util'
+include 'extension-field'
+include 'extension-field:extension-field-demo'
+findProject(':extension-field:extension-field-demo')?.name = 'extension-field-demo'
+include 'broadcast-message'
 
