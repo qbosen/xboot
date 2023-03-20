@@ -36,6 +36,8 @@ import static javax.tools.Diagnostic.Kind;
 public class BroadcastProcessor extends AbstractProcessor {
     @VisibleForTesting
     static final String MISSING_NAME_ERROR = "No broadcast message name provided for element!";
+    @VisibleForTesting
+    static final String DUPLICATED_NAME_ERROR = "Broadcast message name provided DUPLICATED for element!";
 
     private final Map<String, String> namedBroadcast = Maps.newHashMap();
 
@@ -80,6 +82,10 @@ public class BroadcastProcessor extends AbstractProcessor {
                 log("msg name" + messageName);
                 log("provider implementer: " + messageImpl.getQualifiedName());
 
+                if (namedBroadcast.containsKey(messageName)) {
+                    error(DUPLICATED_NAME_ERROR, e, annotationMirror);
+                    continue;
+                }
                 namedBroadcast.put(messageName, className);
             }
         }

@@ -58,7 +58,7 @@ class BroadcastProcessorTest {
     }
 
     @Test
-    void should_failed_if_annotation_without_value() {
+    void should_fail_if_annotation_without_value() {
         Compilation compilation = Compiler.javac()
                 .withProcessors(new BroadcastProcessor())
                 .compile(JavaFileObjects.forResource("test/NoName.java"));
@@ -73,5 +73,33 @@ class BroadcastProcessorTest {
                 .compile(JavaFileObjects.forResource("test/NoAnnotation.java"));
         assertThat(compilation).succeededWithoutWarnings();
         assertThat(compilation.generatedFile(StandardLocation.CLASS_OUTPUT, "META-INF/broadcast.properties")).isEmpty();
+    }
+
+    @Test
+    void should_generate_BroadcastConfigFile_for_static_nested_class() throws IOException {
+        Compilation compilation = Compiler.javac()
+                .withProcessors(new BroadcastProcessor())
+                .compile(JavaFileObjects.forResource("test/Nested.java"));
+
+        assertThat(compilation).succeededWithoutWarnings();
+
+        Optional<JavaFileObject> generatedConfig = compilation.generatedFile(StandardLocation.CLASS_OUTPUT, "META-INF/broadcast.properties");
+
+        assertThat(generatedConfig).isPresent();
+
+        Properties configFile = BroadcastFile.readConfigFile(generatedConfig.get().openInputStream());
+        assertThat(configFile)
+                .hasSize(2)
+                .containsEntry("foo", "test.Nested$Foo")
+                .containsEntry("bar", "test.Nested$Bar");
+    }
+
+    @Test
+    void should_fail_if_broadcastMessages_have_duplicated_name() {
+        Compilation compilation = Compiler.javac()
+                .withProcessors(new BroadcastProcessor())
+                .compile(JavaFileObjects.forResource("test/DuplicateName.java"));
+        assertThat(compilation).failed();
+        assertThat(compilation).hadErrorContaining(BroadcastProcessor.DUPLICATED_NAME_ERROR);
     }
 }
