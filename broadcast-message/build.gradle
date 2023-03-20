@@ -16,6 +16,8 @@ dependencies {
     implementation("cn.hutool:hutool-core:5.8.12")
 
     implementation("org.springframework.data:spring-data-redis")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.14.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
 
     testImplementation platform("org.junit:junit-bom:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
