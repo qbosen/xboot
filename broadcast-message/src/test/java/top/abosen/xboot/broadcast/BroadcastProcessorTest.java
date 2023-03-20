@@ -3,6 +3,7 @@ package top.abosen.xboot.broadcast;
 import com.google.testing.compile.Compilation;
 import com.google.testing.compile.Compiler;
 import com.google.testing.compile.JavaFileObjects;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import javax.tools.JavaFileObject;
@@ -22,17 +23,7 @@ class BroadcastProcessorTest {
 
     @Test
     void should_generate_BroadcastConfigFile_when_single_name_configured() throws IOException {
-        Compilation compilation = Compiler.javac()
-                .withProcessors(new BroadcastProcessor())
-                .compile(JavaFileObjects.forResource("test/SingleName.java"));
-
-        assertThat(compilation).succeededWithoutWarnings();
-
-        Optional<JavaFileObject> generatedConfig = compilation.generatedFile(StandardLocation.CLASS_OUTPUT, "META-INF/broadcast.properties");
-
-        assertThat(generatedConfig).isPresent();
-
-        Properties configFile = BroadcastFile.readConfigFile(generatedConfig.get().openInputStream());
+        Properties configFile = compileSuccessAndGetConfig("test/SingleName.java");
         assertThat(configFile)
                 .hasSize(1)
                 .containsEntry("message-name", "test.SingleName");
@@ -40,17 +31,9 @@ class BroadcastProcessorTest {
 
     @Test
     void should_generate_BroadcastConfigFile_when_multiple_name_configured() throws IOException {
-        Compilation compilation = Compiler.javac()
-                .withProcessors(new BroadcastProcessor())
-                .compile(JavaFileObjects.forResource("test/MultipleName.java"));
+        String file = "test/MultipleName.java";
+        Properties configFile = compileSuccessAndGetConfig(file);
 
-        assertThat(compilation).succeededWithoutWarnings();
-
-        Optional<JavaFileObject> generatedConfig = compilation.generatedFile(StandardLocation.CLASS_OUTPUT, "META-INF/broadcast.properties");
-
-        assertThat(generatedConfig).isPresent();
-
-        Properties configFile = BroadcastFile.readConfigFile(generatedConfig.get().openInputStream());
         assertThat(configFile)
                 .hasSize(2)
                 .containsEntry("alias2", "test.MultipleName")
@@ -77,17 +60,7 @@ class BroadcastProcessorTest {
 
     @Test
     void should_generate_BroadcastConfigFile_for_static_nested_class() throws IOException {
-        Compilation compilation = Compiler.javac()
-                .withProcessors(new BroadcastProcessor())
-                .compile(JavaFileObjects.forResource("test/Nested.java"));
-
-        assertThat(compilation).succeededWithoutWarnings();
-
-        Optional<JavaFileObject> generatedConfig = compilation.generatedFile(StandardLocation.CLASS_OUTPUT, "META-INF/broadcast.properties");
-
-        assertThat(generatedConfig).isPresent();
-
-        Properties configFile = BroadcastFile.readConfigFile(generatedConfig.get().openInputStream());
+        Properties configFile = compileSuccessAndGetConfig("test/Nested.java");
         assertThat(configFile)
                 .hasSize(2)
                 .containsEntry("foo", "test.Nested$Foo")
@@ -101,5 +74,20 @@ class BroadcastProcessorTest {
                 .compile(JavaFileObjects.forResource("test/DuplicateName.java"));
         assertThat(compilation).failed();
         assertThat(compilation).hadErrorContaining(BroadcastProcessor.DUPLICATED_NAME_ERROR);
+    }
+
+    @NotNull
+    private static Properties compileSuccessAndGetConfig(String file) throws IOException {
+        Compilation compilation = Compiler.javac()
+                .withProcessors(new BroadcastProcessor())
+                .compile(JavaFileObjects.forResource(file));
+
+        assertThat(compilation).succeededWithoutWarnings();
+
+        Optional<JavaFileObject> generatedConfig = compilation.generatedFile(StandardLocation.CLASS_OUTPUT, "META-INF/broadcast.properties");
+
+        assertThat(generatedConfig).isPresent();
+
+        return BroadcastFile.readConfigFile(generatedConfig.get().openInputStream());
     }
 }
