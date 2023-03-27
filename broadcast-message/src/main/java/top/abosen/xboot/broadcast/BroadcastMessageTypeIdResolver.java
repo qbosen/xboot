@@ -7,12 +7,8 @@ import com.fasterxml.jackson.databind.jsontype.impl.TypeIdResolverBase;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * @author qiubaisen
@@ -25,26 +21,29 @@ public class BroadcastMessageTypeIdResolver extends TypeIdResolverBase {
     JavaType baseType;
     private final Map<String, Class<?>> idToClass;
     private final Map<Class<?>, String> classToId;
-    private static final String BROADCAST_PROPERTIES = "META-INF/broadcast.properties";
-
-    private static Properties broadcastMapping;
-
 
     public BroadcastMessageTypeIdResolver() {
-        setupBroadcastMapping();
+        this(new BroadcastMappingResourceProvider());
+    }
+
+    public BroadcastMessageTypeIdResolver(BroadcastMappingProvider broadcastMappingProvider) {
 
         this.idToClass = new HashMap<>();
         this.classToId = new HashMap<>();
 
-        for (Map.Entry<Object, Object> entry : broadcastMapping.entrySet()) {
+        for (Map.Entry<Object, Object> entry : broadcastMappingProvider.getBroadcastMapping().entrySet()) {
             String messageId = String.valueOf(entry.getKey());
-            Class<?> messageType = null;
+            String messageTypeValue = String.valueOf(entry.getValue());
+
+            Class<?> messageType;
             try {
-                messageType = Class.forName(String.valueOf(entry.getValue()));
+                messageType = Class.forName(messageTypeValue);
             } catch (ClassNotFoundException e) {
-                log.warn("不存在的消息类型", e);
+                log.warn("不存在的消息类型{}={}", messageId, messageTypeValue);
+                continue;
             }
-            if (messageType == null || !(InstanceMessage.class.isAssignableFrom(messageType))) {
+            if (!(InstanceMessage.class.isAssignableFrom(messageType))) {
+                log.warn("类型{}不是一个有效的 InstanceMessage 类型", messageTypeValue);
                 continue;
             }
             idToClass.putIfAbsent(messageId, messageType);
@@ -52,28 +51,6 @@ public class BroadcastMessageTypeIdResolver extends TypeIdResolverBase {
         }
     }
 
-    private synchronized static void setupBroadcastMapping() {
-        if (broadcastMapping == null) {
-            try {
-                broadcastMapping = loadBroadcastMapping();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
-    private static Properties loadBroadcastMapping() throws IOException {
-        Properties props = new Properties();
-        Enumeration<URL> broadcasts = Thread.currentThread().getContextClassLoader()
-                .getResources(BROADCAST_PROPERTIES);
-        while (broadcasts.hasMoreElements()) {
-            URL broadcast = broadcasts.nextElement();
-            try (InputStream stream = broadcast.openStream()) {
-                props.load(stream);
-            }
-        }
-        return props;
-    }
 
     @Override
     public void init(JavaType bt) {
