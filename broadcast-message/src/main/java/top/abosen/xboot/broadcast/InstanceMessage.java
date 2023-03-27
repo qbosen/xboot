@@ -17,5 +17,5 @@ import lombok.Setter;
 @JsonTypeInfo(use = JsonTypeInfo.Id.CUSTOM, property = "@type", include = JsonTypeInfo.As.EXTERNAL_PROPERTY)
 @JsonTypeIdResolver(BroadcastMessageTypeIdResolver.class)
 public abstract class InstanceMessage {
-    String instanceId;
+    protected String instanceId;
 }
