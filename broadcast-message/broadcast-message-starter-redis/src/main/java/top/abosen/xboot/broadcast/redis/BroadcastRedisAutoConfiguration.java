@@ -1,6 +1,7 @@
 package top.abosen.xboot.broadcast.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,6 +15,7 @@ import java.util.List;
 
 /**
  * 外部需要有 {@link ObjectMapper} {@link StringRedisTemplate} 的相关bean
+ *
  * @author qiubaisen
  * @since 2023/3/29
  */
@@ -21,6 +23,7 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(BroadcastRedisProperties.class)
 @ConditionalOnProperty(value = BroadcastRedisProperties.TOPIC)
+@ConditionalOnBean(value = {ObjectMapper.class, StringRedisTemplate.class})
 public class BroadcastRedisAutoConfiguration {
 
     @Bean
