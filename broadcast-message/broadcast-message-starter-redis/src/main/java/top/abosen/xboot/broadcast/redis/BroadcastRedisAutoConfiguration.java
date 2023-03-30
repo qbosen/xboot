@@ -8,7 +8,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import top.abosen.xboot.broadcast.*;
 
 import java.util.List;
@@ -23,8 +26,16 @@ import java.util.List;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(BroadcastRedisProperties.class)
 @ConditionalOnProperty(value = BroadcastRedisProperties.TOPIC)
-@ConditionalOnBean(value = {ObjectMapper.class, StringRedisTemplate.class})
+@ConditionalOnBean(value = {ObjectMapper.class, RedisConnectionFactory.class})
 public class BroadcastRedisAutoConfiguration {
+
+    public static final String REDIS_BROADCAST_MESSAGE_LISTENER_CONTAINER = "REDIS_BROADCAST_MESSAGE_LISTENER_CONTAINER";
+
+    @Bean
+    @ConditionalOnMissingBean
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory) {
+        return new StringRedisTemplate(connectionFactory);
+    }
 
     @Bean
     @ConditionalOnMissingBean
@@ -33,6 +44,7 @@ public class BroadcastRedisAutoConfiguration {
             StringRedisTemplate redisTemplate) {
         return (message -> redisTemplate.convertAndSend(properties.getTopic(), message));
     }
+
 
     /**
      * {@link MessageListener } {@link BroadcastMessageMiddlewareListener}
@@ -53,7 +65,7 @@ public class BroadcastRedisAutoConfiguration {
     @ConditionalOnMissingBean
     public BroadcastMessageForwarder messageForwarder(
             BroadcastInstanceContext context, ObjectMapper objectMapper,
-            List<BroadcastMessageListener<?>> listeners) {
+            List<BroadcastMessageListener<InstanceMessage>> listeners) {
         return new BroadcastMessageForwarderImpl(context, objectMapper, listeners);
     }
 
@@ -63,5 +75,17 @@ public class BroadcastRedisAutoConfiguration {
             BroadcastInstanceContext context, ObjectMapper objectMapper,
             BroadcastMessageMiddlewarePublisher redisPublisher) {
         return new BroadcastMessagePublisherImpl(context, objectMapper, redisPublisher);
+    }
+
+    @Bean(name = REDIS_BROADCAST_MESSAGE_LISTENER_CONTAINER)
+    @ConditionalOnMissingBean(name = REDIS_BROADCAST_MESSAGE_LISTENER_CONTAINER)
+    public RedisMessageListenerContainer container(
+            RedisConnectionFactory connectionFactory,
+            BroadcastMessageRedisListener redisListener,
+            BroadcastRedisProperties properties) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(redisListener, new ChannelTopic(properties.getTopic()));
+        return container;
     }
 }

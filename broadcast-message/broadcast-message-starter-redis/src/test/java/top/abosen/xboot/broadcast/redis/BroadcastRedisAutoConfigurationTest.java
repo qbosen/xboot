@@ -1,12 +1,18 @@
 package top.abosen.xboot.broadcast.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DynamicNode;
+import org.junit.jupiter.api.DynamicTest;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.TestFactory;
 import org.springframework.boot.env.RandomValuePropertySource;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import top.abosen.xboot.broadcast.BroadcastMessageForwarder;
 import top.abosen.xboot.broadcast.BroadcastMessageMiddlewareListener;
 import top.abosen.xboot.broadcast.BroadcastMessageMiddlewarePublisher;
@@ -14,6 +20,7 @@ import top.abosen.xboot.broadcast.BroadcastMessagePublisher;
 
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,27 +35,44 @@ import static org.mockito.Mockito.mock;
  * @since 2023/3/29
  */
 class BroadcastRedisAutoConfigurationTest {
-
     final StringRedisTemplate redisTemplate = mock(StringRedisTemplate.class);
+    final RedisConnectionFactory redisConnectionFactory = mock(RedisConnectionFactory.class);
     final ObjectMapper objectMapper = new ObjectMapper();
+
     /**
      * RandomValuePropertySource 是在 {@link org.springframework.boot.env.EnvironmentPostProcessor}
      */
-    ApplicationContextRunner contextRunner;
+
+    private ApplicationContextRunner setupContextRunner() {
+        return setupContextRunner(() -> {
+            AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+            RandomValuePropertySource.addToEnvironment(context.getEnvironment());
+            return context;
+        }, true, true, true);
+    }
+
+    private ApplicationContextRunner setupContextRunner(boolean topic, boolean redis, boolean mapper) {
+        return setupContextRunner(AnnotationConfigApplicationContext::new, topic, redis, mapper);
+    }
+
+    private ApplicationContextRunner setupContextRunner(
+            Supplier<ConfigurableApplicationContext> contextFactory, boolean topic, boolean redis, boolean mapper) {
+        ApplicationContextRunner contextRunner = new ApplicationContextRunner(contextFactory)
+                .withUserConfiguration(BroadcastRedisAutoConfiguration.class);
+        if (topic)
+            contextRunner = contextRunner.withPropertyValues("xboot.broadcast.redis.topic=foo");
+        if (redis)
+            contextRunner = contextRunner.withBean(RedisConnectionFactory.class, () -> redisConnectionFactory)
+                    /*为避免真的创建对应连接而做的mock*/
+                    .withBean(StringRedisTemplate.class, () -> redisTemplate)
+                    .withBean(BroadcastRedisAutoConfiguration.REDIS_BROADCAST_MESSAGE_LISTENER_CONTAINER, RedisMessageListenerContainer.class, () -> mock(RedisMessageListenerContainer.class));
+        if (mapper)
+            contextRunner = contextRunner.withBean(ObjectMapper.class, () -> objectMapper);
+        return contextRunner;
+    }
 
     @Nested
     class ConfigurationTest {
-
-        ApplicationContextRunner setupContextRunner(boolean topic, boolean redis, boolean mapper) {
-            contextRunner = new ApplicationContextRunner().withUserConfiguration(BroadcastRedisAutoConfiguration.class);
-            if (topic)
-                contextRunner = contextRunner.withPropertyValues("xboot.broadcast.redis.topic=foo");
-            if (redis)
-                contextRunner = contextRunner.withBean(StringRedisTemplate.class, () -> redisTemplate);
-            if (mapper)
-                contextRunner = contextRunner.withBean(ObjectMapper.class, () -> objectMapper);
-            return contextRunner;
-        }
 
 
         @TestFactory
@@ -89,18 +113,6 @@ class BroadcastRedisAutoConfigurationTest {
 
     @Nested
     class InstanceIdTest {
-        @BeforeEach
-        void setup() {
-            contextRunner = new ApplicationContextRunner(() -> {
-                AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-                RandomValuePropertySource.addToEnvironment(context.getEnvironment());
-                return context;
-            }).withUserConfiguration(BroadcastRedisAutoConfiguration.class)
-                    .withBean(StringRedisTemplate.class, () -> redisTemplate)
-                    .withBean(ObjectMapper.class, () -> objectMapper)
-                    .withPropertyValues("xboot.broadcast.redis.topic=foo")
-            ;
-        }
 
         @TestFactory
         Stream<DynamicNode> should_set_instance_id() {
@@ -132,7 +144,7 @@ class BroadcastRedisAutoConfigurationTest {
                     .map(it -> it.getKey() + "=" + it.getValue())
                     .toArray(String[]::new);
 
-            contextRunner.withPropertyValues(pairs)
+            setupContextRunner().withPropertyValues(pairs)
                     .run(context -> {
                         assertThat(context)
                                 .hasNotFailed()
