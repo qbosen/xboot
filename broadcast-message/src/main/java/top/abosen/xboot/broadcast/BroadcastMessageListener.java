@@ -6,7 +6,7 @@ package top.abosen.xboot.broadcast;
  * @param <T> 消息的实际类型
  */
 
-public interface BroadcastMessageCallback<T extends InstanceMessage> {
+public interface BroadcastMessageListener<T extends InstanceMessage> {
     /**
      * 消息回调可处理的{@code @type}
      *

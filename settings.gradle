@@ -14,4 +14,6 @@ include 'extension-field'
 include 'extension-field:extension-field-demo'
 findProject(':extension-field:extension-field-demo')?.name = 'extension-field-demo'
 include 'broadcast-message'
+include 'broadcast-message:broadcast-message-starter-redis'
+findProject(':broadcast-message:broadcast-message-starter-redis')?.name = 'broadcast-message-starter-redis'
 
