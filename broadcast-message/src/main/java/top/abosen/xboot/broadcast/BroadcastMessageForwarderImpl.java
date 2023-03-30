@@ -1,12 +1,12 @@
 package top.abosen.xboot.broadcast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 /**
  * @author qiubaisen
@@ -14,17 +14,11 @@ import java.util.stream.Collectors;
  */
 
 @Slf4j
+@RequiredArgsConstructor
 public class BroadcastMessageForwarderImpl implements BroadcastMessageForwarder {
     final BroadcastInstanceContext context;
-    final Map<Class<? extends InstanceMessage>, BroadcastMessageListener<? extends InstanceMessage>> messageListeners;
     final ObjectMapper objectMapper;
-
-    public BroadcastMessageForwarderImpl(BroadcastInstanceContext context, ObjectMapper objectMapper,
-                                         List<BroadcastMessageListener<?>> messageListeners) {
-        this.context = context;
-        this.objectMapper = objectMapper;
-        this.messageListeners = messageListeners.stream().collect(Collectors.toMap(BroadcastMessageListener::type, it -> it));
-    }
+    final List<BroadcastMessageListener<InstanceMessage>> messageListeners;
 
 
     @SneakyThrows
@@ -36,14 +30,11 @@ public class BroadcastMessageForwarderImpl implements BroadcastMessageForwarder 
             return;
         }
 
-        if (!messageListeners.containsKey(instanceMessage.getClass())) {
-            log.warn("[broadcast] 没有对应的处理器, 跳过:{}", message);
-            return;
-        }
-
-        //noinspection unchecked
-        ((BroadcastMessageListener<InstanceMessage>) messageListeners.get(instanceMessage.getClass()))
-                .onMessage(instanceMessage);
+        messageListeners.stream()
+                .filter(it -> Objects.equals(it.type(), instanceMessage.getClass()))
+                .forEach(it -> context.broadcast(
+                        () -> it.onMessage(instanceMessage)
+                ));
     }
 
 }

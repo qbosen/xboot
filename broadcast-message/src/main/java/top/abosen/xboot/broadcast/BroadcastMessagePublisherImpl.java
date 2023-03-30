@@ -22,8 +22,16 @@ public class BroadcastMessagePublisherImpl implements BroadcastMessagePublisher{
         if (context.isBroadcasting()) {
             return;
         }
+        forcePublish(message);
+    }
+
+    @SneakyThrows
+    @Override
+    public void forcePublish(InstanceMessage message) {
         message.setInstanceId(context.getInstanceId());
         String messageStr = objectMapper.writeValueAsString(message);
         realPublisher.publish(messageStr);
     }
+
+
 }
