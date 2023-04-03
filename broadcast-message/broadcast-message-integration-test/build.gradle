@@ -1,0 +1,26 @@
+plugins {
+    id 'java-library'
+    id "org.springframework.boot"
+    id "io.spring.dependency-management"
+    id "io.freefair.lombok"
+}
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor(project(":broadcast-message"))
+    implementation(project(":broadcast-message:broadcast-message-starter-redis"))
+
+    implementation("org.springframework.boot:spring-boot-starter-web")
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+bootJar.archiveVersion.set("")

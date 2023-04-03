@@ -1,12 +1,14 @@
 package top.abosen.xboot.broadcast.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -27,6 +29,7 @@ import java.util.List;
 @EnableConfigurationProperties(BroadcastRedisProperties.class)
 @ConditionalOnProperty(value = BroadcastRedisProperties.TOPIC)
 @ConditionalOnBean(value = {ObjectMapper.class, RedisConnectionFactory.class})
+@Slf4j
 public class BroadcastRedisAutoConfiguration {
 
     public static final String REDIS_BROADCAST_MESSAGE_LISTENER_CONTAINER = "REDIS_BROADCAST_MESSAGE_LISTENER_CONTAINER";
@@ -65,7 +68,7 @@ public class BroadcastRedisAutoConfiguration {
     @ConditionalOnMissingBean
     public BroadcastMessageForwarder messageForwarder(
             BroadcastInstanceContext context, ObjectMapper objectMapper,
-            List<BroadcastMessageListener<InstanceMessage>> listeners) {
+            @Lazy List<BroadcastMessageListener<? extends InstanceMessage>> listeners) {
         return new BroadcastMessageForwarderImpl(context, objectMapper, listeners);
     }
 
