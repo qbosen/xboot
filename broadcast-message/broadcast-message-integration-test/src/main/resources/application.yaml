@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  redis:
+    host: ${REDIS_HOST:}
+
+xboot:
+  broadcast:
+    redis:
+      topic: broadcast-demo-topic
+      # 从环境变量里设置
+      instance-id: ${INSTANCE_ID:}
+
+logging:
+  level:
+    top.abosen.xboot.broadcast: debug

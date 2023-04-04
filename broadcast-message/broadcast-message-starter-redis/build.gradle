@@ -3,7 +3,7 @@ plugins {
     id 'maven-publish'
     id "org.springframework.boot"
     id "io.spring.dependency-management"
-    id "io.freefair.lombok" version "6.6.1"
+    id "io.freefair.lombok"
 }
 
 
@@ -12,10 +12,14 @@ repositories {
 }
 
 dependencies {
+    api(project(":broadcast-message"))
+    implementation("com.fasterxml.jackson.core:jackson-databind")
 
-    implementation("org.slf4j:slf4j-api")
-    implementation("com.fasterxml.jackson.core:jackson-core:2.14.2")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-data-redis")
+    implementation("org.springframework.boot:spring-boot-starter")
+
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
@@ -24,6 +28,8 @@ dependencies {
     annotationProcessor("com.google.auto.service:auto-service:1.0.1")
     testAnnotationProcessor("com.google.auto.service:auto-service:1.0.1")
     testImplementation("com.google.testing.compile:compile-testing:0.21.0")
+
+
 }
 
 test {

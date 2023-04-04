@@ -1,0 +1,35 @@
+version: "3"
+services:
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+  broadcast-1:
+    image: broadcast-message-integration-test
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - INSTANCE_ID=broadcast-app-1
+    ports:
+      - "10001:8080"
+
+  broadcast-2:
+    image: broadcast-message-integration-test
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - INSTANCE_ID=broadcast-app-2
+    ports:
+      - "10002:8080"
+
+  broadcast-3:
+    image: broadcast-message-integration-test
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOST=redis
+      - INSTANCE_ID=broadcast-app-3
+    ports:
+      - "10003:8080"
