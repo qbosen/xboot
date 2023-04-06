@@ -1,6 +1,6 @@
 /**
  * config in ~/.gradle/gradle.properties
- * signingKey, signingPassword,
+ * signing.keyId, signing.password, signing.secretKeyRingFile
  * xxReleaseRepoUrl, xxSnapshotRepoUrl, xxUsername, xxPassword
  */
 
@@ -12,9 +12,6 @@ plugins {
 
 group = "top.abosen.xboot"
 version = Ci.publishVersion
-
-val signingKey: String? by project
-val signingPassword: String? by project
 
 val publications: PublicationContainer = (extensions.getByName("publishing") as PublishingExtension).publications
 val javadoc = tasks.named("javadoc")
@@ -56,7 +53,6 @@ publishing {
         for (item in listOf("central", "aliyun", "inner")) {
             val conf = MavenConf(item)
             if(!conf.isValidConfig()) continue;
-            println("[publishing] config ${conf.name} repo...")
             maven {
                 name = conf.name
                 url = if (Ci.isRelease) uri(conf.releaseUrl) else uri(conf.snapshotUrl)
@@ -72,6 +68,7 @@ publishing {
         create<MavenPublication>("maven"){
             from(components["java"])
             artifact(javadocJar)
+            println("publishing $artifactId:$version")
         }
     }
 
@@ -107,10 +104,6 @@ publishing {
     }
 
     signing {
-        useGpgCmd()
-        if (signingKey != null && signingPassword != null) {
-            useInMemoryPgpKeys(signingKey, signingPassword)
-        }
         if (Ci.isRelease) {
             sign(publications)
         }

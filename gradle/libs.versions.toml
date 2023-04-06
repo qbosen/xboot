@@ -59,7 +59,7 @@ jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-dat
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 lombok-plugin = { module = "io.freefair.gradle:lombok-plugin", version.ref = "lombok" }
 [plugins]
-lombok = { id = "io.freefair.lombok", version = "lombok" }
+lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
 springboot = { id = "org.springframework.boot", version.ref = "spring-boot" }
 
 [bundles]

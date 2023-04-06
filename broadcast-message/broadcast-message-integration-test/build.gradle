@@ -1,6 +1,5 @@
 plugins {
     id("springboot-conventions")
-    id("xboot-publishing-conventions")
     alias(libs.plugins.springboot)
 }
 

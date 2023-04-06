@@ -3,11 +3,6 @@ plugins {
     id("xboot-publishing-conventions")
 }
 
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     api(project(":broadcast-message"))
     implementation("com.fasterxml.jackson.core:jackson-databind")
@@ -25,13 +20,4 @@ dependencies {
     annotationProcessor("com.google.auto.service:auto-service:1.0.1")
     testAnnotationProcessor("com.google.auto.service:auto-service:1.0.1")
     testImplementation("com.google.testing.compile:compile-testing:0.21.0")
-
-
 }
-
-test {
-    useJUnitPlatform()
-}
-
-
-jar { enabled = true; archiveClassifier.set("") }
