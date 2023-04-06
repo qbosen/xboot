@@ -4,7 +4,7 @@ import top.abosen.xboot.sortableutil.domain.ExecuteMeta;
 
 /**
  * @author qiubaisen
- * @date 2021/5/21
+ * @since 2021/5/21
  */
 public class ContentStickMeta {
     private static final ExecuteMeta META = ExecuteMeta.stickMeta("content_stick", "id", "weight", "stick");

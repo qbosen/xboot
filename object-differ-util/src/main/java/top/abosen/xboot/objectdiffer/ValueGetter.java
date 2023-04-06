@@ -6,7 +6,7 @@ import java.util.Objects;
 
 /**
  * @author qiubaisen
- * @date 2023/1/18
+ * @since 2023/1/18
  */
 interface ValueGetter {
 

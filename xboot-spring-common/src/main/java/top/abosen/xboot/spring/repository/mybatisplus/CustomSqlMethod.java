@@ -4,7 +4,7 @@ import lombok.Getter;
 
 /**
  * @author qiubaisen
- * @date 2021/2/4
+ * @since 2021/2/4
  */
 @Getter
 public enum CustomSqlMethod {

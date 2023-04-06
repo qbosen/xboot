@@ -1,11 +1,10 @@
 plugins {
-    id 'java'
-    id "org.springframework.boot"
-    id "io.spring.dependency-management"
-    id "io.freefair.lombok"
+    id("springboot-conventions")
+    id("xboot-publishing-conventions")
+    alias(libs.plugins.springboot)
 }
 
-group 'top.abosen.xboot'
+group "top.abosen.xboot"
 
 repositories {
     mavenCentral()
@@ -13,13 +12,13 @@ repositories {
 
 dependencies {
     implementation(project(":extension-field"))
-    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springdoc:springdoc-openapi-ui:$springDocVersion")
 
     runtimeOnly("com.h2database:h2:$h2Version")
     implementation("com.baomidou:mybatis-plus-boot-starter:$mybatisPlusVersion")
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     implementation("com.google.auto.service:auto-service:1.0.1")
     annotationProcessor("com.google.auto.service:auto-service:1.0.1")

@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author qiubaisen
- * @date 2022/9/6
+ * @since 2022/9/6
  */
 @Data
 @NoArgsConstructor

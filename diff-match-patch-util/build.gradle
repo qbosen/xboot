@@ -1,18 +1,18 @@
 plugins {
-    id 'java-library'
-    id 'maven-publish'
+    id "java-library"
+    id "maven-publish"
 }
 
 dependencies {
     // lombok dependencies
-    compileOnly "org.projectlombok:lombok:$lombokVersion"
-    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
-    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
-    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    compileOnly("org.projectlombok:lombok:$lombokVersion")
+    annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+    testCompileOnly("org.projectlombok:lombok:$lombokVersion")
+    testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
     //test dependencies
     testImplementation platform("org.junit:junit-bom:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
 
 }
@@ -23,4 +23,4 @@ configurations {
     }
 }
 
-jar { enabled = true; archiveClassifier.set('') }
+jar { enabled = true; archiveClassifier.set("") }

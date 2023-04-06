@@ -1,9 +1,7 @@
 plugins {
-    id 'java-library'
-    id 'maven-publish'
-    id "org.springframework.boot"
-    id "io.spring.dependency-management"
-    id "io.freefair.lombok" version "6.6.1"
+    id("springboot-conventions")
+    id("xboot-publishing-conventions")
+
 }
 
 
@@ -17,12 +15,13 @@ dependencies {
     implementation("com.fasterxml.jackson.core:jackson-core:2.14.2")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.14.2")
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     implementation("com.google.auto.service:auto-service:1.0.1")
     testImplementation("com.google.auto.service:auto-service:1.0.1")
     annotationProcessor("com.google.auto.service:auto-service:1.0.1")
     testAnnotationProcessor("com.google.auto.service:auto-service:1.0.1")
+
     testImplementation("com.google.testing.compile:compile-testing:0.21.0")
 }
 
@@ -31,5 +30,4 @@ test {
 }
 
 
-jar { enabled = true; archiveClassifier.set('') }
-bootJar { enabled = false }
+jar { enabled = true; archiveClassifier.set("") }

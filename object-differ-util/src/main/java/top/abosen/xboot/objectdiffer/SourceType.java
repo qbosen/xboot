@@ -4,7 +4,7 @@ package top.abosen.xboot.objectdiffer;
  * 对象值在输出对比结果时的来源
  *
  * @author qiubaisen
- * @date 2023/1/16
+ * @since 2023/1/16
  */
 public enum SourceType {
     /**

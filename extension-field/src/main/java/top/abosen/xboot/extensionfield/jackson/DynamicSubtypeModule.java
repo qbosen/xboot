@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author qiubaisen
- * @date 2023/2/21
+ * @since 2023/2/21
  */
 @AutoService(Module.class)
 public class DynamicSubtypeModule extends Module {

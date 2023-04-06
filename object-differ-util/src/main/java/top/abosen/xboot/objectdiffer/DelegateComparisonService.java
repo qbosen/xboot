@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
  * 代理 {@link ComparisonService}, 实现对包含 {@link DiffEquals} 注解对象的对比功能
  *
  * @author qiubaisen
- * @date 2023/1/15
+ * @since 2023/1/15
  */
 public class DelegateComparisonService extends ComparisonService {
     public DelegateComparisonService(ObjectDifferBuilder objectDifferBuilder) {

@@ -10,7 +10,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * @author qiubaisen
- * @date 2023/1/18
+ * @since 2023/1/18
  */
 class ValueGetterTest {
     @Test

@@ -5,7 +5,7 @@ import javax.validation.ConstraintValidatorContext;
 
 /**
  * @author qiubaisen
- * @date 2021/3/31
+ * @since 2021/3/31
  */
 public class FlagValidatorClass implements ConstraintValidator<FlagValidator, Integer> {
     private int[] values;

@@ -2,7 +2,7 @@ package top.abosen.xboot.shared.utility;
 
 /**
  * @author qiubaisen
- * @date 2021/4/2
+ * @since 2021/4/2
  */
 public class CastUtils {
     @SuppressWarnings("unchecked")

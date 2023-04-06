@@ -7,7 +7,7 @@ import java.util.Map;
  * Base exception class for all business exceptions
  *
  * @author qiubaisen
- * @date 2021/4/2
+ * @since 2021/4/2
  */
 
 public abstract class AppException extends RuntimeException {

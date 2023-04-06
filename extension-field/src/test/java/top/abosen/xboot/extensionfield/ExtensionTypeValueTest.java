@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.*;
 
 /**
  * @author qiubaisen
- * @date 2023/2/23
+ * @since 2023/2/23
  */
 class ExtensionTypeValueTest {
     @Test

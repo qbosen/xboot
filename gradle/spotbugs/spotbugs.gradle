@@ -1,4 +1,4 @@
-apply plugin: 'com.github.spotbugs'
+apply plugin: "com.github.spotbugs"
 
 
 spotbugs {

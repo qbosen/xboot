@@ -6,7 +6,7 @@ import java.lang.annotation.Annotation;
 
 /**
  * @author qiubaisen
- * @date 2023/1/17
+ * @since 2023/1/17
  */
 public class Annotations {
     public static <T extends Annotation> T getNodeAnno(DiffNode node, Class<T> anno) {

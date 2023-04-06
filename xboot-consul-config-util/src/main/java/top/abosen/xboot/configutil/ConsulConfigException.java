@@ -2,7 +2,7 @@ package top.abosen.xboot.configutil;
 
 /**
  * @author qiubaisen
- * @date 2021/11/12
+ * @since 2021/11/12
  */
 public class ConsulConfigException extends RuntimeException {
     public ConsulConfigException() {

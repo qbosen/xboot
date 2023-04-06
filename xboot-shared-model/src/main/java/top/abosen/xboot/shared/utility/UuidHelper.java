@@ -4,7 +4,7 @@ import java.util.UUID;
 
 /**
  * @author qiubaisen
- * @date 2021/3/31
+ * @since 2021/3/31
  */
 public class UuidHelper {
     /**

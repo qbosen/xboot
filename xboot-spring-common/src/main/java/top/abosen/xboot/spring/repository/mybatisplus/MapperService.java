@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * @author qiubaisen
- * @date 2021/7/2
+ * @since 2021/7/2
  */
 public class MapperService<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements IService<T> {
 

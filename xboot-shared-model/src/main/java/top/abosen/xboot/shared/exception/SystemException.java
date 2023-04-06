@@ -5,7 +5,7 @@ import static com.google.common.collect.ImmutableMap.of;
 
 /**
  * @author qiubaisen
- * @date 2021/4/3
+ * @since 2021/4/3
  */
 
 public class SystemException extends AppException {

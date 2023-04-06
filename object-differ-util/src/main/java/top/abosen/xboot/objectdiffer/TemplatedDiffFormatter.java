@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author qiubaisen
- * @date 2023/1/15
+ * @since 2023/1/15
  */
 class TemplatedDiffFormatter implements DiffFormatter {
     final DiffFormatterConfiguration configuration;

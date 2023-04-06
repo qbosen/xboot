@@ -1,39 +1,36 @@
 plugins {
-    id "java-library"
-    id "maven-publish"
-    id "org.springframework.boot"
-    id "io.spring.dependency-management"
+    id("springboot-conventions")
+    id("xboot-publishing-conventions")
 }
 
 dependencies {
     api(project(":xboot-shared-model"))
-    api 'jakarta.servlet:jakarta.servlet-api'
-    api 'jakarta.persistence:jakarta.persistence-api'
-    api 'jakarta.validation:jakarta.validation-api'
-    api 'org.springframework.boot:spring-boot-starter'
-    api 'org.springframework:spring-tx'
-    api 'org.springframework.data:spring-data-commons'
-    api 'org.springframework.boot:spring-boot-starter-validation'
+    api "jakarta.servlet:jakarta.servlet-api"
+    api "jakarta.persistence:jakarta.persistence-api"
+    api "jakarta.validation:jakarta.validation-api"
+    api "org.springframework.boot:spring-boot-starter"
+    api "org.springframework:spring-tx"
+    api "org.springframework.data:spring-data-commons"
+    api "org.springframework.boot:spring-boot-starter-validation"
     api "org.springdoc:springdoc-openapi-ui:$springDocVersion"
-    api('org.springframework.boot:spring-boot-starter-web')
+    api("org.springframework.boot:spring-boot-starter-web")
     // 暴露出去,不然这边版本高了,客户端有兼容性问题
     api("com.baomidou:mybatis-plus:$mybatisPlusVersion")
 
-    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     // lombok dependencies
-    compileOnly "org.projectlombok:lombok:$lombokVersion"
-    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
-    testCompileOnly "org.projectlombok:lombok:$lombokVersion"
-    testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
+    compileOnly("org.projectlombok:lombok:$lombokVersion")
+    annotationProcessor("org.projectlombok:lombok:$lombokVersion")
+    testCompileOnly("org.projectlombok:lombok:$lombokVersion")
+    testAnnotationProcessor("org.projectlombok:lombok:$lombokVersion")
     //test dependencies
     testImplementation platform("org.junit:junit-bom:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
 }
 
-jar { enabled = true; archiveClassifier.set('') }
-bootJar { enabled = false }
+jar { enabled = true; archiveClassifier.set("") }
 java {
     withSourcesJar()
 }

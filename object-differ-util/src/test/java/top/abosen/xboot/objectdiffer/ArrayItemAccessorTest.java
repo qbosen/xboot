@@ -11,7 +11,7 @@ import static top.abosen.xboot.objectdiffer.DelegateIdentityService.diffIdentity
 
 /**
  * @author qiubaisen
- * @date 2023/1/30
+ * @since 2023/1/30
  */
 public class ArrayItemAccessorTest {
     private static final Object ANY_REFERENCE_ITEM = new Object();

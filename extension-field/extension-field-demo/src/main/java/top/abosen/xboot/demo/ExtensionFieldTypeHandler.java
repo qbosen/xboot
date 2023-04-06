@@ -14,7 +14,7 @@ import java.util.List;
  * JsonTypeInfo is ignored when serializing a list of annotated object · Issue #336 · FasterXML/jackson-databind](https://github.com/FasterXML/jackson-databind/issues/336)
  *
  * @author qiubaisen
- * @date 2023/3/1
+ * @since 2023/3/1
  */
 public class ExtensionFieldTypeHandler extends JacksonTypeHandler {
     private static ObjectMapper OBJECT_MAPPER;

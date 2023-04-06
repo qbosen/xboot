@@ -2,7 +2,7 @@ package top.abosen.xboot.shared.exception;
 
 /**
  * @author qiubaisen
- * @date 2021/3/31
+ * @since 2021/3/31
  */
 public interface ErrorCode {
     /**

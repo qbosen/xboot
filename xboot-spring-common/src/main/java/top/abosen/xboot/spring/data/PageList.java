@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 /**
  * @author qiubaisen
- * @date 2021/3/31
+ * @since 2021/3/31
  */
 public class PageList<T> implements SliceList<T> {
     private int size;

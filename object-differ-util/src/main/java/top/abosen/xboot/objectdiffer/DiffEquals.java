@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * 如果标注在字段上, 多个字段值{@code equals}时 视为对象{@code equals}
  *
  * @author qiubaisen
- * @date 2023/1/17
+ * @since 2023/1/17
  */
 
 @Documented

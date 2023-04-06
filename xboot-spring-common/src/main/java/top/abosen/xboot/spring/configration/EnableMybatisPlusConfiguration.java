@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 
 /**
  * @author qiubaisen
- * @date 2021/4/12
+ * @since 2021/4/12
  */
 
 @Target(ElementType.TYPE)

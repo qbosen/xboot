@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * @author qiubaisen
- * @date 2021/3/31
+ * @since 2021/3/31
  */
 public abstract class BaseAggregate<ID extends Serializable> extends BaseEntity<ID> implements Validatable {
     private transient List<DomainEvent> _events;

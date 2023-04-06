@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * @author qiubaisen
- * @date 2022/9/6
+ * @since 2022/9/6
  */
 class StringIntHandlerTest {
     PropertyHandler intMustPositiveOrZero = new PropertyHandler() {

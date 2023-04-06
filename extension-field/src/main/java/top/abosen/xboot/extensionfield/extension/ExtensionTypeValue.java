@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * @author qiubaisen
- * @date 2023/2/22
+ * @since 2023/2/22
  */
 @JsonSerialize(as = ExtensionTypeValueMap.class)
 @JsonDeserialize(as = ExtensionTypeValueMap.class)

@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * @author qiubaisen
- * @date 2023/2/23
+ * @since 2023/2/23
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, defaultImpl = SimpleExtensionField.class)
 @Schema(oneOf = {SimpleExtensionField.class, MapExtensionField.class, ListExtensionField.class, SwitchExtensionField.class})

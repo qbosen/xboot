@@ -1,40 +1,38 @@
 plugins {
-    id 'java-library'
-    id 'maven-publish'
-    id "org.springframework.boot"
-    id "io.spring.dependency-management"
-    id "groovy"
+    id("springboot-conventions")
+    id("xboot-publishing-conventions")
+    id ("groovy")
 }
 
 
 dependencies {
 
-    implementation "org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatisStarterVersion"
-    implementation "com.google.guava:guava:$guavaVersion"
+    implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:$mybatisStarterVersion")
+    implementation("com.google.guava:guava:$guavaVersion")
 
     // lombok dependencies
-    compileOnly "org.projectlombok:lombok"
-    annotationProcessor "org.projectlombok:lombok"
-    testCompileOnly "org.projectlombok:lombok"
-    testAnnotationProcessor "org.projectlombok:lombok"
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+    testCompileOnly("org.projectlombok:lombok")
+    testAnnotationProcessor("org.projectlombok:lombok")
     //test dependencies
     testImplementation platform("org.junit:junit-bom:$junitVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api")
-    testImplementation('org.junit.jupiter:junit-jupiter-engine')
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
     testImplementation("org.mockito:mockito-junit-jupiter:$mockitoJunitVersion")
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
     // spock test
     testImplementation platform("org.spockframework:spock-bom:$spockGroovyVersion")
-    testImplementation "org.codehaus.groovy:groovy:$groovyVersion"
-    testImplementation "org.spockframework:spock-core"
-    testImplementation "org.spockframework:spock-spring"
+    testImplementation("org.codehaus.groovy:groovy:$groovyVersion")
+    testImplementation("org.spockframework:spock-core")
+    testImplementation("org.spockframework:spock-spring")
     // optional dependencies for using Spock
-    testImplementation "org.hamcrest:hamcrest-core:$hamcrestVersion"   // only necessary if Hamcrest matchers are used
+    testImplementation("org.hamcrest:hamcrest-core:$hamcrestVersion")   // only necessary if Hamcrest matchers are used
     testRuntimeOnly "net.bytebuddy:byte-buddy:$byteBuddyVersion" // allows mocking of classes (in addition to interfaces)
     testRuntimeOnly "org.objenesis:objenesis:$objenesisVersion"
     // allows mocking of classes without default constructor (together with ByteBuddy or CGLIB)
     testRuntimeOnly "com.h2database:h2:$h2Version"        // allows H2 database to be used for testing
-    testImplementation "org.codehaus.groovy:groovy-sql:$groovyVersion"
+    testImplementation("org.codehaus.groovy:groovy-sql:$groovyVersion")
 
 }
 
@@ -51,5 +49,4 @@ sourceSets {
     }
 }
 
-jar { enabled = true; archiveClassifier.set('') }
-bootJar { enabled = false }
+jar { enabled = true; archiveClassifier.set("") }

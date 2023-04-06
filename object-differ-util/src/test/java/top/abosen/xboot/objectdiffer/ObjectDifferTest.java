@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author qiubaisen
- * @date 2023/1/13
+ * @since 2023/1/13
  */
 class ObjectDifferTest {
     // todo 自定义root对象名称,在 DiffFormat里面

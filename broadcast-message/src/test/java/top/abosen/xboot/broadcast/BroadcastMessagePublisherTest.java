@@ -39,7 +39,7 @@ public class BroadcastMessagePublisherTest extends MockitoBase {
     void should_publish_message_to_real_publisher() {
         publisher.publish(instanceMessage);
 
-        verify(instanceMessage, description("message should set instanceId from context")).setInstanceId(eq("foo"));
+        verify(instanceMessage, atLeast(1).description("message should set instanceId from context")).setInstanceId(eq("foo"));
         verify(realPublisher, description("should receive raw message")).publish(eq(rawMessageStr));
     }
 

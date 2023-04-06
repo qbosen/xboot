@@ -2,7 +2,7 @@ package top.abosen.xboot.sortableutil.domain;
 
 /**
  * @author qiubaisen
- * @date 2021/4/30
+ * @since 2021/4/30
  */
 public class Flag {
     private FlagEnum flagEnum = FlagEnum.ORIGINAL;

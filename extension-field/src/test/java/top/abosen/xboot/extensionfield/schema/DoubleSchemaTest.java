@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author qiubaisen
- * @date 2023/2/28
+ * @since 2023/2/28
  */
 class DoubleSchemaTest {
 

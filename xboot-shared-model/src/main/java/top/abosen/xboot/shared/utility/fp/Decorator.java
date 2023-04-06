@@ -8,7 +8,7 @@ import java.util.function.Function;
  * 对同一个类型数据进行修正/装饰
  *
  * @author qiubaisen
- * @date 2021/5/28
+ * @since 2021/5/28
  */
 
 @FunctionalInterface

@@ -6,7 +6,7 @@ import top.abosen.xboot.sortableutil.domain.SortableElement;
 
 /**
  * @author qiubaisen
- * @date 2021/5/4
+ * @since 2021/5/4
  */
 public interface SortableCommonService {
     PagedList<SortableElement> query(ExecuteMeta executeMeta, long page, long size);

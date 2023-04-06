@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 /**
  * @author qiubaisen
- * @date 2021/3/31
+ * @since 2021/3/31
  */
 public abstract class FPs {
 

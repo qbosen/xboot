@@ -4,7 +4,7 @@ import top.abosen.xboot.shared.exception.ErrorCode;
 
 /**
  * @author qiubaisen
- * @date 2021/4/2
+ * @since 2021/4/2
  */
 public enum SpringCommonErrorCode implements ErrorCode {
     REQUEST_VALIDATION_FAILED(40001, 500, "参数校验错误"),

@@ -3,7 +3,7 @@ apply plugin: "jacoco"
 ext {
     jacocoLineMin = 0
     jacocoBranchMin = 0
-    jacocoToolVersion = '0.8.6'
+    jacocoToolVersion = "0.8.6"
     // 配置需要忽略的文件
     jacocoExcludes = [
     ]
@@ -34,17 +34,17 @@ jacocoTestCoverageVerification {
     executionData test
     violationRules {
         rule {
-            element = 'BUNDLE'
+            element = "BUNDLE"
             limit {
-                counter = 'INSTRUCTION'
+                counter = "INSTRUCTION"
                 minimum = jacocoLineMin
             }
         }
 
         rule {
-            element = 'BUNDLE'
+            element = "BUNDLE"
             limit {
-                counter = 'BRANCH'
+                counter = "BRANCH"
                 minimum = jacocoBranchMin
             }
         }

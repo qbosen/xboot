@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 /**
  * @author qiubaisen
- * @date 2023/3/2
+ * @since 2023/3/2
  */
 @UtilityClass
 public class Objs {

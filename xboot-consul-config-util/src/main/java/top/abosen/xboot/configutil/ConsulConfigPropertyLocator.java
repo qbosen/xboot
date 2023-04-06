@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author qiubaisen
- * @date 2021/11/12
+ * @since 2021/11/12
  */
 public class ConsulConfigPropertyLocator implements PropertySourceLocator {
     private static final Log log = LogFactory.getLog(ConsulConfigPropertyLocator.class);

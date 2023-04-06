@@ -9,7 +9,7 @@ import org.springframework.core.env.ConfigurableEnvironment;
 /**
  * 未启用; 通过代理转换器达到修改属性值的效果,影响较大
  * @author qiubaisen
- * @date 2022/6/21
+ * @since 2022/6/21
  */
 @Deprecated
 public class ConversionHack implements ApplicationListener<ApplicationEnvironmentPreparedEvent> {

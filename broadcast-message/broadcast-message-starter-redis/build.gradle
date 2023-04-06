@@ -1,9 +1,6 @@
 plugins {
-    id 'java-library'
-    id 'maven-publish'
-    id "org.springframework.boot"
-    id "io.spring.dependency-management"
-    id "io.freefair.lombok"
+    id("springboot-conventions")
+    id("xboot-publishing-conventions")
 }
 
 
@@ -21,7 +18,7 @@ dependencies {
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     implementation("com.google.auto.service:auto-service:1.0.1")
     testImplementation("com.google.auto.service:auto-service:1.0.1")
@@ -37,5 +34,4 @@ test {
 }
 
 
-jar { enabled = true; archiveClassifier.set('') }
-bootJar { enabled = false }
+jar { enabled = true; archiveClassifier.set("") }

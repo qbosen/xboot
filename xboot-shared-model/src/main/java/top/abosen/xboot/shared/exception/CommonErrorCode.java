@@ -2,7 +2,7 @@ package top.abosen.xboot.shared.exception;
 
 /**
  * @author qiubaisen
- * @date 2021/4/2
+ * @since 2021/4/2
  */
 public enum CommonErrorCode implements ErrorCode {
     SYSTEM_ERROR(10000, 500, "系统内部错误"),

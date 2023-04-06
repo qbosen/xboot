@@ -15,7 +15,7 @@ import top.abosen.xboot.extensionfield.jackson.DynamicSubtypeModule;
 
 /**
  * @author qiubaisen
- * @date 2023/2/28
+ * @since 2023/2/28
  */
 
 @SpringBootApplication

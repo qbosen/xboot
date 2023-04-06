@@ -10,7 +10,7 @@ import top.abosen.xboot.extensionfield.widget.BizWidgetExtension;
 
 /**
  * @author qiubaisen
- * @date 2023/3/1
+ * @since 2023/3/1
  */
 
 @AutoService(BizWidgetExtension.class)

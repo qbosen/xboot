@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author qiubaisen
- * @date 2023/1/30
+ * @since 2023/1/30
  */
 public class PrettyLogVisitor implements DiffNode.Visitor {
     private final Object source;

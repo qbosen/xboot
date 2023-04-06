@@ -10,7 +10,7 @@ import static com.google.common.collect.Maps.newHashMap;
 
 /**
  * @author qiubaisen
- * @date 2021/4/2
+ * @since 2021/4/2
  */
 public class ErrorRepresentation {
     private final int code;

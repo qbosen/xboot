@@ -7,7 +7,7 @@ import java.util.function.Function;
  * 用于element之间存在继承关系时的key多态映射
  *
  * @author qiubaisen
- * @date 2021/3/31
+ * @since 2021/3/31
  */
 public abstract class AbstractContextKey<B extends Context.Element, E extends B> implements Context.Key<E> {
     private final Function<Context.Element, E> safeCast;

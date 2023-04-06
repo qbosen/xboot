@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author qiubaisen
- * @date 2023/1/17
+ * @since 2023/1/17
  */
 public class DelegateIdentityService extends IdentityService {
     public DelegateIdentityService(ObjectDifferBuilder objectDifferBuilder) {

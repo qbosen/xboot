@@ -13,7 +13,7 @@ import top.abosen.xboot.extensionfield.extension.ExtensionTypeValue;
 
 /**
  * @author qiubaisen
- * @date 2023/2/28
+ * @since 2023/2/28
  */
 
 @TableName(value = "content", autoResultMap = true)

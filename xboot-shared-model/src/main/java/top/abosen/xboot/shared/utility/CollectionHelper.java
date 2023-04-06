@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author qiubaisen
- * @date 2021/3/31
+ * @since 2021/3/31
  */
 public abstract class CollectionHelper {
     public static <T> T random(Collection<T> collection) {

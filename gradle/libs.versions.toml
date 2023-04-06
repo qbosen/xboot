@@ -1,0 +1,67 @@
+[versions]
+junit-jupiter = "5.8.2"
+# mockito 5.* need JDK11
+mockito = "4.11.0"
+assertj = "3.24.2"
+
+lombok = "8.0.1"
+guava = "31.1-jre"
+commons-lang3 = "3.12.0"
+commons-collection4 = "4.4"
+jackson = "2.14.2"
+
+kotlin = "1.7.20"
+javers = "6.8.2"
+slf4j = "2.0.5"
+
+spring-boot = "2.7.8"
+springdoc = "1.6.14"
+
+[libraries]
+# Utils
+apache-commons-lang = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3" }
+apache-commons-collection = { module = "org.apache.commons:commons-collections4", version.ref = "commons-collection4" }
+google-guava = { module = "com.google.guava:guava", version.ref = "guava" }
+
+# Testing
+junit-jupiter-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit-jupiter" }
+junit-jupiter-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit-jupiter" }
+mocito-core = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+mocito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "mockito" }
+
+javers-core = { module = "org.javers:javers-core", version.ref = "javers" }
+assertj = { module = "org.assertj:assertj-core", version.ref = "assertj" }
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4j" }
+
+# Open API
+springdoc-core = { module = "org.springdoc:springdoc-openapi-webmvc-core", version.ref = "springdoc" }
+
+# Spring family
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
+
+# Spring Cloud
+spring-cloud-starter-bootstrap = { module = "org.springframework.cloud:spring-cloud-starter-bootstrap" }
+spring-cloud-starter-consul-config = { module = "org.springframework.cloud:spring-cloud-starter-consul-config" }
+
+# Jackson
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
+jackson-module-parameter-names = { module = "com.fasterxml.jackson.module:jackson-module-parameter-names", version.ref = "jackson" }
+jackson-datatype-jdk8 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jdk8", version.ref = "jackson" }
+jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
+
+
+# Gradle plugins
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+lombok-plugin = { module = "io.freefair.gradle:lombok-plugin", version.ref = "lombok" }
+[plugins]
+lombok = { id = "io.freefair.lombok", version = "lombok" }
+springboot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+
+[bundles]
+junit-jupiter = ["junit-jupiter-api", "junit-jupiter-engine"]
+xboot-test = ["junit-jupiter-api", "junit-jupiter-engine", "mocito-core", "mocito-junit-jupiter", "assertj"]

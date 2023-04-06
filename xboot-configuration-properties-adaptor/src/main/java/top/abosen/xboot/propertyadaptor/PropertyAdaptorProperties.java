@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * @author qiubaisen
- * @date 2022/6/21
+ * @since 2022/6/21
  */
 @Data
 @ConfigurationProperties(prefix = PropertyAdaptorProperties.PREFIX)

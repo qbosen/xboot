@@ -8,7 +8,7 @@ import java.util.Collection;
 
 /**
  * @author qiubaisen
- * @date 2023/1/30
+ * @since 2023/1/30
  */
 @UtilityClass
 public class Models {

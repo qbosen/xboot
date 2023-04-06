@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author qiubaisen
- * @date 2021/2/4
+ * @since 2021/2/4
  */
 public interface BaseMapper<T> extends com.baomidou.mybatisplus.core.mapper.BaseMapper<T> {
     int insertBatchSomeColumn(List<T> entityList);

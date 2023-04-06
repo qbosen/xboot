@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * @author qiubaisen
- * @date 2021/3/31
+ * @since 2021/3/31
  */
 public class StringFlagValidatorClass implements ConstraintValidator<StringFlagValidator, String> {
     private Set<String> valuesSet;

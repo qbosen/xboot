@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 /**
  * @author qiubaisen
- * @date 2023/1/30
+ * @since 2023/1/30
  */
 public class IdentityStrategyTest {
 

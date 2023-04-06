@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * @author qiubaisen
- * @date 2021/3/31
+ * @since 2021/3/31
  */
 public abstract class BaseFlagEntity<ID extends Serializable> extends BaseEntity<ID> implements PersistFlag {
     private transient PersistType persistType;

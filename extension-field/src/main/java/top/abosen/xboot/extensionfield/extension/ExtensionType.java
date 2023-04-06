@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author qiubaisen
- * @date 2023/2/22
+ * @since 2023/2/22
  */
 
 public interface ExtensionType extends Validatable {

@@ -7,7 +7,7 @@ import org.apache.ibatis.mapping.SqlSource;
 
 /**
  * @author qiubaisen
- * @date 2021/2/22
+ * @since 2021/2/22
  */
 public class ExistMethod extends AbstractMethod {
     public ExistMethod() {

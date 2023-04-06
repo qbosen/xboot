@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * @author qiubaisen
- * @date 2023/1/13
+ * @since 2023/1/13
  */
 
 @SuppressWarnings("ClassCanBeRecord")

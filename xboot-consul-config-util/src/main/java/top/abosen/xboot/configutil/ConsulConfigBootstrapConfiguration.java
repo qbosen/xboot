@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 
 /**
  * @author qiubaisen
- * @date 2021/11/12
+ * @since 2021/11/12
  */
 @Configuration(proxyBeanMethods = false)
 @ConditionalOnProperty(name = "spring.cloud.consul.config.enabled", matchIfMissing = true)

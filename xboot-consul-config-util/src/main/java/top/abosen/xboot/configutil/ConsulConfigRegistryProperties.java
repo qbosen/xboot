@@ -11,7 +11,7 @@ import static top.abosen.xboot.configutil.ConsulConfigRegistryProperties.PREFIX;
 
 /**
  * @author qiubaisen
- * @date 2021/11/12
+ * @since 2021/11/12
  */
 @ConfigurationProperties(PREFIX)
 @Data

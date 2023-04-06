@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 /**
  * @author qiubaisen
- * @date 2022/9/7
+ * @since 2022/9/7
  */
 public class ParallelSpeedUpTest {
     @SneakyThrows

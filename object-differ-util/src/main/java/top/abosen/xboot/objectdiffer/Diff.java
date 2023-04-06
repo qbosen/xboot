@@ -6,7 +6,7 @@ import java.lang.annotation.*;
  * 可作用于属性 和 类型, 属性先于类型
  *
  * @author qiubaisen
- * @date 2023/1/13
+ * @since 2023/1/13
  */
 @Documented
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE})
