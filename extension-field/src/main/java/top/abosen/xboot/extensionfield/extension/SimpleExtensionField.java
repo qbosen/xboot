@@ -24,7 +24,7 @@ import java.util.Optional;
 @ToString(callSuper = true)
 @NoArgsConstructor
 @ExtensionMethod(Opt8.class)
-@io.swagger.v3.oas.annotations.media.Schema(description = "简单扩展字段; 由schema和widget组成", example = "{\"@type\":\"simple\",\"key\":\"age\",\"name\":\"年龄\",\"schema\":{\"@type\":\"integer\",\"required\":true,\"defaultValue\":20,\"min\":0,\"max\":150},\"widget\":{\"@type\":\"input\",\"name\":\"输入年龄\",\"multiple\":false}}")
+@io.swagger.v3.oas.annotations.media.Schema(description = "简单扩展字段; 由schema和widget组成", example = "{\"@type\":\"simple\",\"key\":\"age\",\"name\":\"年龄\",\"schema\":{\"@type\":\"integer\",\"required\":true,\"default_value\":20,\"min\":0,\"max\":150},\"widget\":{\"@type\":\"input\",\"name\":\"输入年龄\",\"style\":null,\"multiple\":false},\"desc\":\"一个用于填写年龄的简单扩展\"}")
 public class SimpleExtensionField extends AbstractExtensionField {
     public final String type = "simple";
     Schema schema;

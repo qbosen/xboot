@@ -2,6 +2,7 @@ package top.abosen.xboot.extensionfield.extension;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.google.common.collect.ImmutableMap;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import top.abosen.xboot.extensionfield.widget.OptionWidget;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @since 2023/2/27
  */
 class ExtensionFieldTest {
-    ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules();
+    ObjectMapper objectMapper = new ObjectMapper().findAndRegisterModules().setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
 
     @Test
     void should_map_to_simple_field_by_default() throws JsonProcessingException {
