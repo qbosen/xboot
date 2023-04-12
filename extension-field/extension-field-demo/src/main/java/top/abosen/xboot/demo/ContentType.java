@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import top.abosen.xboot.extensionfield.extension.ExtensionField;
+import top.abosen.xboot.extensionfield.extension.ExtensionFields;
 import top.abosen.xboot.extensionfield.extension.ExtensionType;
+import top.abosen.xboot.extensionfield.mybatis.ExtensionFieldsTypeHandler;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class ContentType implements ExtensionType {
 
     String name;
 
-    @TableField(typeHandler = ExtensionFieldTypeHandler.class)
-    List<ExtensionField> fields;
+    @TableField(typeHandler = ExtensionFieldsTypeHandler.class)
+    ExtensionFields fields;
 
 }

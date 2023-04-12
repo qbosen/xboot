@@ -29,7 +29,7 @@ public class ContentController {
         if (!content.getExtension().valid(contentType)) {
             return -1;
         }
-
+        content.setId(null);
         contentMapper.insert(content);
         return content.getId();
     }
@@ -46,5 +46,10 @@ public class ContentController {
         contentMapper.updateById(content);
     }
 
+    @GetMapping("/{id}")
+    @Operation(summary = "获取内容")
+    public Content get(@PathVariable long id) {
+        return contentMapper.selectById(id);
+    }
 
 }

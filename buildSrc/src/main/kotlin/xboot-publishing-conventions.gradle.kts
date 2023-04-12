@@ -68,7 +68,6 @@ publishing {
         create<MavenPublication>("maven"){
             from(components["java"])
             artifact(javadocJar)
-            println("publishing $artifactId:$version")
         }
     }
 

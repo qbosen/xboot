@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import top.abosen.xboot.extensionfield.extension.ExtensionFields;
 import top.abosen.xboot.extensionfield.extension.ExtensionTypeValueMap;
 import top.abosen.xboot.extensionfield.extension.MapExtensionField;
 import top.abosen.xboot.extensionfield.extension.SimpleExtensionField;
@@ -20,6 +21,8 @@ import top.abosen.xboot.extensionfield.widget.InputWidget;
 import top.abosen.xboot.extensionfield.widget.OptionWidget;
 import top.abosen.xboot.extensionfield.widget.SelectWidget;
 
+import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,13 +44,25 @@ class ApplicationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    private <T> List<T> lists(T... items) {
+        return Arrays.asList(items);
+    }
+
+    private <K, V> Map<K, V> maps(Object... kvs) {
+        LinkedHashMap<K, V> map = new LinkedHashMap<>();
+        for (int i = 0; i < kvs.length; i += 2) {
+            map.put((K) kvs[i], (V) kvs[i + 1]);
+        }
+        return map;
+    }
+
     @Test
     void should_add_content_type() throws Exception {
         ContentType contentType = ContentType.builder()
                 //region build content type
                 .key("article")
                 .name("图文文章")
-                .fields(List.of(
+                .fields(new ExtensionFields(lists(
                         SimpleExtensionField.builder()
                                 .key("share_template")
                                 .name("分享模板")
@@ -63,11 +78,11 @@ class ApplicationTest {
                         MapExtensionField.builder()
                                 .key("videos")
                                 .name("星选视频")
-                                .extension(Map.of(
+                                .extension(maps(
                                         "desc", "打分,视频,视频标题的复杂组合",
                                         "other", "扩展属性, 业务上可编辑和操作"
                                 ))
-                                .fields(List.of(
+                                .fields(lists(
                                         SimpleExtensionField.builder()
                                                 .key("title")
                                                 .name("视频组名称")
@@ -83,7 +98,7 @@ class ApplicationTest {
                                         SimpleExtensionField.builder()
                                                 .key("score")
                                                 .name("评分")
-                                                .extension(Map.of(
+                                                .extension(maps(
                                                         "desc", "OptionWidget的style由页面定义"
                                                 ))
                                                 .schema(IntegerSchema.builder()
@@ -95,7 +110,7 @@ class ApplicationTest {
                                                 .widget(OptionWidget.builder()
                                                         .name("下拉框")
                                                         .style("dropdown")
-                                                        .options(Map.of(
+                                                        .options(maps(
                                                                 "一星", 1,
                                                                 "二星", 2,
                                                                 "三星", 3,
@@ -120,7 +135,7 @@ class ApplicationTest {
                                 ))
                                 .build()
 //endregion
-                )).build();
+                ))).build();
 
         String json = objectMapper.writeValueAsString(contentType);
         System.out.println(json);
@@ -140,12 +155,12 @@ class ApplicationTest {
                 .contentType("article")
                 .title("测试文章")
                 .body("正文...")
-                .extension(new ExtensionTypeValueMap(Map.of(
+                .extension(new ExtensionTypeValueMap(maps(
                         "share_template", "",
-                        "videos", Map.of(
+                        "videos", maps(
                                 "title", "精选视频集合2022",
                                 "score", 5,
-                                "videos", List.of(1000, 1005)
+                                "videos", lists(1000, 1005)
                         ))
                 )).build();
 

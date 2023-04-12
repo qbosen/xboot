@@ -2,6 +2,7 @@ package top.abosen.xboot.extensionfield.widget;
 
 import cn.hutool.core.collection.CollUtil;
 import com.google.auto.service.AutoService;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
@@ -20,14 +21,13 @@ import java.util.Optional;
 @AutoService(Widget.class)
 @SuperBuilder
 @NoArgsConstructor
+@Schema(description = "选项组件; 可单选/多选; 值受绑定的schema限制")
 public class OptionWidget extends AbstractWidget {
     public final String type = "option";
+    @Schema(description = "是否多行; 当schema是list时生效", example = "[true, false]")
     private boolean multiple;
-    private String style;
 
-    /**
-     * 选项,key作为展示,value为保存时的值,该值在保存时参与schema校验
-     */
+    @Schema(description = "选项,key作为展示,value为保存时的值,该值在保存时参与schema校验", example = "{\"选项1\":1,\"选项2\":2}")
     private Map<String, Object> options;
 
     @Override

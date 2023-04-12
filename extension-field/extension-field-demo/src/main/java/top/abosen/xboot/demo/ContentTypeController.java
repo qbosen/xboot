@@ -22,9 +22,9 @@ public class ContentTypeController {
 
     @PostMapping
     @Operation(summary = "创建类型")
-    public String create(@RequestBody ContentType type){
+    public String create(@RequestBody ContentType type) {
         Optional<String> valid = type.validMessage();
-        if(valid.isPresent()) return valid.get();
+        if (valid.isPresent()) return valid.get();
 
         mapper.insert(type);
         return "OK";
@@ -32,14 +32,18 @@ public class ContentTypeController {
 
     @PutMapping("/{key}")
     @Operation(summary = "更新类型")
-    public String update(@PathVariable String key, @RequestBody ContentType type){
+    public String update(@PathVariable String key, @RequestBody ContentType type) {
         Optional<String> valid = type.validMessage();
-        if(valid.isPresent()) return valid.get();
+        if (valid.isPresent()) return valid.get();
 
         type.setKey(key);
         mapper.updateById(type);
         return "OK";
     }
 
-
+    @GetMapping("/{key}")
+    @Operation(summary = "获取类型")
+    public ContentType get(@PathVariable String key) {
+        return mapper.selectById(key);
+    }
 }

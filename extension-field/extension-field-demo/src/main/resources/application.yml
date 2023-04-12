@@ -8,7 +8,8 @@ spring:
     init:
       schema-locations: classpath:db/schema-h2.sql
       mode: always
-
+  jackson:
+    property-naming-strategy: SNAKE_CASE
 logging:
   level:
     top.abosen.xboot: debug
