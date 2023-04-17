@@ -7,6 +7,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -33,7 +34,13 @@ public class OptionWidget extends AbstractWidget {
     @Override
     public boolean checkValue(ValueHolder valueHolder) {
         if (valueHolder == null) return true;
-        return options != null && options.containsValue(valueHolder.get());
+
+        if (options == null) return false;
+        Object realValue = valueHolder.get();
+        if (multiple && realValue instanceof List) {
+            return ((List<?>) realValue).stream().allMatch(options::containsValue);
+        }
+        return options.containsValue(realValue);
     }
 
     @Override
