@@ -48,6 +48,9 @@ public class OptionWidget extends AbstractWidget {
         if (CollUtil.isEmpty(options)) {
             return Optional.of("选项不能为空");
         }
+        if (options.values().stream().distinct().count() != options.size()) {
+            return Optional.of("选项值不能重复");
+        }
         return Optional.empty();
     }
 }
