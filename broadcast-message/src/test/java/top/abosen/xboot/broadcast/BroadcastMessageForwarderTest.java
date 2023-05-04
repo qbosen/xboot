@@ -62,6 +62,15 @@ class BroadcastMessageForwarderTest extends MockitoBase {
     }
 
     @Test
+    void should_forward_same_instance_message_if_handleLocalInstanceMessage() {
+        when(listener.handleLocalInstanceMessage()).thenReturn(true);
+        when(context.getInstanceId()).thenReturn("foo");
+        messageForwarder.forward("bar");
+
+        verify(listener, times(1)).onMessage(same(instanceMessage));
+    }
+
+    @Test
     void should_skip_forward_if_type_not_match() {
         doReturn(Object.class).when(listener).type();
 

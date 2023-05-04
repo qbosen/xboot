@@ -20,4 +20,12 @@ public interface BroadcastMessageListener<T extends InstanceMessage> {
      * @param message 广播消息
      */
     void onMessage(T message);
+
+    /**
+     * 是否处理来自本机实例的消息, 默认不处理本机消息
+     * @return 是否处理
+     */
+    default boolean handleLocalInstanceMessage(){
+        return false;
+    }
 }

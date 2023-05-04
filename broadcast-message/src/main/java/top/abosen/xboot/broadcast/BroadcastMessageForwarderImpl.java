@@ -36,15 +36,13 @@ public class BroadcastMessageForwarderImpl implements BroadcastMessageForwarder 
     @Override
     public void forward(String message) {
         InstanceMessage instanceMessage = objectMapper.readValue(message, InstanceMessage.class);
-        if (context.getInstanceId().equals(instanceMessage.getInstanceId())) {
-            log.debug("[broadcast] 本机消息,跳过");
-            return;
-        }
+        boolean fromOtherInstance = !context.getInstanceId().equals(instanceMessage.getInstanceId());
 
         log.debug("[broadcast] 处理广播消息:{}", message);
 
         messageListeners.stream()
                 .filter(it -> Objects.equals(it.type(), instanceMessage.getClass()))
+                .filter(it -> fromOtherInstance || it.handleLocalInstanceMessage())
                 .forEach(it -> context.broadcast(
                         () -> it.onMessage(instanceMessage)
                 ));
