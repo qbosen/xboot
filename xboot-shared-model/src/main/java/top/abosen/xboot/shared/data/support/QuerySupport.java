@@ -38,4 +38,9 @@ public abstract class QuerySupport extends PageableSupport implements Query {
             this.sort = sort;
         }
     }
+
+    @Override
+    public boolean invalid() {
+        return getPage() <= 0 || getSize() <= 0;
+    }
 }
