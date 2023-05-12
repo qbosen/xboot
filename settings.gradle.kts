@@ -18,4 +18,5 @@ include ("broadcast-message:broadcast-message-starter-redis")
 findProject(":broadcast-message:broadcast-message-starter-redis")?.name = "broadcast-message-starter-redis"
 include ("broadcast-message:broadcast-message-integration-test")
 findProject(":broadcast-message:broadcast-message-integration-test")?.name = "broadcast-message-integration-test"
+include("statemachine")
 
