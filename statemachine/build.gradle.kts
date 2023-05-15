@@ -5,6 +5,7 @@ plugins {
 
 
 dependencies {
-    implementation(libs.slf4j.simple)
+    implementation(libs.slf4j.api)
+    testImplementation(libs.slf4j.simple)
     testImplementation(libs.bundles.junit.jupiter)
 }

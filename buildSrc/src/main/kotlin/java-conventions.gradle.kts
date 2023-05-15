@@ -19,3 +19,9 @@ tasks.withType<JavaCompile>().configureEach {
     sourceCompatibility = "1.8"
     targetCompatibility = "1.8"
 }
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(8))
+    }
+}
