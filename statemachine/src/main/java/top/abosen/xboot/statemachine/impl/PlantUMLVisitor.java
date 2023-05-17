@@ -16,7 +16,7 @@ public class PlantUMLVisitor implements Visitor {
     /**
      * Since the state machine is stateless, there is no initial state.
      * <p>
-     * You have to add "[*] -> initialState" to mark it as a state machine diagram.
+     * You have to add "{@code [*] -> initialState}" to mark it as a state machine diagram.
      * otherwise it will be recognized as a sequence diagram.
      *
      * @param visitable the element to be visited.
