@@ -78,6 +78,7 @@ public class FluentPropertySetter {
             Function<S, PS> getter, BiConsumer<D, PD> setter, Function<PS, PD> mapper,
             BiPredicate<S, D> prevCondition, BiPredicate<D, PD> postCondition) {
         return (source, dest) -> {
+            if (source == null || dest == null) return;
             if (prevCondition.test(source, dest)) {
                 PD value = mapper.apply(getter.apply(source));
                 if (postCondition.test(dest, value)) {

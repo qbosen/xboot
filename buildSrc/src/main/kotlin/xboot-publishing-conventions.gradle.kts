@@ -23,6 +23,9 @@ val javadocJar by tasks.creating(Jar::class) {
     from(javadoc)
 }
 
+java {
+    withSourcesJar()
+}
 
 data class MavenConf(val name: String) {
     private val releaseRepoUrlLiteral: String = "${name}ReleaseRepoUrl"
@@ -52,7 +55,7 @@ publishing {
     repositories {
         for (item in listOf("central", "aliyun", "inner")) {
             val conf = MavenConf(item)
-            if(!conf.isValidConfig()) continue;
+            if (!conf.isValidConfig()) continue;
             maven {
                 name = conf.name
                 url = if (Ci.isRelease) uri(conf.releaseUrl) else uri(conf.snapshotUrl)
@@ -64,8 +67,8 @@ publishing {
             }
         }
     }
-    publications{
-        create<MavenPublication>("maven"){
+    publications {
+        create<MavenPublication>("maven") {
             from(components["java"])
             artifact(javadocJar)
         }
