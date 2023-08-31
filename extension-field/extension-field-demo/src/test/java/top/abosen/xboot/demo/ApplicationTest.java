@@ -10,12 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import top.abosen.xboot.extensionfield.extension.ExtensionFields;
-import top.abosen.xboot.extensionfield.extension.ExtensionTypeValueMap;
-import top.abosen.xboot.extensionfield.extension.MapExtensionField;
-import top.abosen.xboot.extensionfield.extension.SimpleExtensionField;
+import top.abosen.xboot.extensionfield.extension.*;
 import top.abosen.xboot.extensionfield.schema.IntegerSchema;
-import top.abosen.xboot.extensionfield.schema.LongListSchema;
 import top.abosen.xboot.extensionfield.schema.StringSchema;
 import top.abosen.xboot.extensionfield.widget.InputWidget;
 import top.abosen.xboot.extensionfield.widget.OptionWidget;
@@ -119,18 +115,20 @@ class ApplicationTest {
                                                         ))
                                                         .build())
                                                 .build(),
-                                        SimpleExtensionField.builder()
+                                        ListExtensionField.builder()
                                                 .key("videos")
                                                 .name("视频列表")
-                                                .schema(LongListSchema.builder()
-                                                        .required(true)
-                                                        .maxSize(10)
-                                                        .build())
-                                                .widget(SelectWidget.builder()
+                                                .target(SimpleExtensionField.builder()
+                                                        .key("video")
                                                         .name("视频")
-                                                        .multiple(true)
-                                                        .biz(new VideoBizExtension())
-                                                        .build())
+                                                        .schema(StringSchema.builder().required(true).build())
+                                                        .widget(SelectWidget.builder()
+                                                                .name("视频")
+                                                                .multiple(true)
+                                                                .biz(new VideoBizExtension())
+                                                                .build())
+                                                        .build()
+                                                )
                                                 .build()
                                 ))
                                 .build()
@@ -160,7 +158,7 @@ class ApplicationTest {
                         "videos", maps(
                                 "title", "精选视频集合2022",
                                 "score", 5,
-                                "videos", lists(1000, 1005)
+                                "videos", lists("1000", "1005")
                         ))
                 )).build();
 
@@ -174,12 +172,20 @@ class ApplicationTest {
                 .andReturn().getResponse().getContentAsString();
         long contentId = Long.parseLong(response);
         Content queryContent = contentMapper.selectById(contentId);
-        System.out.println(queryContent);
+        // 根据业务更新自身
+        System.out.println("文章更新前;" + queryContent);
+        queryContent.getExtension().update(article);
+        System.out.println("文章更新后;" + queryContent);
 
         // template 被设置为默认值
         content.setId(contentId);
         Map<String, Object> newExtension = Maps.newHashMap(content.getExtension().toMap());
         newExtension.put("share_template", "分享了一篇内容");
+        // biz 填充信息
+        ((Map<String, Object>) newExtension.get("videos")).put("videos", lists(
+                maps("id", "1000", "name", "视频名称", "url", "http://www.baidu.com"),
+                maps("id", "1005", "name", "视频名称", "url", "http://www.baidu.com")
+        ));
         content.setExtension(new ExtensionTypeValueMap(newExtension));
         assertThat(queryContent).isNotNull().isEqualTo(content);
     }

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
 import io.swagger.v3.oas.annotations.media.Schema;
 import top.abosen.xboot.extensionfield.validator.Validatable;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolderChecker;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolderUpdater;
 
 import java.util.Map;
 
@@ -26,7 +27,7 @@ import java.util.Map;
         },
         oneOf = {SimpleExtensionField.class, MapExtensionField.class, ListExtensionField.class, SwitchExtensionField.class}
 )
-public interface ExtensionField extends ValueHolderChecker, Validatable {
+public interface ExtensionField extends ValueHolderChecker, ValueHolderUpdater, Validatable {
     @JsonIgnore
     String getType();
 
@@ -35,4 +36,5 @@ public interface ExtensionField extends ValueHolderChecker, Validatable {
     String getName();
 
     Map<String, Object> extension();
+
 }

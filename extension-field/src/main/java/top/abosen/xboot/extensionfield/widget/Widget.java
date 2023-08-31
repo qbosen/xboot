@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import top.abosen.xboot.extensionfield.validator.Validatable;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolderChecker;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolderUpdater;
 
 /**
  * @author qiubaisen
@@ -22,7 +23,7 @@ import top.abosen.xboot.extensionfield.valueholder.ValueHolderChecker;
                 @DiscriminatorMapping(value = "select", schema = SelectWidget.class),
         },
         oneOf = {InputWidget.class, OptionWidget.class, SelectWidget.class})
-public interface Widget extends ValueHolderChecker, Validatable {
+public interface Widget extends ValueHolderChecker, ValueHolderUpdater, Validatable {
     @JsonIgnore
     String getType();
 
@@ -31,6 +32,10 @@ public interface Widget extends ValueHolderChecker, Validatable {
     @Override
     default boolean checkValue(ValueHolder valueHolder) {
         return true;
+    }
+
+    @Override
+    default void updateValue(ValueHolder valueHolder) {
     }
 }
 

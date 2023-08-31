@@ -36,6 +36,11 @@ public class SimpleExtensionField extends AbstractExtensionField {
     }
 
     @Override
+    public void updateValue(ValueHolder valueHolder) {
+        widget.updateValue(valueHolder);
+    }
+
+    @Override
     protected Optional<String> validMsg() {
         if (schema == null || widget == null) return Optional.of("值和组件不能为空");
         return schema.validMessage().or(() -> widget.validMessage());

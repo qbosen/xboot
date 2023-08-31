@@ -31,10 +31,10 @@ test {
 }
 
 compileTestJava {
-    sourceCompatibility = 17
-    targetCompatibility = 17
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 }
 compileJava {
-    sourceCompatibility = 17
-    targetCompatibility = 17
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 }

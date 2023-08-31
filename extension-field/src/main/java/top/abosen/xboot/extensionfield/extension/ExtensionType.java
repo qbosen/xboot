@@ -37,4 +37,10 @@ public interface ExtensionType extends Validatable {
                 map.containsKey(field.getKey()) ? MapValueHolder.of(map, field.getKey()) : null)
         );
     }
+
+    default void update(Map<String, Object> map){
+        getFields().forEach(field -> field.updateValue(
+                map.containsKey(field.getKey()) ? MapValueHolder.of(map, field.getKey()) : null)
+        );
+    }
 }

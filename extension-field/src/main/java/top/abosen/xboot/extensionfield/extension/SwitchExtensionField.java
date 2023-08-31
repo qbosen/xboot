@@ -1,11 +1,8 @@
 package top.abosen.xboot.extensionfield.extension;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.IterUtil;
 import cn.hutool.core.util.StrUtil;
 import com.google.auto.service.AutoService;
-import io.swagger.v3.oas.annotations.extensions.Extension;
-import io.swagger.v3.oas.annotations.extensions.ExtensionProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -49,9 +46,21 @@ public class SwitchExtensionField extends AbstractExtensionField {
     }
 
     @Override
+    public void updateValue(ValueHolder valueHolder) {
+        Object nestedValue = valueHolder.get();
+        if (!(nestedValue instanceof Map)) return;
+        Map<String, Object> castValue = (Map<String, Object>) nestedValue;
+
+        String selectOption = castValue.keySet().stream().filter(options::containsKey).findFirst().orElse(null);
+        if (selectOption == null) return;
+        if (!options.containsKey(selectOption)) return;
+        options.get(selectOption).updateValue(MapValueHolder.of(castValue, selectOption));
+    }
+
+    @Override
     protected Optional<String> validMsg() {
         if (CollUtil.isEmpty(options)) return Optional.of("字段列表不能为空");
-        if(options.keySet().stream().anyMatch(StrUtil::isBlank)) return Optional.of("选项不能为空");
+        if (options.keySet().stream().anyMatch(StrUtil::isBlank)) return Optional.of("选项不能为空");
         return options.values().stream().map(Validatable::validMessage)
                 .filter(Optional::isPresent)
                 .map(Optional::get).findFirst();

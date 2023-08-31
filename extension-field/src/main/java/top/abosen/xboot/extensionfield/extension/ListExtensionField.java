@@ -15,10 +15,7 @@ import top.abosen.xboot.extensionfield.validator.ValueValidator;
 import top.abosen.xboot.extensionfield.valueholder.MapValueHolder;
 import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * 对同一个field的可重复集合
@@ -52,6 +49,11 @@ public class ListExtensionField extends AbstractExtensionField {
         return Utils.listValue(valueHolder).stream().allMatch(holder -> target.checkValue(holder));
     }
 
+    @Override
+    public void updateValue(ValueHolder valueHolder) {
+        Utils.listValue(valueHolder).forEach(holder->target.updateValue(holder));
+    }
+
     protected ValueValidator buildValidator() {
         return LengthValidator.collection(minSize, maxSize);
     }
@@ -62,4 +64,5 @@ public class ListExtensionField extends AbstractExtensionField {
         return target.validMessage().or(() ->
                 buildValidator().validMessage());
     }
+
 }

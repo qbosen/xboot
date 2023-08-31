@@ -4,6 +4,7 @@ import com.google.auto.service.AutoService;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import top.abosen.xboot.extensionfield.valueholder.ValueHolder;
 
 /**
  * @author qiubaisen
@@ -23,4 +24,14 @@ public class SelectWidget extends AbstractWidget {
     private boolean multiple;
     @Schema(description = "业务组件扩展; 由key定义具体业务, 后台针对不同业务进行相应处理", example = "{\"key\": \"video\"}")
     private BizWidgetExtension biz;
+
+    @Override
+    public boolean checkValue(ValueHolder valueHolder) {
+        return biz.checkValue(valueHolder);
+    }
+
+    @Override
+    public void updateValue(ValueHolder valueHolder) {
+        biz.updateValue(valueHolder);
+    }
 }

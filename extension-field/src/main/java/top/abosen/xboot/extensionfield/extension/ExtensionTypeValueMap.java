@@ -41,5 +41,8 @@ public class ExtensionTypeValueMap implements ExtensionTypeValue {
         return type.valid(toMap());
     }
 
-
+    @Override
+    public void update(ExtensionType type) {
+        type.update(toMap());
+    }
 }

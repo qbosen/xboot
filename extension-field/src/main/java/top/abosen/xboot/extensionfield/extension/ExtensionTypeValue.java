@@ -18,7 +18,17 @@ public interface ExtensionTypeValue {
 
     Map<String, Object> toMap();
 
+    /**
+     * 验证扩展值 是否 和类型定义 匹配
+     * @param type 扩展类型定义
+     * @return 是否匹配
+     */
     boolean valid(ExtensionType type);
 
+    /**
+     * 根据类型定义更新扩展值
+     * @param type 扩展类型定义
+     */
+    void update(ExtensionType type);
 }
 

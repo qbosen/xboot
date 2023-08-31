@@ -22,4 +22,9 @@ public class DefaultBizWidgetExtension implements BizWidgetExtension {
     public boolean checkValue(ValueHolder valueHolder) {
         return true;
     }
+
+    @Override
+    public void updateValue(ValueHolder valueHolder) {
+
+    }
 }

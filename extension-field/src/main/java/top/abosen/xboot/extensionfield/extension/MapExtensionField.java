@@ -42,6 +42,14 @@ public class MapExtensionField extends AbstractExtensionField {
     }
 
     @Override
+    public void updateValue(ValueHolder valueHolder) {
+        Object nestedValue = valueHolder.get();
+        if (!(nestedValue instanceof Map)) return;
+        Map<String, Object> castValue = (Map<String, Object>) nestedValue;
+        fields.forEach(f -> f.updateValue(castValue.containsKey(f.getKey()) ? MapValueHolder.of(castValue, f.getKey()) : null));
+    }
+
+    @Override
     protected Optional<String> validMsg() {
         if (CollUtil.isEmpty(fields)) return Optional.of("字段列表不能为空");
         if (fields.stream().map(ExtensionField::getKey).distinct().count() != fields.size())
